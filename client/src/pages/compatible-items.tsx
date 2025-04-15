@@ -1,0 +1,205 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/dashboard/header";
+import TabNavigation from "@/components/dashboard/tab-navigation";
+import Footer from "@/components/dashboard/footer";
+import Icon from "@/components/ui/icon";
+
+interface CompatibleItem {
+  id: string;
+  name: string;
+  category: string;
+  thermalRating: string;
+  compatibleUnits: string[];
+  sku: string;
+  notes: string;
+}
+
+// Sample items for the page - in a real app, this would come from an API
+const compatibleItems: CompatibleItem[] = [
+  {
+    id: "1",
+    name: "Thermal Blanket Pro",
+    category: "Blankets",
+    thermalRating: "35.5°C - 37.5°C",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #3"],
+    sku: "TB-001-A",
+    notes: "Recommended for all standard transport units"
+  },
+  {
+    id: "2",
+    name: "Insulation Pad Plus",
+    category: "Bedding",
+    thermalRating: "36.0°C - 37.0°C",
+    compatibleUnits: ["Unit #2", "Unit #4"],
+    sku: "IP-205-B",
+    notes: "Provides additional insulation for high-risk transports"
+  },
+  {
+    id: "3",
+    name: "Vibration Dampening Mat",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #3", "Unit #4", "Unit #5"],
+    sku: "VDM-103",
+    notes: "Reduces vibration exposure during transport"
+  },
+  {
+    id: "4",
+    name: "Temperature Regulating Sheet",
+    category: "Bedding",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["Unit #1", "Unit #3"],
+    sku: "TRS-450",
+    notes: "Active temperature regulation for premature infants"
+  },
+  {
+    id: "5",
+    name: "Sensor Calibration Kit",
+    category: "Maintenance",
+    thermalRating: "Calibration tool",
+    compatibleUnits: ["All Units"],
+    sku: "SCK-001",
+    notes: "For monthly sensor calibration"
+  },
+  {
+    id: "6",
+    name: "Thermal Reflective Cover",
+    category: "Accessories",
+    thermalRating: "35.0°C - 38.0°C",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #4"],
+    sku: "TRC-220-A",
+    notes: "For outdoor or long-distance transports"
+  }
+];
+
+export default function CompatibleItems() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  
+  // Filter items based on search term and category
+  const filteredItems = compatibleItems.filter(item => {
+    const matchesSearch = searchTerm === "" || 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.notes.toLowerCase().includes(searchTerm.toLowerCase());
+      
+    const matchesCategory = categoryFilter === "" || item.category === categoryFilter;
+    
+    return matchesSearch && matchesCategory;
+  });
+  
+  // Get unique categories for filter
+  const categories = Array.from(new Set(compatibleItems.map(item => item.category)));
+
+  return (
+    <div className="min-h-screen bg-[#FAFAFA] flex flex-col">
+      <Header />
+      <TabNavigation />
+      
+      <main className="container mx-auto px-4 py-4 flex-grow">
+        <h1 className="text-2xl font-semibold mb-4">Compatible Items Reference</h1>
+        
+        <Card className="mb-6">
+          <CardContent className="p-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Input
+                    placeholder="Search by name, SKU, or notes..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                  <div className="absolute left-3 top-2.5 text-[#616161]">
+                    <Icon name="filter" size={16} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant={categoryFilter === "" ? "default" : "outline"}
+                  onClick={() => setCategoryFilter("")}
+                  className={categoryFilter === "" ? "bg-[#6A1B9A]" : ""}
+                >
+                  All
+                </Button>
+                {categories.map(category => (
+                  <Button
+                    key={category}
+                    variant={categoryFilter === category ? "default" : "outline"}
+                    onClick={() => setCategoryFilter(category)}
+                    className={categoryFilter === category ? "bg-[#6A1B9A]" : ""}
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredItems.map(item => (
+            <Card key={item.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="text-lg font-semibold">{item.name}</h3>
+                    <p className="text-sm text-[#616161]">{item.category} | SKU: {item.sku}</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs text-[#616161] mb-1">Thermal Rating</p>
+                    <div className="flex items-center">
+                      <Icon name="temperature" size={18} className="text-[#9C27B0] mr-1" />
+                      <span className="font-medium">{item.thermalRating}</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <p className="text-xs text-[#616161] mb-1">Compatible Units</p>
+                    <div className="flex flex-wrap gap-1">
+                      {item.compatibleUnits.map((unit, i) => (
+                        <span 
+                          key={i} 
+                          className="inline-block bg-[#F3E5F5] text-[#6A1B9A] text-xs px-2 py-1 rounded-md"
+                        >
+                          {unit}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <p className="text-xs text-[#616161] mb-1">Notes</p>
+                    <p className="text-sm">{item.notes}</p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 border-t border-gray-100 pt-3">
+                  <Button variant="outline" className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5">
+                    <Icon name="info" size={16} className="mr-1" />
+                    View Details
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        {filteredItems.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-[#616161]">No items found matching your search criteria.</p>
+          </div>
+        )}
+      </main>
+      
+      <Footer />
+    </div>
+  );
+}
