@@ -1,0 +1,249 @@
+Nestara UX and Product Strategy Overview
+
+Vision
+
+Nestara is a neonatal transport platform designed to set the safety benchmark in neonatal care. It addresses the critical absence of industry standards for shock exposure and thermal regulation during transport of premature and critically ill infants. Nestara is built modularly, beginning with a sensor fusion alert unit and evolving into a fully integrated transport bed with embedded stabilization and thermal features.
+
+Primary Users
+
+Head Nurse: Needs passive, real-time monitoring of all units during rounds without carrying a laptop.
+
+Assigned Nurse: Needs actionable, unit-specific alerts.
+
+Tech/Support Staff: Needs visibility into equipment performance, maintenance logs, and historical alerts.
+
+MVP Goals
+
+Monitor and alert for two main physical risks:
+
+Overheating (thermal instability)
+
+Shaking or shock exposure (vibration instability)
+
+Provide a clean, non-intrusive, HIPAA-compliant dashboard that integrates into Microsoft Teams.
+
+Avoid creating new systems for nurses; work with their existing workflows.
+
+Physical Components (Hardware)
+
+Sensors:
+
+Temperature: TMP117 or DS18B20 for internal and mattress surface temps.
+
+Vibration: MPU6050 or ADXL345 for 3-axis motion and tilt detection.
+
+Microcontroller:
+
+ESP32 or Raspberry Pi Pico W for Wi-Fi transmission.
+
+No cameras to avoid HIPAA risk.
+
+Digital Architecture (UX System)
+
+Page 1: Main Dashboard View
+
+Purpose: Provide at-a-glance status of all Nestara units.
+
+Components:
+
+Header: "Nestara Live Monitor" with timestamp or refresh indicator.
+
+Filter Bar: Filter by Room, Unit ID, or Status (All / Normal / Warning / Alert).
+
+Unit Cards:
+
+Unit ID (e.g., Unit #3)
+
+Temp reading (surface/internal)
+
+Vibration Status (Stable / Spike Detected)
+
+Battery Level
+
+Color-coded Alert Status (Green, Yellow, Red)
+
+Clickable cards open Unit Detail View.
+
+Page 2: Unit Detail View
+
+Purpose: Provide the assigned nurse with full info on a specific unit.
+
+Components:
+
+Header: Unit ID / Room / Assigned Nurse.
+
+Live Data:
+
+Internal Temp
+
+Surface Temp
+
+Vibration (Stable / Tilt / Spike)
+
+Battery Status
+
+Optional: Mini graph (last 4 hours trend).
+
+Action Buttons:
+
+[Acknowledge Alert]
+
+[Request Tech Check]
+
+[Send to TEAMS]
+
+Alert History Log: Timestamped events and responses.
+
+Page 3: Companion Item Reference (Optional)
+
+Purpose: Help identify thermally-compatible NICU products.
+
+Components:
+
+Search/Filter Bar
+
+Cards for NICU items:
+
+Product Image
+
+Thermal rating / tolerance
+
+Compatible units
+
+SKU / Notes from nurses
+
+Link to SharePoint or procurement system.
+
+Page 4: Alert History + Export View
+
+Purpose: For QA teams or tech admins to review system performance.
+
+Components:
+
+Date Selector + Unit Filter
+
+Event Log Table:
+
+Timestamp
+
+Event Type
+
+Unit ID
+
+Resolution Status
+
+Export to CSV or PDF.
+
+Embedded Teams View (Optional)
+
+Purpose: Allow alert interaction directly inside Microsoft Teams.
+
+Components:
+
+Mini Unit Status Card
+
+Buttons:
+
+[Acknowledge]
+
+[View Detail]
+
+[Send to Tech]
+
+Apple Health Integration (Exploratory Feature)
+
+Purpose: Expand Nestara’s alert and dashboard features into iOS and watchOS environments.
+
+Inspiration: Apple Emergency SOS, Fall Detection, Crash Detection APIs
+
+Components:
+
+Apple Watch Notifications: Haptic and visual alerts for Nestara unit status
+
+iOS Widget: Quick-glance unit dashboard for nurses and techs
+
+Siri Shortcut: “Hey Siri, Nestara update on Unit 2”
+
+iPad App View: Real-time dashboard at nurse stations
+
+This integration allows Nestara to function as a passive safety companion embedded within Apple’s healthcare ecosystem, mimicking Apple's successful implementation of emergency medical alert systems for consumers—now translated to neonatal transport.
+
+Strategic Phasing
+
+MVP = Sensor Fusion Unit (thermal + vibration monitoring + Teams alert)
+
+Phase 2 = Modular Transport Bed (shock absorption, battery redesign)
+
+Phase 3 = Standard Definition (clinical data collection → define Transport Vibration Index or similar)
+
+Phase 4 = Apple Health/Watch Integration (passive alerting via Apple platforms)
+
+Design Language
+
+Primary Brand Color: Rich Purple #6A1B9A
+
+Accent Purple: #9C27B0
+
+Status Indicators:
+
+Safe: Soft Green #66BB6A
+
+Warning: Amber #FFA000
+
+Alert: Warm Red #E53935
+
+Offline: Cool Gray #BDBDBD
+
+UI Neutrals:
+
+Background: #FAFAFA
+
+Card Background: #FFFFFF
+
+Primary Text: #212121
+
+Secondary Text: #616161
+
+Fonts: Inter or Roboto
+
+Icons: Thermometer, lightning bolt, shock icon
+
+Accessibility: WCAG AA compliant, screen-reader friendly
+
+Integration Principles
+
+No PHI stored or shown.
+
+Leverages Microsoft Teams and SharePoint for alerts, summaries, and logs.
+
+Future integration with Apple platforms for wearable and mobile alerting.
+
+Avoids introducing new logins or platforms unless necessary.
+
+Agent vs. Plug-in Architecture
+
+Nestara operates as a hybrid system composed of:
+
+1. Sensor Fusion Agent (Back-End)
+
+Runs on-device or in the cloud (ESP32 → Azure IoT / Logic App / Function App)
+
+Continuously monitors temperature and vibration
+
+Sends alert payloads to Microsoft Teams and logs them to SharePoint or Power BI
+
+2. Teams Plug-in Interface (Front-End)
+
+Surfaces alerts as Teams Bot messages or Tab Apps
+
+Interactive cards allow users to acknowledge alerts or escalate
+
+Accessible within existing hospital workflows (no extra app)
+
+3. Apple Plug-in Interface (Future)
+
+Uses Apple Watch, iPhone, or iPad for silent, actionable alerts
+
+Low-power, passive notifications enable real-time awareness without distraction
+
+This model ensures that Nestara operates as a lightweight, interoperable safety system that enhances rather than disrupts clinical routines.
