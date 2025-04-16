@@ -5,6 +5,8 @@ import {
   alerts, type Alert, type InsertAlert,
   type UnitWithTelemetry
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -64,9 +66,9 @@ export class MemStorage implements IStorage {
     this.initializeSampleData();
   }
 
-  private initializeSampleData() {
+  private async initializeSampleData() {
     // Create some units
-    const unit1 = this.createUnit({
+    const unit1 = await this.createUnit({
       unitId: "Unit #1",
       serialNumber: "NST-2023-001-A",
       firmwareVersion: "v2.1.5",
@@ -78,7 +80,7 @@ export class MemStorage implements IStorage {
       status: "alert"
     });
     
-    const unit2 = this.createUnit({
+    const unit2 = await this.createUnit({
       unitId: "Unit #2",
       serialNumber: "NST-2023-002-B",
       firmwareVersion: "v2.1.5",
@@ -90,7 +92,7 @@ export class MemStorage implements IStorage {
       status: "warning"
     });
     
-    const unit3 = this.createUnit({
+    const unit3 = await this.createUnit({
       unitId: "Unit #3",
       serialNumber: "NST-2023-003-C",
       firmwareVersion: "v2.1.4",
@@ -102,7 +104,7 @@ export class MemStorage implements IStorage {
       status: "normal"
     });
     
-    const unit4 = this.createUnit({
+    const unit4 = await this.createUnit({
       unitId: "Unit #4",
       serialNumber: "NST-2023-004-D",
       firmwareVersion: "v2.1.5",
@@ -114,7 +116,7 @@ export class MemStorage implements IStorage {
       status: "normal"
     });
     
-    const unit5 = this.createUnit({
+    const unit5 = await this.createUnit({
       unitId: "Unit #5",
       serialNumber: "NST-2023-005-E",
       firmwareVersion: "v2.1.3",
@@ -353,4 +355,168 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database-backed storage implementation
+export class DatabaseStorage implements IStorage {
+  // User operations
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+  
+  // Unit operations
+  async getUnits(): Promise<Unit[]> {
+    return db.select().from(units);
+  }
+  
+  async getUnit(id: number): Promise<Unit | undefined> {
+    const [unit] = await db.select().from(units).where(eq(units.id, id));
+    return unit || undefined;
+  }
+  
+  async getUnitByUnitId(unitId: string): Promise<Unit | undefined> {
+    const [unit] = await db.select().from(units).where(eq(units.unitId, unitId));
+    return unit || undefined;
+  }
+  
+  async createUnit(insertUnit: InsertUnit): Promise<Unit> {
+    const [unit] = await db
+      .insert(units)
+      .values(insertUnit)
+      .returning();
+    return unit;
+  }
+  
+  async updateUnit(id: number, unitUpdate: Partial<Unit>): Promise<Unit | undefined> {
+    const [updatedUnit] = await db
+      .update(units)
+      .set(unitUpdate)
+      .where(eq(units.id, id))
+      .returning();
+    return updatedUnit || undefined;
+  }
+  
+  // Telemetry operations
+  async getTelemetryByUnitId(unitId: number, limit = 100): Promise<Telemetry[]> {
+    return db
+      .select()
+      .from(telemetry)
+      .where(eq(telemetry.unitId, unitId))
+      .orderBy(desc(telemetry.timestamp))
+      .limit(limit);
+  }
+  
+  async createTelemetry(insertTelemetry: InsertTelemetry): Promise<Telemetry> {
+    const [telemetryEntry] = await db
+      .insert(telemetry)
+      .values(insertTelemetry)
+      .returning();
+    return telemetryEntry;
+  }
+  
+  async getLatestTelemetry(unitId: number): Promise<Telemetry | undefined> {
+    const [latestTelemetry] = await db
+      .select()
+      .from(telemetry)
+      .where(eq(telemetry.unitId, unitId))
+      .orderBy(desc(telemetry.timestamp))
+      .limit(1);
+    return latestTelemetry || undefined;
+  }
+  
+  // Alert operations
+  async getAlerts(filter: { unitId?: number, status?: string } = {}): Promise<Alert[]> {
+    let query = db.select().from(alerts);
+    
+    if (filter.unitId !== undefined) {
+      query = query.where(eq(alerts.unitId, filter.unitId));
+    }
+    
+    if (filter.status !== undefined) {
+      query = query.where(eq(alerts.status, filter.status));
+    }
+    
+    return query.orderBy(desc(alerts.timestamp));
+  }
+  
+  async getAlert(id: number): Promise<Alert | undefined> {
+    const [alert] = await db.select().from(alerts).where(eq(alerts.id, id));
+    return alert || undefined;
+  }
+  
+  async createAlert(insertAlert: InsertAlert): Promise<Alert> {
+    const [alert] = await db
+      .insert(alerts)
+      .values(insertAlert)
+      .returning();
+    return alert;
+  }
+  
+  async updateAlert(id: number, alertUpdate: Partial<Alert>): Promise<Alert | undefined> {
+    const [updatedAlert] = await db
+      .update(alerts)
+      .set(alertUpdate)
+      .where(eq(alerts.id, id))
+      .returning();
+    return updatedAlert || undefined;
+  }
+  
+  // Combined operations
+  async getUnitsWithTelemetry(filter: { room?: string, status?: string } = {}): Promise<UnitWithTelemetry[]> {
+    let query = db.select().from(units);
+    
+    if (filter.room !== undefined && filter.room !== "") {
+      query = query.where(eq(units.room, filter.room));
+    }
+    
+    if (filter.status !== undefined && filter.status !== "") {
+      query = query.where(eq(units.status, filter.status));
+    }
+    
+    const unitsList = await query;
+    
+    const unitsWithTelemetry: UnitWithTelemetry[] = await Promise.all(
+      unitsList.map(async (unit) => {
+        const latestTelemetry = await this.getLatestTelemetry(unit.id);
+        const unitAlerts = await this.getAlerts({ unitId: unit.id });
+        
+        return {
+          ...unit,
+          telemetry: latestTelemetry || null,
+          alerts: unitAlerts
+        };
+      })
+    );
+    
+    return unitsWithTelemetry;
+  }
+  
+  async getUnitWithTelemetry(id: number): Promise<UnitWithTelemetry | undefined> {
+    const unit = await this.getUnit(id);
+    if (!unit) return undefined;
+    
+    const latestTelemetry = await this.getLatestTelemetry(id);
+    const unitAlerts = await this.getAlerts({ unitId: id });
+    
+    return {
+      ...unit,
+      telemetry: latestTelemetry || null,
+      alerts: unitAlerts
+    };
+  }
+}
+
+// Create an instance of the database storage
+export const storage = new DatabaseStorage();

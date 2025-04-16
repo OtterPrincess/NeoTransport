@@ -1,4 +1,5 @@
-import { pgTable, text, serial, timestamp, integer, real, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer, real, boolean, primaryKey } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -43,7 +44,7 @@ export const insertUnitSchema = createInsertSchema(units).omit({
 // Unit telemetry
 export const telemetry = pgTable("telemetry", {
   id: serial("id").primaryKey(),
-  unitId: integer("unit_id").notNull(),
+  unitId: integer("unit_id").notNull().references(() => units.id),
   timestamp: timestamp("timestamp").notNull().defaultNow(),
   internalTemp: real("internal_temp"), // Celsius
   surfaceTemp: real("surface_temp"), // Celsius
@@ -59,7 +60,7 @@ export const insertTelemetrySchema = createInsertSchema(telemetry).omit({
 // Alerts
 export const alerts = pgTable("alerts", {
   id: serial("id").primaryKey(),
-  unitId: integer("unit_id").notNull(),
+  unitId: integer("unit_id").notNull().references(() => units.id),
   timestamp: timestamp("timestamp").notNull().defaultNow(),
   alertType: text("alert_type").notNull(), // e.g. "temperature", "vibration", "battery"
   message: text("message").notNull(),
@@ -94,3 +95,23 @@ export type UnitWithTelemetry = Unit & {
   telemetry: Telemetry | null;
   alerts: Alert[];
 };
+
+// Define relations
+export const unitsRelations = relations(units, ({ many }) => ({
+  telemetry: many(telemetry),
+  alerts: many(alerts)
+}));
+
+export const telemetryRelations = relations(telemetry, ({ one }) => ({
+  unit: one(units, {
+    fields: [telemetry.unitId],
+    references: [units.id]
+  })
+}));
+
+export const alertsRelations = relations(alerts, ({ one }) => ({
+  unit: one(units, {
+    fields: [alerts.unitId],
+    references: [units.id]
+  })
+}));
