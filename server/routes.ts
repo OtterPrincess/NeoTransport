@@ -179,6 +179,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // POST to resolve/dismiss an alert
+  app.post("/api/alerts/:id/resolve", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid alert ID" });
+      }
+      
+      const alert = await storage.getAlert(id);
+      if (!alert) {
+        return res.status(404).json({ message: "Alert not found" });
+      }
+      
+      const updatedAlert = await storage.updateAlert(id, {
+        status: "resolved",
+        resolvedAt: new Date()
+      });
+      
+      res.json(updatedAlert);
+    } catch (error) {
+      console.error("Error resolving alert:", error);
+      res.status(500).json({ message: "Failed to resolve alert" });
+    }
+  });
+
+  // POST to generate a device report (mock endpoint)
+  app.post("/api/units/:id/generate-report", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid unit ID" });
+      }
+      
+      const unit = await storage.getUnit(id);
+      if (!unit) {
+        return res.status(404).json({ message: "Unit not found" });
+      }
+      
+      // This would normally generate a PDF or other report format
+      // For now, we'll just return a success message
+      res.json({
+        message: "Device report generated successfully",
+        reportUrl: `/reports/${unit.unitId}_${Date.now()}.pdf`
+      });
+    } catch (error) {
+      console.error("Error generating report:", error);
+      res.status(500).json({ message: "Failed to generate device report" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

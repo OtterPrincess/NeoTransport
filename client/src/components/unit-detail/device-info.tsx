@@ -4,12 +4,38 @@ import { Button } from "@/components/ui/button";
 import { formatShortDate } from "@/lib/utils";
 import Icon from "@/components/ui/icon";
 import type { UnitWithTelemetry } from "@shared/schema";
+import { useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { toast } from "@/hooks/use-toast";
 
 interface DeviceInfoProps {
   unit: UnitWithTelemetry;
 }
 
 export const DeviceInfo: React.FC<DeviceInfoProps> = ({ unit }) => {
+  const queryClient = useQueryClient();
+  
+  const handleDeviceReport = async () => {
+    try {
+      const response = await apiRequest('POST', `/api/units/${unit.id}/generate-report`, {});
+      
+      toast({
+        title: "Device Report Generated",
+        description: "The device report has been generated successfully.",
+        variant: "default",
+      });
+      
+      // If needed, you could invalidate queries here
+      // queryClient.invalidateQueries({ queryKey: ['/api/units'] });
+    } catch (error) {
+      console.error('Failed to generate device report:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate device report. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <Card>
       <CardContent className="p-4">

@@ -31,9 +31,15 @@ export const LiveNotifications: React.FC<LiveNotificationsProps> = ({ alerts }) 
   };
   
   const handleDismiss = async (alertId: number) => {
-    // This would be different than acknowledge in a real app
-    // For now, we'll just use the same endpoint
-    await handleAcknowledge(alertId);
+    try {
+      await apiRequest('POST', `/api/alerts/${alertId}/resolve`, {});
+      
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['/api/alerts'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/units'] });
+    } catch (error) {
+      console.error('Failed to resolve alert:', error);
+    }
   };
   
   const getAlertStyle = (type: string) => {
