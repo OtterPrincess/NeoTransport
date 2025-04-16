@@ -229,6 +229,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // POST to generate a full report (mock endpoint)
+  app.post("/api/units/:id/full-report", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid unit ID" });
+      }
+      
+      const unit = await storage.getUnit(id);
+      if (!unit) {
+        return res.status(404).json({ message: "Unit not found" });
+      }
+      
+      // Get the unit's telemetry and alerts
+      const telemetry = await storage.getTelemetryByUnitId(id, 100);
+      const alerts = await storage.getAlerts({ unitId: id });
+      
+      // This would normally generate a comprehensive PDF or other report format
+      // For now, we'll just return a success message with mock data
+      res.json({
+        message: "Full report generated successfully",
+        reportUrl: `/reports/full_${unit.unitId}_${Date.now()}.pdf`,
+        reportData: {
+          unitInfo: unit,
+          telemetryCount: telemetry.length,
+          alertsCount: alerts.length,
+          generatedAt: new Date()
+        }
+      });
+    } catch (error) {
+      console.error("Error generating full report:", error);
+      res.status(500).json({ message: "Failed to generate full report" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { UnitWithTelemetry } from "@shared/schema";
 import { TEMPERATURE_RANGES } from "@/lib/constants";
+import { toast } from "@/hooks/use-toast";
 
 interface UnitInfoProps {
   unit: UnitWithTelemetry;
@@ -62,6 +63,26 @@ export const UnitInfo: React.FC<UnitInfoProps> = ({ unit }) => {
       queryClient.invalidateQueries({ queryKey: ['/api/alerts'] });
     } catch (error) {
       console.error('Failed to send to Teams:', error);
+    }
+  };
+  
+  const handleViewFullReport = async () => {
+    try {
+      await apiRequest('POST', `/api/units/${unit.id}/full-report`, {});
+      
+      // Show a notification or toast that report is being generated
+      toast({
+        title: "Full Report Generated",
+        description: "The full report has been generated successfully.",
+        variant: "default",
+      });
+    } catch (error) {
+      console.error('Failed to generate full report:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate full report. Please try again.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -259,7 +280,11 @@ export const UnitInfo: React.FC<UnitInfoProps> = ({ unit }) => {
             <Icon name="success" size={20} className="mr-1" />
             Acknowledge Alert
           </Button>
-          <Button variant="outline" className="border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5">
+          <Button 
+            variant="outline" 
+            className="border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5"
+            onClick={handleViewFullReport}
+          >
             <Icon name="report" size={20} className="mr-1" />
             View Full Report
           </Button>

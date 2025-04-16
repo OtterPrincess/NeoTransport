@@ -74,6 +74,7 @@ export const DeviceInfo: React.FC<DeviceInfoProps> = ({ unit }) => {
             <Button 
               variant="outline" 
               className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5"
+              onClick={handleDeviceReport}
             >
               <Icon name="report" size={20} className="mr-1" />
               Device Report
