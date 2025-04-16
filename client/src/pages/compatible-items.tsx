@@ -6,6 +6,16 @@ import Header from "@/components/dashboard/header";
 import TabNavigation from "@/components/dashboard/tab-navigation";
 import Footer from "@/components/dashboard/footer";
 import Icon from "@/components/ui/icon";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose
+} from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 
 interface CompatibleItem {
   id: string;
@@ -78,6 +88,7 @@ const compatibleItems: CompatibleItem[] = [
 export default function CompatibleItems() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [selectedItem, setSelectedItem] = useState<CompatibleItem | null>(null);
   
   // Filter items based on search term and category
   const filteredItems = compatibleItems.filter(item => {
@@ -100,7 +111,16 @@ export default function CompatibleItems() {
       <TabNavigation />
       
       <main className="container mx-auto px-4 py-4 flex-grow">
-        <h1 className="text-2xl font-semibold mb-4">Compatible Items Reference</h1>
+        <h1 className="text-2xl font-semibold mb-2">Compatible Items Reference</h1>
+        
+        <div className="bg-[#F3E5F5] text-[#6A1B9A] p-4 rounded-md mb-6">
+          <h3 className="font-medium mb-1">What is this?</h3>
+          <p className="text-sm">
+            This section lists equipment and accessories specifically designed to work with Nestara neonatal transport units.
+            These items are temperature-rated and safety-tested to ensure optimal conditions during transport.
+            Click "View Details" on any item to see compatibility information, usage instructions, and to request supplies.
+          </p>
+        </div>
         
         <Card className="mb-6">
           <CardContent className="p-4">
@@ -182,7 +202,11 @@ export default function CompatibleItems() {
                 </div>
                 
                 <div className="mt-4 border-t border-gray-100 pt-3">
-                  <Button variant="outline" className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5"
+                    onClick={() => setSelectedItem(item)}
+                  >
                     <Icon name="info" size={16} className="mr-1" />
                     View Details
                   </Button>
@@ -200,6 +224,90 @@ export default function CompatibleItems() {
       </main>
       
       <Footer />
+      
+      {/* Item Details Dialog */}
+      <Dialog open={!!selectedItem} onOpenChange={(open) => !open && setSelectedItem(null)}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{selectedItem?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedItem?.category} | SKU: {selectedItem?.sku}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Product Description</h4>
+              <p className="text-sm">
+                {selectedItem?.notes}
+                {selectedItem?.category === "Blankets" && 
+                  " This specialized thermal blanket is designed to maintain optimal temperature for neonatal transport. It features micro-insulation technology that adapts to ambient conditions."}
+                {selectedItem?.category === "Bedding" && 
+                  " This advanced bedding material regulates temperature and provides maximum comfort during transport. It's hypoallergenic and designed for premature infants."}
+                {selectedItem?.category === "Accessories" && 
+                  " This accessory improves the safety and comfort of neonatal transport by reducing external environmental factors that could affect the infant."}
+                {selectedItem?.category === "Maintenance" && 
+                  " This maintenance kit is essential for ensuring all monitoring systems are calibrated correctly for accurate readings."}
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Thermal Specifications</h4>
+              <div className="flex items-center">
+                <Icon name="temperature" size={18} className="text-[#9C27B0] mr-2" />
+                <span className="font-medium">{selectedItem?.thermalRating}</span>
+              </div>
+              <p className="text-sm mt-2">
+                {selectedItem?.thermalRating !== "N/A" && selectedItem?.thermalRating !== "Calibration tool" && 
+                  "This temperature range is optimal for neonatal transport and helps maintain the infant's core temperature within safe parameters."}
+                {selectedItem?.thermalRating === "N/A" && 
+                  "This item doesn't have a thermal rating as it's designed for vibration reduction rather than temperature regulation."}
+                {selectedItem?.thermalRating === "Calibration tool" && 
+                  "This tool ensures all temperature sensors in the transport unit are accurately calibrated."}
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Compatible Transport Units</h4>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {selectedItem?.compatibleUnits.map((unit, i) => (
+                  <span 
+                    key={i} 
+                    className="inline-block bg-[#F3E5F5] text-[#6A1B9A] text-xs px-2 py-1 rounded-md"
+                  >
+                    {unit}
+                  </span>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Usage Instructions</h4>
+              <p className="text-sm">
+                To use this item with your transport unit, please follow the manufacturer guidelines.
+                Always ensure it's properly secured before transport begins. Replace as needed according
+                to the maintenance schedule.
+              </p>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              toast({
+                title: "Item added to request list",
+                description: "Your supply request has been updated",
+                variant: "default",
+              });
+              setSelectedItem(null);
+            }} className="mr-2">
+              Add to Request
+            </Button>
+            <DialogClose asChild>
+              <Button variant="ghost">Close</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
