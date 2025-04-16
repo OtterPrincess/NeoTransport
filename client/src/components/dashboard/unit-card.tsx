@@ -208,9 +208,18 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
       
       <div className="border-t border-gray-100 pt-2 flex justify-between items-center">
         <span className="text-xs text-[#616161]">Last updated: {lastUpdatedText}</span>
-        <Link to={`/unit/${unit.id}`}>
-          <button className="text-[#6A1B9A] hover:text-[#9C27B0] text-sm font-medium">View Details</button>
-        </Link>
+        <div className="relative group">
+          <Link to={`/unit/${unit.id}`}>
+            <button className="text-[#6A1B9A] hover:text-[#9C27B0] text-sm font-medium flex items-center">
+              View Details
+              <Icon name="info" size={16} className="ml-1 opacity-70" />
+            </button>
+          </Link>
+          <div className="absolute right-0 w-64 p-2 mt-2 text-xs bg-white border rounded-md shadow-lg 
+                       opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none">
+            View detailed temperature and vibration charts, access device reports, manage alerts, and request maintenance.
+          </div>
+        </div>
       </div>
     </Card>
   );
