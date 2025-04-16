@@ -84,11 +84,11 @@ export const TEMPERATURE_RANGES = {
   }
 };
 
-// Vibration thresholds
+// Vibration thresholds (in m/s²) - based on real data
 export const VIBRATION_THRESHOLDS = {
-  normal: 0.3,
-  warning: 0.5,
-  alert: 0.8
+  normal: 0.3,  // 0.0-0.3: Stable (minimal vibration)
+  warning: 0.5, // 0.3-0.5: Moderate vibration 
+  alert: 0.8    // >0.5: High/excessive vibration
 };
 
 // Battery thresholds
@@ -121,3 +121,29 @@ export const MAINTENANCE_STATUS = {
   due: "due-soon",
   overdue: "overdue"
 };
+
+// Recorded vibration measurements (from real data)
+export const VIBRATION_MEASUREMENTS = [
+  { timestamp: "00:02:40", average: 0.2, max: 1.0, aMax: 0.34 },
+  { timestamp: "00:02:49", average: 0.2, max: 1.0, aMax: 0.43 },
+  { timestamp: "00:04:47", average: 0.2, max: 1.1, aMax: 0.50 },
+  { timestamp: "00:04:52", average: 0.2, max: 1.1, aMax: 0.21 },
+  { timestamp: "00:05:03", average: 0.2, max: 1.1, aMax: 0.29 },
+  { timestamp: "00:05:11", average: 0.2, max: 1.1, aMax: 0.36 },
+  { timestamp: "00:05:26", average: 0.2, max: 1.1, aMax: 0.48 },
+  { timestamp: "00:05:39", average: 0.2, max: 1.3, aMax: 0.55 },
+  { timestamp: "00:05:45", average: 0.2, max: 1.3, aMax: 0.31 },
+  { timestamp: "00:05:51", average: 0.2, max: 1.3, aMax: 0.43 },
+  { timestamp: "00:05:59", average: 0.2, max: 1.3, aMax: 0.19 },
+  { timestamp: "00:06:07", average: 0.2, max: 1.3, aMax: 0.25 }
+];
+
+// Instrumental intensity scale for vibration (from real data)
+export const VIBRATION_INTENSITY_SCALE = [
+  { level: "I", description: "Detectable only by instruments." },
+  { level: "II-III", description: "Very slight vibration felt by only some people." },
+  { level: "IV-V", description: "Feeling moderate shaking." },
+  { level: "VI-VII", description: "Strong and very strong shock. Explicit destruction." },
+  { level: "VIII", description: "Sudden shocks. Widespread destruction." },
+  { level: "IX-X", description: "Change the configuration of land, landslides, and cracks." }
+];

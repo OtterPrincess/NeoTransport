@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { Card } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 import { cn, getTimeAgo, getTemperatureStatusColor, getBatteryStatusColor } from "@/lib/utils";
-import { STATUS_COLORS } from "@/lib/constants";
+import { STATUS_COLORS, VIBRATION_THRESHOLDS } from "@/lib/constants";
 import type { UnitWithTelemetry } from "@shared/schema";
 
 interface UnitCardProps {
@@ -38,8 +38,9 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
   
   const getVibrationStatusText = (): string => {
     if (isOffline || vibration === undefined || vibration === null) return "No Data";
-    if (vibration < 0.3) return "Stable";
-    if (vibration < 0.6) return "Moderate";
+    if (vibration < VIBRATION_THRESHOLDS.normal) return "Stable";
+    if (vibration < VIBRATION_THRESHOLDS.warning) return "Moderate";
+    if (vibration < VIBRATION_THRESHOLDS.alert) return "Warning";
     return "High";
   };
   
@@ -159,8 +160,9 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
                   size={20} 
                   className={cn(
                     "mr-1",
-                    vibration < 0.3 ? "text-safe" : 
-                    vibration < 0.6 ? "text-warning" : 
+                    vibration < VIBRATION_THRESHOLDS.normal ? "text-safe" : 
+                    vibration < VIBRATION_THRESHOLDS.warning ? "text-warning" : 
+                    vibration < VIBRATION_THRESHOLDS.alert ? "text-warning" : 
                     "text-alert"
                   )} 
                 />
