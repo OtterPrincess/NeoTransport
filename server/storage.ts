@@ -389,9 +389,15 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userIdCounter++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    // Ensure role has a default value
+    const userWithDefaults: User = { 
+      ...insertUser, 
+      id,
+      role: insertUser.role || 'nurse',
+      displayName: insertUser.displayName || null
+    };
+    this.users.set(id, userWithDefaults);
+    return userWithDefaults;
   }
   
   // Unit operations
@@ -548,9 +554,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    // Ensure required fields have default values
+    const userToInsert = {
+      ...insertUser,
+      role: insertUser.role || 'nurse',
+      displayName: insertUser.displayName || null
+    };
+    
     const [user] = await db
       .insert(users)
-      .values(insertUser)
+      .values(userToInsert)
       .returning();
     return user;
   }

@@ -13,9 +13,16 @@ import createMemoryStore from "memorystore";
 const MemoryStore = createMemoryStore(session);
 const PostgresSessionStore = connectPg(session);
 
+// Extending Express.User interface 
 declare global {
   namespace Express {
-    interface User extends User {}
+    // Don't extend with User to avoid recursive definition
+    interface User {
+      id: number;
+      username: string;
+      role: string;
+      displayName: string | null;
+    }
   }
 }
 
@@ -147,14 +154,14 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (err: Error | null, user: User | false, info: { message: string } | undefined) => {
       if (err) {
         return next(err);
       }
       if (!user) {
         return res.status(401).json({ message: "Invalid username or password" });
       }
-      req.login(user, (err) => {
+      req.login(user, (err: Error | null) => {
         if (err) {
           return next(err);
         }
@@ -164,7 +171,7 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/logout", (req, res, next) => {
-    req.logout((err) => {
+    req.logout((err: Error | null) => {
       if (err) {
         return next(err);
       }
@@ -179,4 +186,38 @@ export function setupAuth(app: Express) {
       return res.status(401).json({ message: "Not authenticated" });
     }
   });
+  
+  // Create a test user if it doesn't exist
+  createTestUserIfNeeded();
+}
+
+// Create a test user for development if none exists
+async function createTestUserIfNeeded() {
+  try {
+    // Check if admin user exists
+    const adminUser = await storage.getUserByUsername('admin');
+    
+    if (!adminUser) {
+      // Create admin user with password 'password'
+      const hashedPassword = await hashPassword('password');
+      await storage.createUser({
+        username: 'admin',
+        password: hashedPassword,
+        role: 'director',
+        displayName: 'Admin User'
+      });
+      console.log('Created default admin user');
+      
+      // Also create a nurse user
+      await storage.createUser({
+        username: 'nurse',
+        password: await hashPassword('password'),
+        role: 'nurse',
+        displayName: 'Nurse User'
+      });
+      console.log('Created default nurse user');
+    }
+  } catch (error) {
+    console.error('Failed to create test users:', error);
+  }
 }
