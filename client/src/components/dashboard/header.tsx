@@ -55,18 +55,20 @@ export const Header: React.FC = () => {
     <header className="bg-gradient-to-r from-[#6A1B9A] to-[#9C27B0] text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center">
-            <div className="w-7 h-7 text-[#6A1B9A] font-bold flex items-center justify-center">
-              <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M60 20C65.5 20 70 24.5 70 30C70 35.5 65.5 40 60 40C54.5 40 50 35.5 50 30C50 24.5 54.5 20 60 20ZM60 20C60 20 45 20 35 40C25 60 20 80 20 80M30 40C30 46 25 50 20 50" stroke="#6A1B9A" strokeWidth="10" strokeLinecap="round"/>
+          <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
+            <div className="w-8 h-8 text-[#6A1B9A] font-bold flex items-center justify-center">
+              <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M60 15C69 15 76 22 76 31C76 40 69 47 60 47C51 47 44 40 44 31C44 22 51 15 60 15Z" fill="#6A1B9A"/>
+                <path d="M25 50C30 50 34 46 34 41C34 36 30 32 25 32C20 32 16 36 16 41C16 46 20 50 25 50Z" fill="#6A1B9A"/>
+                <path d="M60 15C60 15 45 15 32 40C19 65 16 85 16 85" stroke="#6A1B9A" strokeWidth="12" strokeLinecap="round"/>
               </svg>
             </div>
           </div>
           <div>
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] leading-tight">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] leading-tight tracking-wide">
               NESTARA
             </h1>
-            <span className="text-xs uppercase tracking-wide text-[#E1BEE7]">Neonatal Transport Platform</span>
+            <span className="text-xs uppercase tracking-wider text-[#E1BEE7] font-medium">Neonatal Transport Platform</span>
           </div>
         </div>
         <div className="flex items-center space-x-4">
