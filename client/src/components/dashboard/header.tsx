@@ -52,10 +52,10 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-[#6A1B9A] to-[#9C27B0] text-white shadow-md">
+    <header className="bg-white border-b border-[#E1BEE7] shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
+          <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
             <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
               <svg width="40" height="40" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
                 {/* Main logo group */}
@@ -75,15 +75,17 @@ export const Header: React.FC = () => {
               </svg>
             </div>
           </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] tracking-wide flex items-center">
-              <span className="font-light mr-1">nest</span><span className="font-bold">ara</span>
-              <span className="bg-[#4A148C] text-white text-xs px-1.5 py-0.5 rounded-sm ml-2 uppercase tracking-tight font-medium">Pro</span>
+          <div className="relative">
+            <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-tr from-[#F3E5F5] to-transparent rounded-full blur-xl opacity-30"></div>
+            <h1 className="text-2xl sm:text-3xl tracking-wide flex items-center relative z-10">
+              <span className="font-light text-[#662C6C] tracking-tight">n</span>
+              <span className="font-normal text-[#662C6C]">est</span>
+              <span className="font-bold text-[#662C6C] tracking-tight">ara</span>
+              <div className="ml-2 h-5 w-0.5 bg-[#662C6C]/20"></div>
+              <span className="ml-2 text-[10px] text-[#662C6C]/90 bg-[#F3E5F5] px-1.5 py-0.5 rounded-full shadow-sm">v2.1</span>
             </h1>
-            <div className="flex items-center">
-              <span className="text-xs tracking-wider text-[#E1BEE7]/90 font-medium">Neonatal Transport Monitoring System</span>
-              <span className="bg-[#E1BEE7]/20 h-4 w-px mx-2"></span>
-              <span className="text-[10px] text-white/70 bg-[#4A148C]/40 px-1.5 py-0.5 rounded-full">v2.1</span>
+            <div className="flex items-center mt-1 relative z-10">
+              <span className="text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight">Neonatal Transport Monitoring System</span>
             </div>
           </div>
         </div>
