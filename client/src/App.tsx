@@ -9,6 +9,7 @@ import UnitDetail from "@/pages/unit-detail";
 import AlertHistory from "@/pages/alert-history";
 import CompatibleItems from "@/pages/compatible-items";
 import Settings from "@/pages/settings";
+import SoundscapeGenerator from "@/pages/soundscape-generator";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/alerts" component={AlertHistory} />
       <Route path="/items" component={CompatibleItems} />
       <Route path="/settings" component={Settings} />
+      <Route path="/soundscape" component={SoundscapeGenerator} />
       <Route component={NotFound} />
     </Switch>
   );

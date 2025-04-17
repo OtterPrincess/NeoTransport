@@ -8,6 +8,7 @@ export const TabNavigation: React.FC = () => {
     { name: "Dashboard", path: "/" },
     { name: "Alert History", path: "/alerts" },
     { name: "Compatible Items", path: "/items" },
+    { name: "Soundscape", path: "/soundscape" },
     { name: "Settings", path: "/settings" }
   ];
   
