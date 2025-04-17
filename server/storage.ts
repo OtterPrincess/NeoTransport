@@ -128,6 +128,78 @@ export class MemStorage implements IStorage {
       status: "offline"
     });
     
+    const unit6 = await this.createUnit({
+      unitId: "Bed 1",
+      serialNumber: "NST-2023-B01-A",
+      firmwareVersion: "v2.2.0",
+      room: "NICU-A",
+      location: "Bed 1",
+      assignedNurse: "Nurse Johnson",
+      lastMaintenance: new Date("2023-05-15"),
+      nextMaintenance: new Date("2023-07-15"),
+      status: "normal"
+    });
+    
+    const unit7 = await this.createUnit({
+      unitId: "Bed 2",
+      serialNumber: "NST-2023-B02-B",
+      firmwareVersion: "v2.2.0",
+      room: "NICU-A",
+      location: "Bed 2",
+      assignedNurse: "Nurse Smith",
+      lastMaintenance: new Date("2023-05-15"),
+      nextMaintenance: new Date("2023-07-15"),
+      status: "warning"
+    });
+    
+    const unit8 = await this.createUnit({
+      unitId: "Bed 7",
+      serialNumber: "NST-2023-B07-C",
+      firmwareVersion: "v2.2.0",
+      room: "NICU-B",
+      location: "Bed 7",
+      assignedNurse: "Nurse Davis",
+      lastMaintenance: new Date("2023-05-10"),
+      nextMaintenance: new Date("2023-07-10"),
+      status: "normal"
+    });
+    
+    const unit9 = await this.createUnit({
+      unitId: "Bed 8",
+      serialNumber: "NST-2023-B08-D",
+      firmwareVersion: "v2.2.0",
+      room: "NICU-B",
+      location: "Bed 8",
+      assignedNurse: "Nurse Wilson",
+      lastMaintenance: new Date("2023-05-10"),
+      nextMaintenance: new Date("2023-07-10"),
+      status: "alert"
+    });
+    
+    const unit10 = await this.createUnit({
+      unitId: "Bed 13",
+      serialNumber: "NST-2023-B13-E",
+      firmwareVersion: "v2.2.0",
+      room: "NICU-C",
+      location: "Bed 13",
+      assignedNurse: "Nurse Garcia",
+      lastMaintenance: new Date("2023-05-05"),
+      nextMaintenance: new Date("2023-07-05"),
+      status: "normal"
+    });
+    
+    const unit11 = await this.createUnit({
+      unitId: "Unit #6 (Air)",
+      serialNumber: "NST-2023-AIR-001",
+      firmwareVersion: "v3.0.1",
+      room: "Transport",
+      location: "Air Medical Unit",
+      assignedNurse: "Nurse Martinez",
+      lastMaintenance: new Date("2023-05-01"),
+      nextMaintenance: new Date("2023-07-01"),
+      status: "warning"
+    });
+    
     // Create telemetry for each unit
     this.createTelemetry({
       unitId: unit1.id,
@@ -170,6 +242,67 @@ export class MemStorage implements IStorage {
     });
     
     // No telemetry for unit 5 (offline)
+    
+    // Telemetry for NICU beds
+    this.createTelemetry({
+      unitId: unit6.id,
+      internalTemp: 36.7,
+      surfaceTemp: 36.5,
+      vibration: 0.1,
+      batteryLevel: 90,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
+    
+    this.createTelemetry({
+      unitId: unit7.id,
+      internalTemp: 37.3,
+      surfaceTemp: 36.9,
+      vibration: 0.4,
+      batteryLevel: 45,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
+    
+    this.createTelemetry({
+      unitId: unit8.id,
+      internalTemp: 36.6,
+      surfaceTemp: 36.4,
+      vibration: 0.1,
+      batteryLevel: 92,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
+    
+    this.createTelemetry({
+      unitId: unit9.id,
+      internalTemp: 38.4,
+      surfaceTemp: 37.8,
+      vibration: 0.7,
+      batteryLevel: 32,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
+    
+    this.createTelemetry({
+      unitId: unit10.id,
+      internalTemp: 36.8,
+      surfaceTemp: 36.5,
+      vibration: 0.2,
+      batteryLevel: 85,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
+    
+    this.createTelemetry({
+      unitId: unit11.id,
+      internalTemp: 37.2,
+      surfaceTemp: 36.8,
+      vibration: 0.5,
+      batteryLevel: 55,
+      batteryCharging: false,
+      timestamp: new Date()
+    });
     
     // Create some alerts
     this.createAlert({
