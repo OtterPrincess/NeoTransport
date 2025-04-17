@@ -9,6 +9,12 @@ import Footer from "@/components/dashboard/footer";
 import Icon from "@/components/ui/icon";
 import { ItemDetailDialog } from "@/components/compatible-items/item-detail-dialog";
 import { Link, useRoute } from "wouter";
+import { 
+  MedicalEquipmentIllustration, SafetyEquipmentIllustration, 
+  BlanketsIllustration, AccessoriesIllustration, 
+  MaintenanceIllustration, SmartItemsIllustration,
+  getCategoryIllustration
+} from "@/components/compatible-items/category-illustrations";
 
 interface CompatibleItem {
   id: string;
@@ -294,9 +300,12 @@ export default function CompatibleItems() {
             <Card key={item.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-3">
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-lg font-semibold">{item.name}</h3>
                     <p className="text-sm text-[#616161]">{item.category} | SKU: {item.sku}</p>
+                  </div>
+                  <div className="w-12 h-12 ml-2">
+                    {getCategoryIllustration(item.category)}
                   </div>
                 </div>
                 

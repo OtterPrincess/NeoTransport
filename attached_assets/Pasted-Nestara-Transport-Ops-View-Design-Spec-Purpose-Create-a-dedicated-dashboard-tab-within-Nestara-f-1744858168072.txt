@@ -1,0 +1,151 @@
+Nestara Transport Ops View – Design Spec
+
+Purpose
+
+Create a dedicated dashboard tab within Nestara for managing and visualizing the relationship between intra-hospital transport and inter-facility (ground and aeromedical) transfers, providing all medical professionals with critical context and visibility into movement and readiness across the system.
+
+Tab: Transport Ops
+
+Location: Main navigation alongside Dashboard, Alert History, Compatible Items
+
+📊 Transport Overview Panel
+
+Filters:
+
+Room
+
+Transport Type (Intra-hospital, Ground, Air)
+
+Status (Scheduled, En Route, Completed)
+
+Unit ID / Bed ID
+
+Table View
+
+Bed ID
+
+Current Location
+
+Last Transport
+
+Mode
+
+Duration
+
+Status
+
+Risk Flags
+
+Bed #1
+
+NICU-A 101
+
+NICU → OR
+
+Manual Cot
+
+18 min
+
+Complete
+
+⚠️ Temp Spike
+
+Bed #2
+
+NICU-B 203
+
+ICU → Helipad
+
+AirMed
+
+3 hrs
+
+In Transit
+
+✅ Stable
+
+Bed #5
+
+Recovery Holding
+
+Transport Out
+
+Ground EMS
+
+35 min
+
+Scheduled
+
+—
+
+📍 Bed Detail Panel (Sidebar or Modal)
+
+On row click, display the transport profile for selected bed:
+
+Transport History
+
+Timeline view of movements in past 48 hours
+
+Flags: overheating, vibration events, device malfunction
+
+Current Readiness
+
+Battery charge %
+
+Sensor function status
+
+Assigned nurse/transport tech
+
+External transport team info (if applicable)
+
+🔔 Alert Integration
+
+Flag units at risk during or after transport
+
+Auto-link alerts back to Dashboard + Unit Detail View
+
+Example: Bed #2 experienced vibration spike post-air transport
+
+📦 Inventory + Compatibility Cross-Check
+
+Show current compatible accessories loaded during transport (from Items DB)
+
+Warn if incompatible item is detected for certain transport modes (e.g., thermal wrap not suited for long ground transfers)
+
+🌐 Transport Mode Definitions
+
+Mode
+
+Definition
+
+Intra-hospital
+
+Movement within same building/facility (e.g., NICU to OR)
+
+Ground Transport
+
+EMS or ambulance transfers to another facility
+
+Aeromedical Transport
+
+Helicopter or fixed-wing transfer (MedFlight)
+
+Stakeholders Supported
+
+NICU nurses
+
+Transport coordinators
+
+Air/EMS liaisons
+
+QA/Admin staff
+
+Technical Integration (Optional Future Scope)
+
+Sync with hospital dispatch platforms (via API)
+
+Timestamp pulls from EMS logs / MedFlight portals
+
+Visualization of “transport journey” on embedded hospital floor maps or logistics dashboard
+
+This feature strengthens Nestara’s system-of-record capability across transport ecosystems, improving communication between care teams and elevating safety for neonates in motion.

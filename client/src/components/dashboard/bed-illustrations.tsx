@@ -9,25 +9,37 @@ export const NICUBedBase: React.FC<{ bedNumber: number; status?: string }> = ({ 
         return {
           base: "#FFEBEE",
           accent: "#E53935",
-          monitor: "#FFCDD2"
+          monitor: "#FFCDD2",
+          mattress: "#FFCDD2",
+          pillow: "#FFE6E6",
+          blanket: "#FFCDD2"
         };
       case "warning":
         return {
           base: "#FFF8E1",
           accent: "#FFA000",
-          monitor: "#FFECB3"
+          monitor: "#FFECB3",
+          mattress: "#FFF3CD",
+          pillow: "#FFF8E6",
+          blanket: "#FFEFD0"
         };
       case "offline":
         return {
           base: "#F5F5F5",
           accent: "#BDBDBD",
-          monitor: "#E0E0E0"
+          monitor: "#E0E0E0",
+          mattress: "#EEEEEE",
+          pillow: "#F8F8F8",
+          blanket: "#EEEEEE"
         };
       default: // normal
         return {
           base: "#E8F5E9",
           accent: "#66BB6A",
-          monitor: "#C8E6C9"
+          monitor: "#C8E6C9",
+          mattress: "#E0F2E1",
+          pillow: "#F1F8F1",
+          blanket: "#D7EBD8"
         };
     }
   };
@@ -38,38 +50,66 @@ export const NICUBedBase: React.FC<{ bedNumber: number; status?: string }> = ({ 
     <svg
       width="100%"
       height="100%"
-      viewBox="0 0 120 80"
+      viewBox="0 0 160 120"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
     >
-      {/* Bed frame */}
-      <rect x="10" y="40" width="100" height="30" rx="2" fill={colors.base} stroke="#616161" strokeWidth="1.5" />
+      {/* Base frame */}
+      <rect x="15" y="65" width="130" height="35" rx="3" fill={colors.base} stroke="#424242" strokeWidth="2" />
       
-      {/* Bed legs */}
-      <line x1="20" y1="70" x2="20" y2="78" stroke="#616161" strokeWidth="1.5" />
-      <line x1="100" y1="70" x2="100" y2="78" stroke="#616161" strokeWidth="1.5" />
+      {/* Bed legs and wheels */}
+      <circle cx="30" y="105" r="5" fill="#757575" />
+      <circle cx="130" y="105" r="5" fill="#757575" />
+      <rect x="25" y="100" width="10" height="5" fill="#9E9E9E" />
+      <rect x="125" y="100" width="10" height="5" fill="#9E9E9E" />
       
-      {/* Bed surface with mattress */}
-      <rect x="15" y="35" width="90" height="10" rx="1" fill="white" stroke="#616161" strokeWidth="1" />
+      {/* Bed platform */}
+      <rect x="20" y="55" width="120" height="12" rx="2" fill="white" stroke="#757575" strokeWidth="1.5" />
+      
+      {/* Mattress */}
+      <rect x="25" y="50" width="110" height="8" rx="3" fill={colors.mattress} stroke="#9E9E9E" strokeWidth="1" />
       
       {/* Pillow */}
-      <rect x="20" y="37" width="20" height="6" rx="2" fill="#F3E5F5" stroke="#9E9E9E" strokeWidth="0.5" />
+      <rect x="30" y="45" width="25" height="8" rx="3" fill={colors.pillow} stroke="#BDBDBD" strokeWidth="0.8" />
       
-      {/* Bed number */}
-      <rect x="45" y="50" width="30" height="15" rx="2" fill="white" stroke="#616161" strokeWidth="1" />
-      <text x="55" y="62" fontFamily="sans-serif" fontSize="10" fontWeight="bold" fill="#616161" textAnchor="middle">
+      {/* Blanket */}
+      <path d="M50 50 H115 Q118 50 120 53 V58 H50 V50 Z" fill={colors.blanket} stroke="#9E9E9E" strokeWidth="0.8" />
+      
+      {/* Side rails (up position) */}
+      <rect x="15" y="40" width="3" height="25" fill="#9E9E9E" stroke="#757575" strokeWidth="0.5" />
+      <rect x="142" y="40" width="3" height="25" fill="#9E9E9E" stroke="#757575" strokeWidth="0.5" />
+      <rect x="15" y="40" width="30" height="3" fill="#9E9E9E" />
+      <rect x="115" y="40" width="30" height="3" fill="#9E9E9E" />
+      
+      {/* Bed identification panel */}
+      <rect x="60" y="75" width="40" height="20" rx="3" fill="white" stroke="#616161" strokeWidth="1.5" />
+      <text x="80" y="89" fontFamily="sans-serif" fontSize="14" fontWeight="bold" fill="#424242" textAnchor="middle">
         {bedNumber}
       </text>
       
-      {/* Status indicator */}
-      <circle cx="100" cy="50" r="5" fill={colors.accent} />
+      {/* Monitoring equipment and IV pole */}
+      <rect x="95" y="15" width="30" height="25" rx="2" fill={colors.monitor} stroke="#616161" strokeWidth="1.5" />
+      <line x1="100" y1="25" x2="120" y2="25" stroke="#616161" strokeWidth="1.5" />
+      <line x1="100" y1="30" x2="115" y2="30" stroke="#616161" strokeWidth="1.5" />
+      <line x1="110" y1="40" x2="110" y2="50" stroke="#616161" strokeWidth="1.5" strokeDasharray="2 1" />
       
-      {/* Monitoring equipment for NICU */}
-      <rect x="75" y="10" width="25" height="25" rx="2" fill={colors.monitor} stroke="#616161" strokeWidth="1" />
-      <line x1="80" y1="20" x2="95" y2="20" stroke="#616161" strokeWidth="1" />
-      <line x1="80" y1="25" x2="90" y2="25" stroke="#616161" strokeWidth="1" />
-      <line x1="87.5" y1="35" x2="87.5" y2="40" stroke="#616161" strokeWidth="1" strokeDasharray="2 1" />
+      {/* IV pole */}
+      <line x1="135" y1="15" x2="135" y2="55" stroke="#757575" strokeWidth="2" />
+      <circle cx="135" y="15" r="3" fill="#9E9E9E" />
+      <rect x="132" y="25" width="6" height="4" fill="#BDBDBD" />
+      
+      {/* Status indicator with pulsating effect */}
+      <circle cx="130" cy="75" r="7" fill={colors.accent}>
+        {status === "alert" && (
+          <animate 
+            attributeName="opacity" 
+            values="1;0.5;1" 
+            dur="1s" 
+            repeatCount="indefinite" 
+          />
+        )}
+      </circle>
     </svg>
   );
 };
