@@ -75,17 +75,20 @@ export const Header: React.FC = () => {
               </svg>
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-tr from-[#F3E5F5] to-transparent rounded-full blur-xl opacity-30"></div>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5] via-[#E1BEE7] to-[#F3E5F5]/30 rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-all duration-700 animate-pulse"></div>
+            <div className="absolute top-0 -left-4 w-20 h-20 bg-gradient-to-tl from-[#9C27B0]/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-all duration-700 group-hover:scale-150"></div>
+            <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-br from-[#F3E5F5] to-[#9C27B0]/10 rounded-full blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"></div>
+            
             <h1 className="text-2xl sm:text-3xl tracking-wide flex items-center relative z-10">
-              <span className="font-light text-[#662C6C] tracking-tight">n</span>
-              <span className="font-normal text-[#662C6C]">est</span>
-              <span className="font-bold text-[#662C6C] tracking-tight">ara</span>
-              <div className="ml-2 h-5 w-0.5 bg-[#662C6C]/20"></div>
-              <span className="ml-2 text-[10px] text-[#662C6C]/90 bg-[#F3E5F5] px-1.5 py-0.5 rounded-full shadow-sm">v2.1</span>
+              <span className="font-light text-[#662C6C] tracking-tight group-hover:text-[#4A148C] transition-colors duration-300">n</span>
+              <span className="font-normal text-[#662C6C] group-hover:text-[#4A148C] transition-colors duration-300">est</span>
+              <span className="font-bold text-[#662C6C] tracking-tight group-hover:text-[#4A148C] transition-colors duration-300">ara</span>
+              <div className="ml-2 h-5 w-0.5 bg-[#662C6C]/20 group-hover:bg-[#4A148C]/30 transition-colors duration-300"></div>
+              <span className="ml-2 text-[10px] text-[#662C6C]/90 bg-[#F3E5F5] group-hover:bg-[#E1BEE7] px-1.5 py-0.5 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300">v2.1</span>
             </h1>
             <div className="flex items-center mt-1 relative z-10">
-              <span className="text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight">Neonatal Transport Monitoring System</span>
+              <span className="text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight group-hover:text-[#4A148C] transition-colors duration-300">Neonatal Transport Monitoring System</span>
             </div>
           </div>
         </div>

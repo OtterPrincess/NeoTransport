@@ -14,9 +14,9 @@ import { useToast } from "@/hooks/use-toast";
 
 // Available sound types for alerts
 const ALERT_SOUND_TYPES = [
-  { id: 'gentle', name: 'Gentle (Soft Tones)', description: 'Subtle, calming sounds for non-critical alerts' },
-  { id: 'attention', name: 'Attention (Medium)', description: 'Clear, distinctive sounds for warnings that need acknowledgment' },
-  { id: 'urgent', name: 'Urgent (Prominent)', description: 'Unmistakable sounds for critical alerts requiring immediate action' }
+  { id: 'gentle', name: 'Gentle Chime', description: 'Soft, pleasant bell tones that won\'t startle staff or patients' },
+  { id: 'attention', name: 'Melodic Pattern', description: 'Calming three-note sequence that remains distinct without being jarring' },
+  { id: 'urgent', name: 'Rising Tone', description: 'Progressively increasing tone that conveys urgency without being harsh or alarming' }
 ];
 
 // Alert categories to customize
@@ -79,26 +79,59 @@ export default function SoundscapeGenerator() {
       const oscillator = context.createOscillator();
       const gainNode = context.createGain();
       
-      // Configure sound based on type
+      // Configure sound based on type - using more pleasant and less startling sounds
       switch (soundType) {
         case 'gentle':
+          // Gentle bell-like sound using sine wave
           oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(440, context.currentTime); // A4
-          gainNode.gain.setValueAtTime(volume / 100 * 0.3, context.currentTime);
+          oscillator.frequency.setValueAtTime(698.46, context.currentTime); // F5 - pleasant bell-like tone
+          
+          // Gentle fade-in and fade-out for smooth sound
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.25, context.currentTime + 0.1);
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
           break;
+          
         case 'attention':
+          // Melodic three-note pattern with triangle wave for warmth
           oscillator.type = 'triangle';
+          
+          // Smoother start volume
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.3, context.currentTime + 0.05);
+          
+          // Schedule the three-note pattern
           oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
-          gainNode.gain.setValueAtTime(volume / 100 * 0.5, context.currentTime);
+          oscillator.frequency.setValueAtTime(587.33, context.currentTime + 0.2); // D5
+          oscillator.frequency.setValueAtTime(659.25, context.currentTime + 0.4); // E5
+          
+          // Gentle fade out
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.6);
           break;
+          
         case 'urgent':
-          oscillator.type = 'square';
-          oscillator.frequency.setValueAtTime(880, context.currentTime); // A5
-          gainNode.gain.setValueAtTime(volume / 100 * 0.7, context.currentTime);
+          // Rising tone that's still pleasant (using sine instead of square)
+          oscillator.type = 'sine';
+          
+          // Start with a lower volume and frequency
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.4, context.currentTime + 0.1);
+          
+          // Create a rising tone effect
+          oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
+          oscillator.frequency.linearRampToValueAtTime(783.99, context.currentTime + 0.4); // G5
+          
+          // Gentle fade out
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
           break;
+          
         default:
-          oscillator.frequency.setValueAtTime(440, context.currentTime);
-          gainNode.gain.setValueAtTime(volume / 100 * 0.5, context.currentTime);
+          // Default gentle sound
+          oscillator.type = 'sine';
+          oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.3, context.currentTime + 0.1);
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.4);
       }
       
       // Connect and play
@@ -107,12 +140,12 @@ export default function SoundscapeGenerator() {
       
       oscillator.start();
       
-      // Stop after 0.5 seconds
+      // Stop after 0.8 seconds to allow the more complex sound patterns to complete
       setTimeout(() => {
         oscillator.stop();
         oscillator.disconnect();
         gainNode.disconnect();
-      }, 500);
+      }, 800);
     } catch (error) {
       console.error('Error playing sound:', error);
       toast({
