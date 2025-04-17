@@ -323,17 +323,34 @@ export default function CompatibleItems() {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="outline" className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/5">
-                          <Icon name="info" size={16} className="mr-1" />
-                          View Details
+                        <Button 
+                          variant="outline" 
+                          className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/10 transition-all duration-200 group relative overflow-hidden"
+                        >
+                          <span className="absolute inset-0 w-0 bg-[#6A1B9A]/5 transition-all duration-300 ease-out group-hover:w-full"></span>
+                          <span className="relative flex items-center justify-center">
+                            <Icon name="info" size={16} className="mr-2 group-hover:scale-110 transition-transform duration-200" />
+                            View Details
+                          </span>
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent className="bg-white p-3 shadow-lg rounded-md border max-w-md">
                         <div className="space-y-2">
-                          <p className="text-sm font-medium">View detailed item information including:</p>
+                          <p className="text-sm font-medium">
+                            {item.category === "Medical Equipment" ? "Critical Medical Equipment Details:" : 
+                             item.category === "Safety Equipment" ? "Safety Equipment Specifications:" : 
+                             item.category === "Blankets/Bedding" ? "Thermal Properties & Materials:" : 
+                             item.category === "Maintenance" ? "Maintenance Tool Information:" : 
+                             item.category === "Smart Items" ? "Smart Device Technology Specs:" : 
+                             "View detailed item information:"}
+                          </p>
                           <ul className="text-xs space-y-1 text-gray-600 pl-2">
                             <li>• Complete technical specifications and dimensions</li>
-                            <li>• Certification and compliance documentation</li>
+                            {item.category === "Medical Equipment" && <li>• Medical certifications and clinical usage guidelines</li>}
+                            {item.category === "Safety Equipment" && <li>• Safety ratings and compliance certifications</li>}
+                            {item.category === "Blankets/Bedding" && <li>• Thermal efficiency ratings and material details</li>}
+                            {item.category === "Smart Items" && <li>• Connectivity options and battery requirements</li>}
+                            {item.category === "Maintenance" && <li>• Calibration requirements and testing protocols</li>}
                             <li>• Installation and usage instructions</li>
                             <li>• Maintenance schedule and replacement parts</li>
                             <li>• Order information and availability status</li>

@@ -56,11 +56,14 @@ export const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
-            <div className="w-8 h-8 text-[#6A1B9A] font-bold flex items-center justify-center">
-              <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M60 15C69 15 76 22 76 31C76 40 69 47 60 47C51 47 44 40 44 31C44 22 51 15 60 15Z" fill="#6A1B9A"/>
-                <path d="M25 50C30 50 34 46 34 41C34 36 30 32 25 32C20 32 16 36 16 41C16 46 20 50 25 50Z" fill="#6A1B9A"/>
-                <path d="M60 15C60 15 45 15 32 40C19 65 16 85 16 85" stroke="#6A1B9A" strokeWidth="12" strokeLinecap="round"/>
+            <div className="w-9 h-9 text-[#6A1B9A] font-bold flex items-center justify-center">
+              <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Crescent moon shape */}
+                <path d="M70 30C50 20 30 35 25 55C20 75 30 90 50 95C35 95 15 85 10 65C5 45 15 20 40 10C50 15 65 20 70 30Z" fill="#6A1B9A"/>
+                {/* Small circle (left) */}
+                <circle cx="25" cy="20" r="8" fill="#6A1B9A"/>
+                {/* Larger circle (right) */}
+                <circle cx="50" cy="15" r="14" fill="#6A1B9A"/>
               </svg>
             </div>
           </div>
