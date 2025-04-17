@@ -155,7 +155,7 @@ export const ItemDetailDialog: React.FC<ItemDetailProps> = ({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <DialogTitle className="text-xl font-semibold text-[#6A1B9A]">
@@ -176,86 +176,87 @@ export const ItemDetailDialog: React.FC<ItemDetailProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          {/* Left Column - Core Info */}
+        {/* Combined Specifications Table */}
+        <div className="mt-3">
+          <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Specifications</h4>
+          <div className="rounded-lg border overflow-hidden text-sm">
+            {Object.entries(detailedSpecs).map(([key, value], index) => (
+              <div key={key} className={`flex ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                <div className="w-2/5 px-3 py-2 text-[#616161] font-medium border-r">{key}</div>
+                <div className="w-3/5 px-3 py-2">{value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Usage & Warnings */}
+        <div className="mt-3 space-y-2">
           <div>
-            <h4 className="text-md font-medium mb-3 text-[#6A1B9A]">Specifications</h4>
-            <div className="rounded-lg border overflow-hidden">
-              {Object.entries(detailedSpecs).map(([key, value], index) => (
-                <div key={key} className={`flex ${index % 2 === 0 ? 'bg-gray-50' : ''}`}>
-                  <div className="w-1/3 px-4 py-3 text-[#616161] font-medium">{key}</div>
-                  <div className="w-2/3 px-4 py-3">{value}</div>
-                </div>
-              ))}
+            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Description</h4>
+            <div className="px-3 py-2 border rounded-lg text-sm bg-white">
+              {item.notes}
             </div>
           </div>
           
-          {/* Right Column - Notes & Guidance */}
           <div>
-            <h4 className="text-md font-medium mb-3 text-[#6A1B9A]">Notes & Use Guidance</h4>
-            <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <h5 className="text-sm font-medium mb-2">Description</h5>
-                <p className="text-sm">{item.notes}</p>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <h5 className="text-sm font-medium mb-2">Usage Guidance</h5>
-                <p className="text-sm">{usageGuidance}</p>
-              </div>
-              
-              <div className="p-4 border rounded-lg bg-red-50">
-                <h5 className="text-sm font-medium text-red-700 mb-2 flex items-center">
-                  <Icon name="alert" size={16} className="mr-1 text-red-700" />
-                  Warnings & Precautions
-                </h5>
-                <p className="text-sm text-red-700">{warnings}</p>
-              </div>
+            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Usage Guidance</h4>
+            <div className="px-3 py-2 border rounded-lg text-sm bg-white">
+              {usageGuidance}
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A] flex items-center">
+              <Icon name="alert" size={14} className="mr-1 text-red-600" />
+              Warnings
+            </h4>
+            <div className="px-3 py-2 border border-red-200 rounded-lg text-sm bg-red-50 text-red-700">
+              {warnings}
             </div>
           </div>
         </div>
         
-        {/* Optional Media Panel */}
+        {/* Optional Media Panel - only for Medical Equipment */}
         {item.category === "Medical Equipment" && (
-          <div className="mt-6">
-            <h4 className="text-md font-medium mb-3 text-[#6A1B9A]">Reference Diagrams</h4>
-            <div className="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-              <p className="text-[#616161]">
-                <Icon name="report" size={24} className="inline mr-2" />
+          <div className="mt-3">
+            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Reference Diagrams</h4>
+            <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+              <p className="text-sm text-[#616161]">
+                <Icon name="report" size={20} className="inline mr-2" />
                 Media assets available in full documentation
               </p>
             </div>
           </div>
         )}
         
-        <Separator className="my-4" />
+        <Separator className="my-3" />
         
-        <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between items-stretch sm:items-center">
-          <div className="flex gap-2">
-            <DialogClose asChild>
-              <Button variant="outline" className="text-[#616161] flex-1 sm:flex-none">
-                <Icon name="back" size={16} className="mr-2" />
-                Back to Reference
-              </Button>
-            </DialogClose>
-          </div>
+        <DialogFooter className="flex flex-wrap sm:flex-row gap-2 sm:justify-between">
+          <DialogClose asChild>
+            <Button size="sm" variant="outline" className="text-[#616161]">
+              <Icon name="back" size={14} className="mr-1" />
+              Back
+            </Button>
+          </DialogClose>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 ml-auto">
             <Button 
+              size="sm"
               variant="outline" 
               className="text-red-600 border-red-200 hover:bg-red-50"
               onClick={handleReportIncompatibility}
             >
-              <Icon name="alert" size={16} className="mr-2" />
-              Report Incompatibility
+              <Icon name="alert" size={14} className="mr-1" />
+              Report Issue
             </Button>
             
             <Button 
+              size="sm"
               className="bg-[#6A1B9A] hover:bg-[#6A1B9A]/90 text-white"
               onClick={handleRequestProcurement}
             >
-              <Icon name="items" size={16} className="mr-2" />
-              Request Procurement Info
+              <Icon name="items" size={14} className="mr-1" />
+              Procurement Info
             </Button>
           </div>
         </DialogFooter>
