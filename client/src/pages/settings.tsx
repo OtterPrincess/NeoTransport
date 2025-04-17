@@ -35,7 +35,7 @@ export default function Settings() {
   
   // User settings
   const [displayName, setDisplayName] = useState("Admin User");
-  const [role, setRole] = useState("head_nurse");
+  const [role, setRole] = useState("director");
   const [emailNotifications, setEmailNotifications] = useState(true);
   
   const handleSaveSettings = () => {
@@ -61,6 +61,9 @@ export default function Settings() {
     setVibrationThreshold(VIBRATION_THRESHOLDS.warning.toString());
     setBatteryWarning(BATTERY_THRESHOLDS.warning.toString());
     setBatteryAlert(BATTERY_THRESHOLDS.alert.toString());
+    
+    // Keep director role
+    setRole("director");
     
     toast({
       title: "Defaults Restored",
@@ -301,6 +304,7 @@ export default function Settings() {
                       <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem key="role-director" value="director">Director</SelectItem>
                       <SelectItem key="role-head-nurse" value="head_nurse">Head Nurse</SelectItem>
                       <SelectItem key="role-assigned-nurse" value="assigned_nurse">Assigned Nurse</SelectItem>
                       <SelectItem key="role-tech-support" value="tech_support">Technical Support</SelectItem>
