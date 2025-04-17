@@ -14,19 +14,19 @@ import { useToast } from "@/hooks/use-toast";
 
 // Available sound types for alerts
 const ALERT_SOUND_TYPES = [
-  { id: 'gentle', name: 'Gentle Chime', description: 'Soft, pleasant bell tones that won\'t startle staff or patients' },
-  { id: 'attention', name: 'Melodic Pattern', description: 'Calming three-note sequence that remains distinct without being jarring' },
-  { id: 'urgent', name: 'Rising Tone', description: 'Progressively increasing tone that conveys urgency without being harsh or alarming' },
-  { id: 'melodic', name: 'Soothing Melody', description: 'A gentle, pleasing melody that\'s calming but noticeable in a hospital environment' },
-  { id: 'nature', name: 'Nature Sound', description: 'Peaceful nature-like sounds that promote a calming atmosphere while still alerting staff' }
+  { id: "gentle", name: "Gentle Chime", description: "Soft, pleasant bell tones that won't startle staff or patients" },
+  { id: "attention", name: "Melodic Pattern", description: "Calming three-note sequence that remains distinct without being jarring" },
+  { id: "urgent", name: "Rising Tone", description: "Progressively increasing tone that conveys urgency without being harsh or alarming" },
+  { id: "melodic", name: "Soothing Melody", description: "A gentle, pleasing melody that's calming but noticeable in a hospital environment" },
+  { id: "nature", name: "Nature Sound", description: "Peaceful nature-like sounds that promote a calming atmosphere while still alerting staff" }
 ];
 
 // Alert categories to customize
 const ALERT_CATEGORIES = [
-  { id: 'temperature', name: 'Temperature Alerts', description: 'Alerts related to internal or surface temperature' },
-  { id: 'vibration', name: 'Vibration Alerts', description: 'Alerts related to excessive motion or vibration' },
-  { id: 'battery', name: 'Battery Alerts', description: 'Alerts related to battery level or charging status' },
-  { id: 'connection', name: 'Connection Alerts', description: 'Alerts related to connectivity issues or offline status' }
+  { id: "temperature", name: "Temperature Alerts", description: "Alerts related to internal or surface temperature" },
+  { id: "vibration", name: "Vibration Alerts", description: "Alerts related to excessive motion or vibration" },
+  { id: "battery", name: "Battery Alerts", description: "Alerts related to battery level or charging status" },
+  { id: "connection", name: "Connection Alerts", description: "Alerts related to connectivity issues or offline status" }
 ];
 
 interface SoundProfile {
@@ -43,13 +43,13 @@ interface SoundProfile {
 }
 
 const DEFAULT_PROFILE: SoundProfile = {
-  id: 'default',
-  name: 'Default Profile',
+  id: "default",
+  name: "Default Profile",
   configurations: {
-    temperature: { soundType: 'attention', volume: 70, enabled: true },
-    vibration: { soundType: 'urgent', volume: 85, enabled: true },
-    battery: { soundType: 'gentle', volume: 60, enabled: true },
-    connection: { soundType: 'attention', volume: 75, enabled: true }
+    temperature: { soundType: "attention", volume: 70, enabled: true },
+    vibration: { soundType: "urgent", volume: 85, enabled: true },
+    battery: { soundType: "gentle", volume: 60, enabled: true },
+    connection: { soundType: "melodic", volume: 75, enabled: true }
   },
   isActive: true
 };
@@ -76,7 +76,7 @@ export default function SoundscapeGenerator() {
   // Load profiles from localStorage
   useEffect(() => {
     try {
-      const savedProfiles = localStorage.getItem('nestara_sound_profiles');
+      const savedProfiles = localStorage.getItem("nestara_sound_profiles");
       if (savedProfiles) {
         const parsedProfiles = JSON.parse(savedProfiles) as SoundProfile[];
         if (Array.isArray(parsedProfiles) && parsedProfiles.length > 0) {
@@ -91,7 +91,7 @@ export default function SoundscapeGenerator() {
       }
       setIsLoaded(true);
     } catch (error) {
-      console.error('Error loading sound profiles:', error);
+      console.error("Error loading sound profiles:", error);
       // Fall back to default profile
       setIsLoaded(true);
     }
@@ -101,9 +101,9 @@ export default function SoundscapeGenerator() {
   useEffect(() => {
     if (isLoaded) {
       try {
-        localStorage.setItem('nestara_sound_profiles', JSON.stringify(profiles));
+        localStorage.setItem("nestara_sound_profiles", JSON.stringify(profiles));
       } catch (error) {
-        console.error('Error saving sound profiles:', error);
+        console.error("Error saving sound profiles:", error);
         toast({
           title: "Saving Error",
           description: "Unable to save your sound profiles to local storage.",
@@ -124,9 +124,9 @@ export default function SoundscapeGenerator() {
       
       // Configure sound based on type - using more pleasant and less startling sounds
       switch (soundType) {
-        case 'gentle':
+        case "gentle":
           // Gentle bell-like sound using sine wave
-          oscillator.type = 'sine';
+          oscillator.type = "sine";
           oscillator.frequency.setValueAtTime(698.46, context.currentTime); // F5 - pleasant bell-like tone
           
           // Gentle fade-in and fade-out for smooth sound
@@ -135,9 +135,9 @@ export default function SoundscapeGenerator() {
           gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
           break;
           
-        case 'attention':
+        case "attention":
           // Melodic three-note pattern with triangle wave for warmth
-          oscillator.type = 'triangle';
+          oscillator.type = "triangle";
           
           // Smoother start volume
           gainNode.gain.setValueAtTime(0, context.currentTime);
@@ -152,9 +152,9 @@ export default function SoundscapeGenerator() {
           gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.6);
           break;
           
-        case 'urgent':
+        case "urgent":
           // Rising tone that's still pleasant (using sine instead of square)
-          oscillator.type = 'sine';
+          oscillator.type = "sine";
           
           // Start with a lower volume and frequency
           gainNode.gain.setValueAtTime(0, context.currentTime);
@@ -168,9 +168,9 @@ export default function SoundscapeGenerator() {
           gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
           break;
           
-        case 'melodic':
+        case "melodic":
           // Soothing melody with sine wave
-          oscillator.type = 'sine';
+          oscillator.type = "sine";
           
           // Gentle volume ramp
           gainNode.gain.setValueAtTime(0, context.currentTime);
@@ -187,9 +187,9 @@ export default function SoundscapeGenerator() {
           gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.8);
           break;
           
-        case 'nature':
+        case "nature":
           // Nature-like sound (bird chirp simulation)
-          oscillator.type = 'sine';
+          oscillator.type = "sine";
           
           // Bird chirp effect
           gainNode.gain.setValueAtTime(0, context.currentTime);
@@ -206,7 +206,7 @@ export default function SoundscapeGenerator() {
           
         default:
           // Default gentle sound
-          oscillator.type = 'sine';
+          oscillator.type = "sine";
           oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
           gainNode.gain.setValueAtTime(0, context.currentTime);
           gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.3, context.currentTime + 0.1);
@@ -226,7 +226,7 @@ export default function SoundscapeGenerator() {
         gainNode.disconnect();
       }, 800);
     } catch (error) {
-      console.error('Error playing sound:', error);
+      console.error("Error playing sound:", error);
       toast({
         title: "Sound Preview Error",
         description: "There was an error playing the sound preview.",
@@ -402,14 +402,14 @@ export default function SoundscapeGenerator() {
                       // Profiles are automatically saved to localStorage on every change
                       // This button provides user feedback
                       try {
-                        localStorage.setItem('nestara_sound_profiles', JSON.stringify(profiles));
+                        localStorage.setItem("nestara_sound_profiles", JSON.stringify(profiles));
                         toast({
                           title: "Settings Saved",
                           description: "Your alert sound profile has been saved to your device.",
                           variant: "default"
                         });
                       } catch (error) {
-                        console.error('Error saving sound profiles:', error);
+                        console.error("Error saving sound profiles:", error);
                         toast({
                           title: "Error Saving Settings",
                           description: "Could not save your sound profiles to local storage.",
@@ -459,7 +459,7 @@ export default function SoundscapeGenerator() {
                               <Select 
                                 value={config.soundType}
                                 onValueChange={(value) => {
-                                  updateProfileConfig(category.id, 'soundType', value);
+                                  updateProfileConfig(category.id, "soundType", value);
                                 }}
                               >
                                 <SelectTrigger className="mt-2">
@@ -496,7 +496,7 @@ export default function SoundscapeGenerator() {
                                 step={5}
                                 value={[config.volume]}
                                 onValueChange={(value) => {
-                                  updateProfileConfig(category.id, 'volume', value[0]);
+                                  updateProfileConfig(category.id, "volume", value[0]);
                                 }}
                               />
                             </div>
