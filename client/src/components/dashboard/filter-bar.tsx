@@ -46,8 +46,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <Card className="mb-4">
-      <CardContent className="p-4">
+    <Card className="mb-4 relative group overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5]/0 via-[#E1BEE7]/0 to-[#F3E5F5]/0 opacity-0 group-hover:opacity-20 group-hover:from-[#F3E5F5]/30 group-hover:via-[#E1BEE7]/20 group-hover:to-[#F3E5F5]/10 transition-all duration-500 pointer-events-none"></div>
+      <CardContent className="p-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
             <Label htmlFor="room-filter" className="text-sm font-medium text-[#616161] mb-1">Room</Label>
@@ -111,14 +112,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           </div>
           
           <div className="flex items-end">
-            <Button 
-              variant="default" 
-              className="bg-[#6A1B9A] hover:bg-[#6A1B9A]/90 text-white w-full"
-              onClick={handleApplyFilters}
-            >
-              <Icon name="filter" size={16} className="mr-1" />
-              Apply Filters
-            </Button>
+            <div className="relative w-full group/button overflow-hidden rounded-md">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#9C27B0]/0 via-[#9C27B0]/10 to-[#C2185B]/0 opacity-0 group-hover/button:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+              <Button 
+                variant="default" 
+                className="bg-[#6A1B9A] text-white w-full relative z-10 transition-all duration-300"
+                onClick={handleApplyFilters}
+              >
+                <Icon name="filter" size={16} className="mr-1" />
+                Apply Filters
+              </Button>
+            </div>
           </div>
         </div>
       </CardContent>
