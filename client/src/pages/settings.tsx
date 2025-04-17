@@ -13,21 +13,22 @@ import TabNavigation from "@/components/dashboard/tab-navigation";
 import Footer from "@/components/dashboard/footer";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { TEMPERATURE_RANGES, VIBRATION_THRESHOLDS, BATTERY_THRESHOLDS } from "@/lib/constants";
 
 export default function Settings() {
   const { toast } = useToast();
   
-  // General settings
-  const [refreshInterval, setRefreshInterval] = useState("30");
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  const [teamsIntegration, setTeamsIntegration] = useState(true);
-  const [soundAlerts, setSoundAlerts] = useState(true);
-  
-  // Apple Watch integration
-  const [appleWatchIntegration, setAppleWatchIntegration] = useState(false);
-  const [appleWatchModel, setAppleWatchModel] = useState("series9");
-  const [criticalAlertsOnly, setCriticalAlertsOnly] = useState(true);
+  // Get app settings context
+  const {
+    appleWatchIntegration, setAppleWatchIntegration,
+    appleWatchModel, setAppleWatchModel,
+    criticalAlertsOnly, setCriticalAlertsOnly,
+    teamsIntegration, setTeamsIntegration,
+    soundAlerts, setSoundAlerts,
+    refreshInterval, setRefreshInterval,
+    autoRefresh, setAutoRefresh
+  } = useAppSettings();
   
   // Alert settings
   const [internalTempMin, setInternalTempMin] = useState(TEMPERATURE_RANGES.internal.min.toString());

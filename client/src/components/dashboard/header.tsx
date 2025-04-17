@@ -6,6 +6,7 @@ import { useAppSettings } from "@/contexts/AppSettingsContext";
 export const Header: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeAlertsCount, setActiveAlertsCount] = useState<number>(0);
+  const { appleWatchIntegration, appleWatchModel } = useAppSettings();
   
   // Update the time every minute
   useEffect(() => {
@@ -101,10 +102,14 @@ export const Header: React.FC = () => {
           </div>
           
           {/* Apple Watch Status Indicator */}
-          <div className="hidden md:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
-            <div className="h-3 w-3 rounded-full bg-[#66BB6A] mr-1.5"></div>
-            <span className="text-xs font-medium text-[#4A148C]">Watch Alerts</span>
-          </div>
+          {appleWatchIntegration && (
+            <div className="hidden md:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
+              <div className="h-3 w-3 rounded-full bg-[#66BB6A] mr-1.5"></div>
+              <span className="text-xs font-medium text-[#4A148C]">
+                Watch {appleWatchModel.includes('ultra') ? 'Ultra' : 'Series'} Alerts
+              </span>
+            </div>
+          )}
           
           <Button 
             variant="default" 
