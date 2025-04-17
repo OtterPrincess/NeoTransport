@@ -52,34 +52,43 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-[#6A1B9A] text-white shadow-md">
+    <header className="bg-gradient-to-r from-[#6A1B9A] to-[#9C27B0] text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <div className="p-1 bg-white rounded-md">
-            <div className="w-7 h-7 bg-[#6A1B9A] rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xs">N</span>
+          <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center">
+            <div className="w-7 h-7 text-[#6A1B9A] font-bold flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M60 20C65.5 20 70 24.5 70 30C70 35.5 65.5 40 60 40C54.5 40 50 35.5 50 30C50 24.5 54.5 20 60 20ZM60 20C60 20 45 20 35 40C25 60 20 80 20 80M30 40C30 46 25 50 20 50" stroke="#6A1B9A" strokeWidth="10" strokeLinecap="round"/>
+              </svg>
             </div>
           </div>
-          <h1 className="text-xl font-semibold">Nestara Live Monitor</h1>
+          <div>
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] leading-tight">
+              NESTARA
+            </h1>
+            <span className="text-xs uppercase tracking-wide text-[#E1BEE7]">Neonatal Transport Platform</span>
+          </div>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-sm">
-            <span>{formattedTime}</span> <span>{formattedDate}</span>
-          </span>
+          <div className="bg-[#4A148C]/30 px-3 py-1 rounded-md text-sm hidden md:block">
+            <span className="font-medium">{formattedTime}</span>
+            <span className="mx-2 opacity-50">|</span>
+            <span>{formattedDate}</span>
+          </div>
           <Button 
             variant="default" 
-            className="bg-[#9C27B0] hover:bg-[#9C27B0]/90 text-white p-2 rounded-md flex items-center"
+            className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 rounded-md flex items-center shadow-md transition-all duration-200"
             onClick={handleRefresh}
           >
-            <Icon name="refresh" size={20} className="mr-1" />
+            <Icon name="refresh" size={18} className="mr-1.5" />
             Refresh
           </Button>
           <div className="relative">
-            <Button variant="ghost" className="bg-white text-[#6A1B9A] p-2 rounded-full">
+            <Button variant="ghost" className="bg-white text-[#6A1B9A] p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200">
               <Icon name="notification" size={20} />
             </Button>
             {activeAlertsCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#E53935] text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-[#E53935] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-md animate-pulse">
                 {activeAlertsCount}
               </span>
             )}
