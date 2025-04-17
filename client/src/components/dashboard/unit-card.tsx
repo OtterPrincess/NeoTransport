@@ -62,10 +62,11 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
   return (
     <Card 
       className={cn(
-        "rounded-lg shadow-sm border-l-4 p-4 hover:shadow-md transition-shadow cursor-pointer relative",
+        "rounded-lg shadow-sm border-l-4 p-4 hover:shadow-md transition-all duration-300 cursor-pointer relative group",
         statusColors.border
       )}
     >
+      <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5]/0 via-[#E1BEE7]/0 to-[#F3E5F5]/0 rounded-lg opacity-0 group-hover:opacity-30 group-hover:from-[#F3E5F5]/40 group-hover:via-[#E1BEE7]/30 group-hover:to-[#F3E5F5]/20 transition-all duration-500 pointer-events-none"></div>
       <div className={cn(
         "absolute top-2 right-2 text-white px-2 py-1 rounded-md text-xs font-semibold flex items-center",
         statusColors.bg
@@ -216,9 +217,10 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
         <span className="text-xs text-[#616161]">Last updated: {lastUpdatedText}</span>
         <div className="relative group">
           <Link to={`/unit/${unit.id}`}>
-            <button className="text-[#6A1B9A] hover:text-[#9C27B0] text-sm font-medium flex items-center">
-              View Details
-              <Icon name="info" size={16} className="ml-1 opacity-70" />
+            <button className="relative overflow-hidden px-3 py-1 rounded-full text-[#6A1B9A] text-sm font-medium flex items-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#F3E5F5]/0 via-[#E1BEE7]/0 to-[#F3E5F5]/0 opacity-0 group-hover:opacity-100 group-hover:from-[#F3E5F5]/40 group-hover:via-[#E1BEE7]/30 group-hover:to-[#F3E5F5]/20 transition-all duration-500"></div>
+              <span className="relative z-10">View Details</span>
+              <Icon name="info" size={16} className="ml-1 opacity-70 relative z-10" />
             </button>
           </Link>
           <div className="absolute right-0 w-64 p-2 mt-2 text-xs bg-white border rounded-md shadow-lg 
