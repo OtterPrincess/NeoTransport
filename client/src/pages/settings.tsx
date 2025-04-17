@@ -305,23 +305,41 @@ export default function Settings() {
                       <SelectItem key="role-assigned-nurse" value="assigned_nurse">Assigned Nurse</SelectItem>
                       <SelectItem key="role-tech-support" value="tech_support">Technical Support</SelectItem>
                       <SelectItem key="role-admin" value="admin">Administrator</SelectItem>
+                      <SelectItem key="role-director" value="director">Director</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <Separator />
                 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="emailNotifications">Email Notifications</Label>
-                    <Switch
-                      id="emailNotifications"
-                      checked={emailNotifications}
-                      onCheckedChange={setEmailNotifications}
-                    />
+                {role !== 'director' ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="emailNotifications">Email Notifications</Label>
+                      <Switch
+                        id="emailNotifications"
+                        checked={emailNotifications}
+                        onCheckedChange={setEmailNotifications}
+                      />
+                    </div>
+                    <p className="text-sm text-[#616161]">Receive important alerts via email</p>
                   </div>
-                  <p className="text-sm text-[#616161]">Receive important alerts via email</p>
-                </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="notificationFrequency">Notification Frequency</Label>
+                    <Select value={emailNotifications ? "summary" : "none"} onValueChange={(value) => setEmailNotifications(value !== "none")}>
+                      <SelectTrigger id="notificationFrequency">
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="critical">Only critical alerts</SelectItem>
+                        <SelectItem value="summary">Weekly summary report</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-sm text-[#616161]">Choose how you want to receive alerts and reports</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
