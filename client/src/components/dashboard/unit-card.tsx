@@ -5,6 +5,7 @@ import Icon from "@/components/ui/icon";
 import { cn, getTimeAgo, getTemperatureStatusColor, getBatteryStatusColor } from "@/lib/utils";
 import { STATUS_COLORS, VIBRATION_THRESHOLDS } from "@/lib/constants";
 import type { UnitWithTelemetry } from "@shared/schema";
+import { getUnitIllustration } from "@/components/unit-detail/unit-illustrations";
 
 interface UnitCardProps {
   unit: UnitWithTelemetry;
@@ -84,6 +85,11 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
             isOffline && "text-offline"
           )}>{unit.unitId}</h3>
           <p className="text-sm text-[#616161]">{unit.room} {unit.location}</p>
+        </div>
+        
+        {/* Unit illustration */}
+        <div className="w-24 h-24 -mt-1 -mr-1">
+          {getUnitIllustration(unit.unitId)}
         </div>
       </div>
       

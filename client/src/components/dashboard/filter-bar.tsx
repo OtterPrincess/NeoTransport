@@ -18,24 +18,37 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const [room, setRoom] = useState("all");
   const [unitId, setUnitId] = useState("all");
   const [status, setStatus] = useState("all");
+  const [bed, setBed] = useState("all");
+  const [availableBeds, setAvailableBeds] = useState<string[]>([]);
+
+  // Update available beds when room changes
+  useEffect(() => {
+    if (room && room !== "all" && ROOM_BEDS[room as keyof typeof ROOM_BEDS]) {
+      setAvailableBeds(ROOM_BEDS[room as keyof typeof ROOM_BEDS]);
+    } else {
+      setAvailableBeds([]);
+    }
+  }, [room]);
 
   const handleApplyFilters = () => {
     // Convert "all" values to empty strings for filter logic
     const processedRoom = room === "all" ? "" : room;
     const processedUnitId = unitId === "all" ? "" : unitId;
     const processedStatus = status === "all" ? "" : status;
+    const processedBed = bed === "all" ? "" : bed;
     
     onApplyFilters({ 
       room: processedRoom, 
       unitId: processedUnitId, 
-      status: processedStatus 
+      status: processedStatus,
+      bed: processedBed
     });
   };
 
   return (
     <Card className="mb-4">
       <CardContent className="p-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
             <Label htmlFor="room-filter" className="text-sm font-medium text-[#616161] mb-1">Room</Label>
             <Select value={room} onValueChange={setRoom}>
@@ -49,6 +62,24 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               </SelectContent>
             </Select>
           </div>
+          
+          {/* Bed filter - visible only when a room is selected */}
+          {room !== "all" && room !== "Transport" && (
+            <div>
+              <Label htmlFor="bed-filter" className="text-sm font-medium text-[#616161] mb-1">Bed</Label>
+              <Select value={bed} onValueChange={setBed}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="All Beds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Beds</SelectItem>
+                  {availableBeds.map((bedOption) => (
+                    <SelectItem key={`bed-${bedOption}`} value={bedOption}>{bedOption}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           
           <div>
             <Label htmlFor="unit-filter" className="text-sm font-medium text-[#616161] mb-1">Unit ID</Label>

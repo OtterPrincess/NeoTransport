@@ -11,7 +11,8 @@ export default function Dashboard() {
   const [filters, setFilters] = useState({
     room: "",
     unitId: "",
-    status: ""
+    status: "",
+    bed: ""
   });
 
   // Fetch units with telemetry data
@@ -21,7 +22,7 @@ export default function Dashboard() {
   });
 
   // Apply filters
-  const handleApplyFilters = (newFilters: { room: string; unitId: string; status: string }) => {
+  const handleApplyFilters = (newFilters: { room: string; unitId: string; status: string; bed: string }) => {
     setFilters(newFilters);
   };
   
@@ -30,6 +31,7 @@ export default function Dashboard() {
     if (filters.room && unit.room !== filters.room) return false;
     if (filters.unitId && unit.unitId !== filters.unitId) return false;
     if (filters.status && unit.status !== filters.status) return false;
+    if (filters.bed && (!unit.location || !unit.location.includes(filters.bed))) return false;
     return true;
   });
 
