@@ -3,6 +3,8 @@ import { Route, Switch } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { AppSettingsProvider } from "./contexts/AppSettingsContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Import pages
 import Dashboard from "@/pages/dashboard";
@@ -12,16 +14,18 @@ import CompatibleItems from "@/pages/compatible-items";
 import Settings from "@/pages/settings";
 import SoundscapeGenerator from "@/pages/soundscape-generator";
 import NotFound from "@/pages/not-found";
+import AuthPage from "@/pages/auth-page";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/unit/:id" component={UnitDetail} />
-      <Route path="/alerts" component={AlertHistory} />
-      <Route path="/items" component={CompatibleItems} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/soundscape" component={SoundscapeGenerator} />
+      <ProtectedRoute path="/" component={Dashboard} />
+      <ProtectedRoute path="/unit/:id" component={UnitDetail} />
+      <ProtectedRoute path="/alerts" component={AlertHistory} />
+      <ProtectedRoute path="/items" component={CompatibleItems} />
+      <ProtectedRoute path="/settings" component={Settings} />
+      <ProtectedRoute path="/soundscape" component={SoundscapeGenerator} />
+      <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -30,10 +34,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppSettingsProvider>
-        <Router />
-        <Toaster />
-      </AppSettingsProvider>
+      <AuthProvider>
+        <AppSettingsProvider>
+          <Router />
+          <Toaster />
+        </AppSettingsProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
