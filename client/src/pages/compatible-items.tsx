@@ -379,9 +379,43 @@ export default function CompatibleItems() {
             <Card key={item.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
-                    <p className="text-sm text-[#616161]">{item.category} | SKU: {item.sku}</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      {item.category === "Medical Equipment" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full">
+                          <Icon name="stethoscope" size={20} className="text-blue-600" />
+                        </div>
+                      )}
+                      {item.category === "Safety Equipment" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-red-100 rounded-full">
+                          <Icon name="shield" size={20} className="text-red-600" />
+                        </div>
+                      )}
+                      {item.category === "Blankets" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-purple-100 rounded-full">
+                          <Icon name="layers" size={20} className="text-purple-600" />
+                        </div>
+                      )}
+                      {item.category === "Bedding" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-green-100 rounded-full">
+                          <Icon name="bed" size={20} className="text-green-600" />
+                        </div>
+                      )}
+                      {item.category === "Accessories" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-amber-100 rounded-full">
+                          <Icon name="plus-circle" size={20} className="text-amber-600" />
+                        </div>
+                      )}
+                      {item.category === "Maintenance" && (
+                        <div className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
+                          <Icon name="tool" size={20} className="text-gray-600" />
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="text-lg font-semibold">{item.name}</h3>
+                        <p className="text-sm text-[#616161]">{item.category} | SKU: {item.sku}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -449,9 +483,40 @@ export default function CompatibleItems() {
           </DialogHeader>
           
           <div className="space-y-4 py-4">
-            <div>
-              <h4 className="text-sm font-semibold mb-2">Product Description</h4>
-              <p className="text-sm">
+            <div className="flex items-start gap-4">
+              {selectedItem?.category === "Medical Equipment" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-blue-100 rounded-lg">
+                  <Icon name="stethoscope" size={24} className="text-blue-600" />
+                </div>
+              )}
+              {selectedItem?.category === "Safety Equipment" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-red-100 rounded-lg">
+                  <Icon name="shield" size={24} className="text-red-600" />
+                </div>
+              )}
+              {selectedItem?.category === "Blankets" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-purple-100 rounded-lg">
+                  <Icon name="layers" size={24} className="text-purple-600" />
+                </div>
+              )}
+              {selectedItem?.category === "Bedding" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-green-100 rounded-lg">
+                  <Icon name="bed" size={24} className="text-green-600" />
+                </div>
+              )}
+              {selectedItem?.category === "Accessories" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-amber-100 rounded-lg">
+                  <Icon name="plus-circle" size={24} className="text-amber-600" />
+                </div>
+              )}
+              {selectedItem?.category === "Maintenance" && (
+                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-lg">
+                  <Icon name="tool" size={24} className="text-gray-600" />
+                </div>
+              )}
+              <div>
+                <h4 className="text-sm font-semibold mb-2">Product Description</h4>
+                <p className="text-sm">
                 {selectedItem?.notes}
                 {selectedItem?.category === "Blankets" && 
                   " This specialized thermal blanket is designed to maintain optimal temperature for neonatal transport. It features micro-insulation technology that adapts to ambient conditions."}
