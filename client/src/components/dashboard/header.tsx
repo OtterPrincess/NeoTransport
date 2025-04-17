@@ -56,14 +56,22 @@ export const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
-            <div className="w-9 h-9 text-[#6A1B9A] font-bold flex items-center justify-center">
-              <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Crescent moon shape */}
-                <path d="M70 30C50 20 30 35 25 55C20 75 30 90 50 95C35 95 15 85 10 65C5 45 15 20 40 10C50 15 65 20 70 30Z" fill="#6A1B9A"/>
-                {/* Small circle (left) */}
-                <circle cx="25" cy="20" r="8" fill="#6A1B9A"/>
-                {/* Larger circle (right) */}
-                <circle cx="50" cy="15" r="14" fill="#6A1B9A"/>
+            <div className="w-10 h-10 text-[#6A1B9A] font-bold flex items-center justify-center">
+              <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Moon face base */}
+                <path d="M50 90C72 90 90 72 90 50C90 28 72 10 50 10C28 10 10 28 10 50C10 72 28 90 50 90Z" fill="#6A1B9A"/>
+                
+                {/* Moon crescent (lighter area) */}
+                <path d="M50 90C65 90 78 80 83 65C75 75 60 80 45 75C30 70 20 55 25 40C30 25 45 15 60 20C55 15 45 10 35 10C20 15 10 30 10 50C10 72 28 90 50 90Z" fill="white" fillOpacity="0.2"/>
+                
+                {/* Smile */}
+                <path d="M30 65C35 75 65 75 70 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+                
+                {/* Left circle (smaller) */}
+                <circle cx="30" cy="30" r="8" fill="#6A1B9A" stroke="white" strokeWidth="2"/>
+                
+                {/* Right circle (larger) */}
+                <circle cx="70" cy="30" r="12" fill="#6A1B9A" stroke="white" strokeWidth="2"/>
               </svg>
             </div>
           </div>
