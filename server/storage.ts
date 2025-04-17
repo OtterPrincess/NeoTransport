@@ -7,11 +7,21 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+import createMemoryStore from "memorystore";
+import { pool } from "./db";
+
+// Session store setup
+const MemoryStore = createMemoryStore(session);
+const PostgresSessionStore = connectPg(session);
 
 // modify the interface with any CRUD methods
 // you might need
 
 export interface IStorage {
+  // Session store
+  sessionStore: session.Store;
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -50,6 +60,9 @@ export class MemStorage implements IStorage {
   private unitIdCounter: number;
   private telemetryIdCounter: number;
   private alertIdCounter: number;
+  
+  // Session store
+  public sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -61,6 +74,27 @@ export class MemStorage implements IStorage {
     this.unitIdCounter = 1;
     this.telemetryIdCounter = 1;
     this.alertIdCounter = 1;
+    
+    // Create a default admin user
+    this.createUser({
+      username: "admin",
+      password: "$2b$10$Ql0SHp9YpnB2z.gvsxGKYuTpV.UVzDQGYZKlomLzn8JdF1JzXEA.C.60c57d148d878a69a1ca5c31a6ec45f0",  // Password: "admin"
+      role: "admin",
+      displayName: "Administrator"
+    });
+    
+    // Create a default user
+    this.createUser({
+      username: "user",
+      password: "$2b$10$Ql0SHp9YpnB2z.gvsxGKYuTpV.UVzDQGYZKlomLzn8JdF1JzXEA.C.60c57d148d878a69a1ca5c31a6ec45f0",  // Password: "user"
+      role: "nurse",
+      displayName: "Regular User"
+    });
+    
+    // Initialize session store
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000 // Prune expired entries every 24h
+    });
     
     // Initialize with some sample units
     this.initializeSampleData();
@@ -490,6 +524,18 @@ export class MemStorage implements IStorage {
 
 // Database-backed storage implementation
 export class DatabaseStorage implements IStorage {
+  // Session store
+  public sessionStore: session.Store;
+  
+  constructor() {
+    // Initialize the session store with PostgreSQL
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true,
+      tableName: 'session' 
+    });
+  }
+  
   // User operations
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
