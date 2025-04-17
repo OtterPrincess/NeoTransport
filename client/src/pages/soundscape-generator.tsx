@@ -16,7 +16,9 @@ import { useToast } from "@/hooks/use-toast";
 const ALERT_SOUND_TYPES = [
   { id: 'gentle', name: 'Gentle Chime', description: 'Soft, pleasant bell tones that won\'t startle staff or patients' },
   { id: 'attention', name: 'Melodic Pattern', description: 'Calming three-note sequence that remains distinct without being jarring' },
-  { id: 'urgent', name: 'Rising Tone', description: 'Progressively increasing tone that conveys urgency without being harsh or alarming' }
+  { id: 'urgent', name: 'Rising Tone', description: 'Progressively increasing tone that conveys urgency without being harsh or alarming' },
+  { id: 'melodic', name: 'Soothing Melody', description: 'A gentle, pleasing melody that\'s calming but noticeable in a hospital environment' },
+  { id: 'nature', name: 'Nature Sound', description: 'Peaceful nature-like sounds that promote a calming atmosphere while still alerting staff' }
 ];
 
 // Alert categories to customize
@@ -58,6 +60,7 @@ export default function SoundscapeGenerator() {
   const [activeProfile, setActiveProfile] = useState<SoundProfile>(DEFAULT_PROFILE);
   const [activeTab, setActiveTab] = useState<string>("temperature");
   const [newProfileName, setNewProfileName] = useState<string>("");
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   
   // Audio contexts for sound preview
   const audioContext = useRef<AudioContext | null>(null);
@@ -69,6 +72,46 @@ export default function SoundscapeGenerator() {
     }
     return audioContext.current;
   };
+  
+  // Load profiles from localStorage
+  useEffect(() => {
+    try {
+      const savedProfiles = localStorage.getItem('nestara_sound_profiles');
+      if (savedProfiles) {
+        const parsedProfiles = JSON.parse(savedProfiles) as SoundProfile[];
+        if (Array.isArray(parsedProfiles) && parsedProfiles.length > 0) {
+          setProfiles(parsedProfiles);
+          
+          // Find the active profile
+          const activeOne = parsedProfiles.find(p => p.isActive);
+          if (activeOne) {
+            setActiveProfile(activeOne);
+          }
+        }
+      }
+      setIsLoaded(true);
+    } catch (error) {
+      console.error('Error loading sound profiles:', error);
+      // Fall back to default profile
+      setIsLoaded(true);
+    }
+  }, []);
+  
+  // Save profiles to localStorage whenever they change
+  useEffect(() => {
+    if (isLoaded) {
+      try {
+        localStorage.setItem('nestara_sound_profiles', JSON.stringify(profiles));
+      } catch (error) {
+        console.error('Error saving sound profiles:', error);
+        toast({
+          title: "Saving Error",
+          description: "Unable to save your sound profiles to local storage.",
+          variant: "destructive"
+        });
+      }
+    }
+  }, [profiles, isLoaded, toast]);
   
   // Generate a simple sound based on the sound type
   const playPreviewSound = (soundType: string, volume: number) => {
@@ -123,6 +166,42 @@ export default function SoundscapeGenerator() {
           
           // Gentle fade out
           gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.5);
+          break;
+          
+        case 'melodic':
+          // Soothing melody with sine wave
+          oscillator.type = 'sine';
+          
+          // Gentle volume ramp
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.3, context.currentTime + 0.05);
+          
+          // Create a calming melody sequence (C major pentatonic)
+          oscillator.frequency.setValueAtTime(523.25, context.currentTime); // C5
+          oscillator.frequency.setValueAtTime(587.33, context.currentTime + 0.15); // D5
+          oscillator.frequency.setValueAtTime(659.25, context.currentTime + 0.3); // E5
+          oscillator.frequency.setValueAtTime(783.99, context.currentTime + 0.45); // G5
+          oscillator.frequency.setValueAtTime(1046.50, context.currentTime + 0.6); // C6
+          
+          // Gentle fade out
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.8);
+          break;
+          
+        case 'nature':
+          // Nature-like sound (bird chirp simulation)
+          oscillator.type = 'sine';
+          
+          // Bird chirp effect
+          gainNode.gain.setValueAtTime(0, context.currentTime);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.2, context.currentTime + 0.05);
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.15);
+          gainNode.gain.linearRampToValueAtTime(volume / 100 * 0.25, context.currentTime + 0.25);
+          gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.4);
+          
+          // Frequency changes for bird-like effect
+          oscillator.frequency.setValueAtTime(2200, context.currentTime);
+          oscillator.frequency.setValueAtTime(2500, context.currentTime + 0.05);
+          oscillator.frequency.setValueAtTime(2300, context.currentTime + 0.25);
           break;
           
         default:
@@ -320,11 +399,23 @@ export default function SoundscapeGenerator() {
                   <Button 
                     className="w-full bg-[#6A1B9A] hover:bg-[#6A1B9A]/90 text-white" 
                     onClick={() => {
-                      toast({
-                        title: "Settings Saved",
-                        description: "Your alert sound profile has been saved.",
-                        variant: "default"
-                      });
+                      // Profiles are automatically saved to localStorage on every change
+                      // This button provides user feedback
+                      try {
+                        localStorage.setItem('nestara_sound_profiles', JSON.stringify(profiles));
+                        toast({
+                          title: "Settings Saved",
+                          description: "Your alert sound profile has been saved to your device.",
+                          variant: "default"
+                        });
+                      } catch (error) {
+                        console.error('Error saving sound profiles:', error);
+                        toast({
+                          title: "Error Saving Settings",
+                          description: "Could not save your sound profiles to local storage.",
+                          variant: "destructive"
+                        });
+                      }
                     }}
                   >
                     Save Settings
