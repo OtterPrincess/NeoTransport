@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Icon from "@/components/ui/icon";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLocation } from "wouter";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Header: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [activeAlertsCount, setActiveAlertsCount] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState('');
   const { appleWatchIntegration, appleWatchModel } = useAppSettings();
+  const { user, logout } = useAuth();
+  const [, setLocation] = useLocation();
   
   // Update the time every minute
   useEffect(() => {
@@ -53,6 +69,17 @@ export const Header: React.FC = () => {
     window.location.reload();
   };
 
+  const handleLogout = async () => {
+    await logout();
+    setLocation('/auth');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Implement search functionality here
+    console.log('Searching for:', searchTerm);
+  };
+
   return (
     <header className="bg-white border-b border-[#E1BEE7] shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -95,6 +122,25 @@ export const Header: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
+          {/* Search bar - extended version */}
+          <form onSubmit={handleSearch} className="relative hidden md:flex">
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Search units, alerts, or items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-80 h-9 pl-10 pr-4 border border-[#E1BEE7] text-[#4A148C] bg-white/80 shadow-sm focus-visible:ring-[#9C27B0]/40"
+              />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Icon name="search" size={16} className="text-[#4A148C]/40" />
+              </div>
+            </div>
+            <Button type="submit" size="sm" variant="ghost" className="absolute right-1 top-1 h-7 px-2">
+              <Icon name="arrow-right" size={14} className="text-[#4A148C]/70" />
+            </Button>
+          </form>
+
           <div className="bg-[#4A148C]/30 px-3 py-1 rounded-md text-sm hidden md:block">
             <span className="font-medium">{formattedTime}</span>
             <span className="mx-2 opacity-50">|</span>
@@ -129,6 +175,49 @@ export const Header: React.FC = () => {
               </span>
             )}
           </div>
+          
+          {/* User profile dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                <Avatar className="h-10 w-10 border-2 border-[#E1BEE7] hover:border-[#9C27B0]/40 transition-colors duration-200">
+                  <AvatarImage src={null} alt={user?.displayName || user?.username || "User"} />
+                  <AvatarFallback className="bg-[#F3E5F5] text-[#4A148C] text-sm">
+                    {user?.displayName ? user.displayName.substring(0, 2).toUpperCase() : 
+                     (user?.username ? user.username.substring(0, 2).toUpperCase() : "U")}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">
+                    {user?.displayName || user?.username || "User"}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.role || "Unknown role"}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setLocation('/settings')}>
+                  <Icon name="settings" className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLocation('/profile')}>
+                  <Icon name="user" className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout}>
+                <Icon name="log-out" className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
