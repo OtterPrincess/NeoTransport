@@ -58,28 +58,28 @@ export const Header: React.FC = () => {
           <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
             <div className="w-10 h-10 text-[#6A1B9A] font-bold flex items-center justify-center">
               <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Moon face base */}
-                <path d="M50 90C72 90 90 72 90 50C90 28 72 10 50 10C28 10 10 28 10 50C10 72 28 90 50 90Z" fill="#6A1B9A"/>
-                
-                {/* Moon crescent (lighter area) */}
-                <path d="M50 90C65 90 78 80 83 65C75 75 60 80 45 75C30 70 20 55 25 40C30 25 45 15 60 20C55 15 45 10 35 10C20 15 10 30 10 50C10 72 28 90 50 90Z" fill="white" fillOpacity="0.2"/>
-                
-                {/* Smile */}
-                <path d="M30 65C35 75 65 75 70 65" stroke="white" strokeWidth="4" strokeLinecap="round"/>
+                {/* Crescent moon - main shape with white overlay to create crescent */}
+                <circle cx="50" cy="50" r="40" fill="#6A1B9A"/>
+                <circle cx="65" cy="40" r="35" fill="white"/>
                 
                 {/* Left circle (smaller) */}
-                <circle cx="30" cy="30" r="8" fill="#6A1B9A" stroke="white" strokeWidth="2"/>
+                <circle cx="30" cy="20" r="8" fill="#6A1B9A"/>
                 
                 {/* Right circle (larger) */}
-                <circle cx="70" cy="30" r="12" fill="#6A1B9A" stroke="white" strokeWidth="2"/>
+                <circle cx="60" cy="20" r="12" fill="#6A1B9A"/>
               </svg>
             </div>
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] leading-tight tracking-wide">
-              NESTARA
+            <h1 className="text-xl sm:text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-[#E1BEE7] tracking-wide flex items-center">
+              <span className="font-light mr-1">nest</span><span className="font-bold">ara</span>
+              <span className="bg-[#4A148C] text-white text-xs px-1.5 py-0.5 rounded-sm ml-2 uppercase tracking-tight font-medium">Pro</span>
             </h1>
-            <span className="text-xs uppercase tracking-wider text-[#E1BEE7] font-medium">Neonatal Transport Platform</span>
+            <div className="flex items-center">
+              <span className="text-xs tracking-wider text-[#E1BEE7]/90 font-medium">Neonatal Transport Monitoring System</span>
+              <span className="bg-[#E1BEE7]/20 h-4 w-px mx-2"></span>
+              <span className="text-[10px] text-white/70 bg-[#4A148C]/40 px-1.5 py-0.5 rounded-full">v2.1</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
