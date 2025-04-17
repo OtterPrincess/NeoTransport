@@ -317,15 +317,6 @@ export default function CompatibleItems() {
       <main className="container mx-auto px-4 py-4 flex-grow">
         <h1 className="text-2xl font-semibold mb-2">Compatible Items Reference</h1>
 
-        {currentUser.role === "Director" && (
-          <div className="bg-blue-50 text-blue-800 p-4 rounded-md mb-4">
-            <h3 className="font-medium mb-1">Director View</h3>
-            <p className="text-sm">
-              You are viewing this page as a Director. You will receive weekly summaries of equipment usage and alerts.
-              Your notification frequency is set to: {currentUser.notificationFrequency}
-            </p>
-          </div>
-        )}
         <div className="bg-[#F3E5F5] text-[#6A1B9A] p-4 rounded-md mb-6">
           <h3 className="font-medium mb-1">What is this?</h3>
           <p className="text-sm">
