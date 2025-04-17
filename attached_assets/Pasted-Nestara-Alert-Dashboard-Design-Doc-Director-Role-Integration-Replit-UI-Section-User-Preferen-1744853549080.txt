@@ -1,0 +1,83 @@
+Nestara Alert Dashboard – Design Doc: Director Role Integration (Replit UI)
+📍Section: User Preferences
+File: UserPreferences.jsx
+
+jsx
+Copy
+Edit
+// Role Selection Dropdown (New Option Added)
+<Select label="Role" value={user.role} onChange={handleRoleChange}>
+  <option value="Head Nurse">Head Nurse</option>
+  <option value="Technician">Technician</option>
+  <option value="Admin User">Admin User</option>
+  <option value="Director">Director</option> // Newly added
+</Select>
+📍Section: Email Notifications
+File: NotificationSettings.jsx
+
+jsx
+Copy
+Edit
+// Notification Options - Only show advanced controls if role !== Director
+{user.role !== 'Director' && (
+  <>
+    <Checkbox
+      label="Receive important alerts via email"
+      checked={user.emailNotifications}
+      onChange={handleNotificationToggle}
+    />
+  </>
+)}
+
+// Director Email Settings (Passive Mode)
+{user.role === 'Director' && (
+  <Select label="Notification Frequency" value={user.notificationFrequency} onChange={handleFrequencyChange}>
+    <option value="None">None</option>
+    <option value="CriticalOnly">Only critical alerts</option>
+    <option value="Summary">Weekly summary report</option>
+  </Select>
+)}
+📍Section: Alert Escalation Logic
+File: alerts.js
+
+js
+Copy
+Edit
+// Escalate unresolved critical alerts to Director (if frequency setting allows)
+if (alert.level === 'Critical' && alert.timeUnresolved > 30) {
+  const directorUsers = users.filter(u => u.role === 'Director' && u.notificationFrequency !== 'None');
+  directorUsers.forEach(director => {
+    if (director.notificationFrequency === 'CriticalOnly') {
+      sendEmail(director.email, generateAlertEmail(alert));
+    }
+  });
+}
+📍Section: Weekly Digest Script
+File: summaryDigest.js
+
+js
+Copy
+Edit
+const generateWeeklySummary = () => {
+  const directors = users.filter(u => u.role === 'Director' && u.notificationFrequency === 'Summary');
+  const summaryContent = getSummaryStats(); // includes alert counts, resolved vs unresolved, unit logs
+
+  directors.forEach(user => {
+    sendEmail(user.email, {
+      subject: "Weekly Transport Unit Summary",
+      body: summaryContent
+    });
+  });
+};
+✅ Sample UI Output for Director (View Only)
+plaintext
+Copy
+Edit
+User Preferences
+Display Name: Dr. Lisa Rao
+Role: Director
+Notification Frequency: Weekly Summary
+
+You will receive:
+✔️ Weekly overview of alert and usage activity
+❌ No real-time alerts or configuration permissions
