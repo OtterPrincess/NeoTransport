@@ -97,14 +97,22 @@ export const BATTERY_THRESHOLDS = {
   alert: 20
 };
 
-// Rooms
+// Rooms with bed specifications
 export const ROOMS = [
   { value: "all", label: "All Rooms" },
-  { value: "NICU-A", label: "NICU-A" },
-  { value: "NICU-B", label: "NICU-B" },
-  { value: "NICU-C", label: "NICU-C" },
+  { value: "NICU-A", label: "NICU-A (Beds 1-6)" },
+  { value: "NICU-B", label: "NICU-B (Beds 7-12)" },
+  { value: "NICU-C", label: "NICU-C (Beds 13-18)" },
   { value: "Transport", label: "Transport" }
 ];
+
+// Room beds mapping
+export const ROOM_BEDS = {
+  "NICU-A": ["Bed 1", "Bed 2", "Bed 3", "Bed 4", "Bed 5", "Bed 6"],
+  "NICU-B": ["Bed 7", "Bed 8", "Bed 9", "Bed 10", "Bed 11", "Bed 12"],
+  "NICU-C": ["Bed 13", "Bed 14", "Bed 15", "Bed 16", "Bed 17", "Bed 18"],
+  "Transport": ["Mobile"]
+};
 
 // Status options
 export const STATUS_OPTIONS = [
