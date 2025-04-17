@@ -25,6 +25,10 @@ interface CompatibleItem {
   compatibleUnits: string[];
   sku: string;
   notes: string;
+  weightRange?: string;
+  ageRange?: string;
+  clinicalGuidelines?: string[];
+  safetyStandards?: string[];
 }
 
 // Sample items for the page - in a real app, this would come from an API
@@ -227,7 +231,7 @@ export default function CompatibleItems() {
       
       {/* Item Details Dialog */}
       <Dialog open={!!selectedItem} onOpenChange={(open) => !open && setSelectedItem(null)}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[700px]">
           <DialogHeader>
             <DialogTitle>{selectedItem?.name}</DialogTitle>
             <DialogDescription>
@@ -281,13 +285,53 @@ export default function CompatibleItems() {
               </div>
             </div>
             
-            <div>
-              <h4 className="text-sm font-semibold mb-2">Usage Instructions</h4>
-              <p className="text-sm">
-                To use this item with your transport unit, please follow the manufacturer guidelines.
-                Always ensure it's properly secured before transport begins. Replace as needed according
-                to the maintenance schedule.
-              </p>
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-semibold mb-2">Clinical Parameters</h4>
+                {selectedItem?.weightRange && (
+                  <div className="mb-2">
+                    <span className="text-xs text-[#616161]">Weight Range:</span>
+                    <p className="text-sm">{selectedItem.weightRange}</p>
+                  </div>
+                )}
+                {selectedItem?.ageRange && (
+                  <div className="mb-2">
+                    <span className="text-xs text-[#616161]">Age Range:</span>
+                    <p className="text-sm">{selectedItem.ageRange}</p>
+                  </div>
+                )}
+              </div>
+              
+              {selectedItem?.clinicalGuidelines && (
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">Clinical Guidelines</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    {selectedItem.clinicalGuidelines.map((guideline, i) => (
+                      <li key={i}>{guideline}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {selectedItem?.safetyStandards && (
+                <div>
+                  <h4 className="text-sm font-semibold mb-2">Safety Standards</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    {selectedItem.safetyStandards.map((standard, i) => (
+                      <li key={i}>{standard}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              <div>
+                <h4 className="text-sm font-semibold mb-2">Usage Instructions</h4>
+                <p className="text-sm">
+                  To use this item with your transport unit, please follow the manufacturer guidelines
+                  and clinical protocols. Always ensure proper sanitization and secure attachment before
+                  transport begins. Monitor patient vitals when using this equipment.
+                </p>
+              </div>
             </div>
           </div>
           
