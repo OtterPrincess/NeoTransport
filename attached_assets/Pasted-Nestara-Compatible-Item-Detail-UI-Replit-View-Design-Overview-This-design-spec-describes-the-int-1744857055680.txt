@@ -1,0 +1,109 @@
+Nestara Compatible Item Detail UI – Replit View Design
+
+Overview
+
+This design spec describes the interactive product detail page for compatible medical equipment and accessories used with Nestara beds. Modeled after McMaster-Carr’s intuitive spec sheets, each item shown in the "Compatible Items Reference" tab will include a dedicated “View Details” page to view full specifications, warnings, and operational context.
+
+Entry Point
+
+Location: Compatible Items tab
+
+Trigger: Clicking the View Details button on any item card
+
+Route: /item/:sku – dynamically loads by SKU or Item ID
+
+Layout: Item Detail Page /item/:sku
+
+🔹 Header
+
+Item Name
+
+Category (e.g. Safety Equipment, Medical Equipment)
+
+SKU / ID
+
+Tag: Compatible with Bed #1, Bed #2, etc.
+
+🔹 Core Info Section
+
+Field
+
+Value
+
+Thermal Rating
+
+e.g. 34.0°C – 38.0°C or N/A
+
+Dimensions
+
+(Optional) Based on item type
+
+Material Info
+
+Latex-free, fire-retardant, breathable, etc.
+
+Weight
+
+(if relevant)
+
+Power Source
+
+e.g., Rechargeable battery, passive
+
+🔹 Notes & Use Guidance
+
+Plain-text description of when/why this item is used (e.g., “Used during in-transit oxygen support. Cannot exceed 38°C.”)
+
+Warnings: e.g., “Not to be used without full stabilization” or “May restrict access during emergency procedures”
+
+🔹 Media Panel (Optional)
+
+Uploadable reference diagrams or usage illustrations
+
+Example: top-view schematic of the clip-on monitor on the bed rail
+
+🔹 Buttons
+
+Action
+
+Function
+
+Back to Reference
+
+Returns to item list
+
+Request Procurement Info
+
+(Optional – triggers form or email intent)
+
+Report Incompatibility
+
+Adds feedback flag to log
+
+Styling Notes
+
+Inherits Nestara UI palette:
+
+Primary: Rich Purple #6A1B9A
+
+Accent: Soft Lavender background with white cards
+
+Icons from Material Design (e.g., thermometer, warning)
+
+Use collapsible sections for long specs (like tech sheets)
+
+Integration Plan
+
+Back-end: Item metadata stored in Firebase or local JSON file
+
+Front-end: Replit React or HTML/CSS layout w/ routing via Vite/React Router
+
+Mobile-first: Scroll-friendly stack on mobile/tablet
+
+Use Case
+
+Nurse checks whether the Fire Retardant Cover can be used with Bed #4
+
+Opens detail page, sees thermal range and usage notes
+
+Verifies compatibility and safely proceeds

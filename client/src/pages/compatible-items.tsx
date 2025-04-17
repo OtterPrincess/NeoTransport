@@ -7,6 +7,8 @@ import Header from "@/components/dashboard/header";
 import TabNavigation from "@/components/dashboard/tab-navigation";
 import Footer from "@/components/dashboard/footer";
 import Icon from "@/components/ui/icon";
+import { ItemDetailDialog } from "@/components/compatible-items/item-detail-dialog";
+import { Link, useRoute } from "wouter";
 
 interface CompatibleItem {
   id: string;
@@ -216,6 +218,14 @@ const compatibleItems: CompatibleItem[] = [
 export default function CompatibleItems() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [selectedItem, setSelectedItem] = useState<CompatibleItem | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  
+  // Handle opening the detail dialog
+  const handleViewDetails = (item: CompatibleItem) => {
+    setSelectedItem(item);
+    setDetailDialogOpen(true);
+  };
   
   // Filter items based on search term and category
   const filteredItems = compatibleItems.filter(item => {
@@ -320,45 +330,17 @@ export default function CompatibleItems() {
                 </div>
                 
                 <div className="mt-4 border-t border-gray-100 pt-3">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="outline" 
-                          className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/10 transition-all duration-200 group relative overflow-hidden"
-                        >
-                          <span className="absolute inset-0 w-0 bg-[#6A1B9A]/5 transition-all duration-300 ease-out group-hover:w-full"></span>
-                          <span className="relative flex items-center justify-center">
-                            <Icon name="info" size={16} className="mr-2 group-hover:scale-110 transition-transform duration-200" />
-                            View Details
-                          </span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent className="bg-white p-3 shadow-lg rounded-md border max-w-md">
-                        <div className="space-y-2">
-                          <p className="text-sm font-medium">
-                            {item.category === "Medical Equipment" ? "Critical Medical Equipment Details:" : 
-                             item.category === "Safety Equipment" ? "Safety Equipment Specifications:" : 
-                             item.category === "Blankets/Bedding" ? "Thermal Properties & Materials:" : 
-                             item.category === "Maintenance" ? "Maintenance Tool Information:" : 
-                             item.category === "Smart Items" ? "Smart Device Technology Specs:" : 
-                             "View detailed item information:"}
-                          </p>
-                          <ul className="text-xs space-y-1 text-gray-600 pl-2">
-                            <li>• Complete technical specifications and dimensions</li>
-                            {item.category === "Medical Equipment" && <li>• Medical certifications and clinical usage guidelines</li>}
-                            {item.category === "Safety Equipment" && <li>• Safety ratings and compliance certifications</li>}
-                            {item.category === "Blankets/Bedding" && <li>• Thermal efficiency ratings and material details</li>}
-                            {item.category === "Smart Items" && <li>• Connectivity options and battery requirements</li>}
-                            {item.category === "Maintenance" && <li>• Calibration requirements and testing protocols</li>}
-                            <li>• Installation and usage instructions</li>
-                            <li>• Maintenance schedule and replacement parts</li>
-                            <li>• Order information and availability status</li>
-                          </ul>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-[#6A1B9A] text-[#6A1B9A] hover:bg-[#6A1B9A]/10 transition-all duration-200 group relative overflow-hidden"
+                    onClick={() => handleViewDetails(item)}
+                  >
+                    <span className="absolute inset-0 w-0 bg-[#6A1B9A]/5 transition-all duration-300 ease-out group-hover:w-full"></span>
+                    <span className="relative flex items-center justify-center">
+                      <Icon name="info" size={16} className="mr-2 group-hover:scale-110 transition-transform duration-200" />
+                      View Details
+                    </span>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -373,6 +355,15 @@ export default function CompatibleItems() {
       </main>
       
       <Footer />
+      
+      {/* Item Detail Dialog */}
+      {selectedItem && (
+        <ItemDetailDialog 
+          item={selectedItem} 
+          open={detailDialogOpen} 
+          onOpenChange={setDetailDialogOpen} 
+        />
+      )}
     </div>
   );
 }

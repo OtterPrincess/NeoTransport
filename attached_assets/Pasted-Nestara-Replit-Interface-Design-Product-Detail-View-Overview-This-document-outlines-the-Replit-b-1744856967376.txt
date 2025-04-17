@@ -1,0 +1,138 @@
+Nestara Replit Interface Design – Product Detail View
+
+Overview
+
+This document outlines the Replit-based front-end interface component for Nestara, designed to allow clinical staff and technicians to view full bed product details—similar to how McMaster-Carr shows detailed product specs.
+
+Goal
+
+Enable users to click "View Details" from a Nestara bed alert card or Teams message and be taken to a dedicated product detail view where all relevant specifications, logs, and history for that specific bed are easily accessible.
+
+Components
+
+🔘 Bed Status Card (Entry Point)
+
+Displayed on the dashboard
+
+Contains: Bed ID, status indicator, temp, vibration, alert icon
+
+Button: [View Details]
+
+On click: routes to /bed/:id detail page
+
+🗂️ Bed Detail Page Layout (/bed/:id)
+
+🔹 Header Section
+
+Bed ID (e.g. Bed #4)
+
+Status badge (green/yellow/red/gray)
+
+Timestamp of last update
+
+[Back to Dashboard] button
+
+🔹 Tabs or Sections
+
+1. Live Metrics Panel
+
+Internal Temperature: 37.1°C
+
+Surface Temperature: 36.8°C
+
+Vibration: Stable, Spike, or Tilt
+
+Battery Life: 72%
+
+2. Alert Log (Reverse Chronological)
+
+Timestamp
+
+Event
+
+Acknowledged
+
+Action Taken
+
+10:42 AM
+
+Overheat Alert
+
+Yes
+
+Request Sent to Tech
+
+09:18 AM
+
+Vibration Spike
+
+Yes
+
+—
+
+3. Technical Specs
+
+Mattress Type: Rigid foam core
+
+Shock Absorber: Passive gel dampening
+
+Sensor Suite: TMP117, MPU6050
+
+Battery: 4hr Li-Ion rechargeable
+
+Connectivity: Wi-Fi 2.4GHz
+
+4. Compatible Items (pulled from reference database)
+
+Thermal covers: [“NestGel Type A”]
+
+Mounting sleds: [“Sled v2.1 adjustable”]
+
+Restraint inserts: [“FlexStrap Infant Secure”]
+
+5. Service History / Notes
+
+Maintenance checked: 04/04/2025
+
+Firmware version: v1.2.3
+
+Assigned Tech: Sam Wu
+
+Design Features
+
+Responsive for tablet display (nurse station)
+
+Back button always visible
+
+Accordion-style section toggles for clarity
+
+Read-only fields unless admin is logged in
+
+Replit Routing Logic
+
+/dashboard: Lists all bed cards
+
+/bed/:id: Loads full detail view for selected bed via dynamic route
+
+Data fetched from Firebase/REST API on mount
+
+Alerts auto-refresh every 60 seconds
+
+Target Users
+
+Clinical nurses
+
+NICU tech staff
+
+QA personnel
+
+Future Enhancements
+
+Button: [Send Report PDF]
+
+Button: [Request Replacement Bed]
+
+Embedded video instructions for handling alerts
+
+This setup allows Nestara to mirror McMaster-Carr’s excellent usability for technical product browsing—tailored for the neonatal care environment.
+
