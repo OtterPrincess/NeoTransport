@@ -40,6 +40,160 @@ const currentUser = {
 // Sample items for the page - in a real app, this would come from an API
 const compatibleItems: CompatibleItem[] = [
   {
+    id: "9",
+    name: "Portable Suction Unit",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "PSU-100",
+    notes: "For clearing airways in emergency en route situations",
+    clinicalGuidelines: [
+      "Check suction pressure before each use",
+      "Replace collection container after each use",
+      "Maintain sterile technique during operation"
+    ],
+    safetyStandards: [
+      "ISO 10079-1 certified",
+      "Meets emergency transport standards",
+      "Battery backup equipped"
+    ]
+  },
+  {
+    id: "10",
+    name: "Integrated Vital Signs Monitor Clip-on",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "VSM-200",
+    notes: "Compact, unit-attachable monitor for heart rate, SpO2, and temperature",
+    clinicalGuidelines: [
+      "Calibrate before each transport",
+      "Verify sensor placement",
+      "Monitor battery status"
+    ],
+    safetyStandards: [
+      "FDA cleared monitoring device",
+      "EMI/RFI shielded",
+      "Transport-grade durability"
+    ]
+  },
+  {
+    id: "11",
+    name: "Umbilical Catheter Kit",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "UCK-300",
+    notes: "For NICU-grade emergency vascular access",
+    clinicalGuidelines: [
+      "Sterile field required",
+      "Use within size-appropriate guidelines",
+      "Monitor insertion depth markers"
+    ],
+    safetyStandards: [
+      "Sterile packaging",
+      "Single-use components",
+      "Transport-compatible design"
+    ]
+  },
+  {
+    id: "12",
+    name: "Infant Restraint Harness",
+    category: "Safety Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "IRH-400",
+    notes: "Adjustable harness system designed for neonatal bodies",
+    weightRange: "500g - 5000g",
+    safetyStandards: [
+      "Crash-tested design",
+      "Quick-release mechanism",
+      "Anti-allergenic material"
+    ]
+  },
+  {
+    id: "13",
+    name: "Fire Retardant Transport Cover",
+    category: "Safety Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "FRC-500",
+    notes: "Lightweight, compliant with medical fire safety standards",
+    safetyStandards: [
+      "Meets NFPA standards",
+      "Chemical-free fire resistance",
+      "High visibility markers"
+    ]
+  },
+  {
+    id: "14",
+    name: "Moisture-Wicking Insert Pad",
+    category: "Blankets",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["All Units"],
+    sku: "MWP-600",
+    notes: "Keeps infants dry during long transports while maintaining thermal performance"
+  },
+  {
+    id: "15",
+    name: "Phototherapy-Compatible Blanket",
+    category: "Blankets",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["All Units"],
+    sku: "PCB-700",
+    notes: "For jaundiced infants during transport; allows for passive light therapy"
+  },
+  {
+    id: "16",
+    name: "Transport Power Adapter Kit",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "PAK-800",
+    notes: "For ambulance, helicopter, and rural facility power compatibility",
+    safetyStandards: [
+      "Multiple voltage compatibility",
+      "Surge protection",
+      "Emergency backup switch"
+    ]
+  },
+  {
+    id: "17",
+    name: "Modular Storage Pouch Set",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "MSP-900",
+    notes: "For quick access to meds, charts, or emergency tools within the unit"
+  },
+  {
+    id: "18",
+    name: "Hygienic Insert Liners",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "HIL-1000",
+    notes: "Disposable, quick-change liners to prevent cross-contamination"
+  },
+  {
+    id: "19",
+    name: "Battery Health Monitor",
+    category: "Maintenance",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "BHM-1100",
+    notes: "Add-on diagnostic tool to check battery life and cycles"
+  },
+  {
+    id: "20",
+    name: "Environmental Sensor Tester",
+    category: "Maintenance",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "EST-1200",
+    notes: "Verifies that temperature and vibration sensors are operational and within spec"
+  },
+  {
     id: "1",
     name: "French Tube Set",
     category: "Medical Equipment",
@@ -87,6 +241,51 @@ const compatibleItems: CompatibleItem[] = [
     compatibleUnits: ["Unit #1", "Unit #2", "Unit #3"],
     sku: "TB-001-A",
     notes: "Recommended for all standard transport units"
+  },
+  {
+    id: "4",
+    name: "Insulation Pad Plus",
+    category: "Bedding",
+    thermalRating: "36.0°C - 37.0°C",
+    compatibleUnits: ["Unit #2", "Unit #4"],
+    sku: "IP-205-B",
+    notes: "Provides additional insulation for high-risk transports"
+  },
+  {
+    id: "5",
+    name: "Vibration Dampening Mat",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #3", "Unit #4", "Unit #5"],
+    sku: "VDM-103",
+    notes: "Reduces vibration exposure during transport"
+  },
+  {
+    id: "6",
+    name: "Temperature Regulating Sheet",
+    category: "Bedding",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["Unit #1", "Unit #3"],
+    sku: "TRS-450",
+    notes: "Active temperature regulation for premature infants"
+  },
+  {
+    id: "7",
+    name: "Sensor Calibration Kit",
+    category: "Maintenance",
+    thermalRating: "Calibration tool",
+    compatibleUnits: ["All Units"],
+    sku: "SCK-001",
+    notes: "For monthly sensor calibration"
+  },
+  {
+    id: "8",
+    name: "Thermal Reflective Cover",
+    category: "Accessories",
+    thermalRating: "35.0°C - 38.0°C",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #4"],
+    sku: "TRC-220-A",
+    notes: "For outdoor or long-distance transports"
   }
 ];
 
@@ -94,19 +293,19 @@ export default function CompatibleItems() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState<CompatibleItem | null>(null);
-  
+
   // Filter items based on search term and category
   const filteredItems = compatibleItems.filter(item => {
     const matchesSearch = searchTerm === "" || 
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.notes.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
     const matchesCategory = categoryFilter === "" || item.category === categoryFilter;
-    
+
     return matchesSearch && matchesCategory;
   });
-  
+
   // Get unique categories for filter
   const categories = Array.from(new Set(compatibleItems.map(item => item.category)));
 
@@ -114,10 +313,10 @@ export default function CompatibleItems() {
     <div className="min-h-screen bg-[#FAFAFA] flex flex-col">
       <Header />
       <TabNavigation />
-      
+
       <main className="container mx-auto px-4 py-4 flex-grow">
         <h1 className="text-2xl font-semibold mb-2">Compatible Items Reference</h1>
-        
+
         {currentUser.role === "Director" && (
           <div className="bg-blue-50 text-blue-800 p-4 rounded-md mb-4">
             <h3 className="font-medium mb-1">Director View</h3>
@@ -135,7 +334,7 @@ export default function CompatibleItems() {
             Click "View Details" on any item to see compatibility information, usage instructions, and to request supplies.
           </p>
         </div>
-        
+
         <Card className="mb-6">
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4">
@@ -174,7 +373,7 @@ export default function CompatibleItems() {
             </div>
           </CardContent>
         </Card>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map(item => (
             <Card key={item.id} className="hover:shadow-md transition-shadow">
@@ -219,7 +418,7 @@ export default function CompatibleItems() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs text-[#616161] mb-1">Thermal Rating</p>
@@ -228,7 +427,7 @@ export default function CompatibleItems() {
                       <span className="font-medium">{item.thermalRating}</span>
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-xs text-[#616161] mb-1">Compatible Units</p>
                     <div className="flex flex-wrap gap-1">
@@ -242,13 +441,13 @@ export default function CompatibleItems() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div>
                     <p className="text-xs text-[#616161] mb-1">Notes</p>
                     <p className="text-sm">{item.notes}</p>
                   </div>
                 </div>
-                
+
                 <div className="mt-4 border-t border-gray-100 pt-3">
                   <Button 
                     variant="outline" 
@@ -263,16 +462,16 @@ export default function CompatibleItems() {
             </Card>
           ))}
         </div>
-        
+
         {filteredItems.length === 0 && (
           <div className="text-center py-8">
             <p className="text-[#616161]">No items found matching your search criteria.</p>
           </div>
         )}
       </main>
-      
+
       <Footer />
-      
+
       {/* Item Details Dialog */}
       <Dialog open={!!selectedItem} onOpenChange={(open) => !open && setSelectedItem(null)}>
         <DialogContent className="sm:max-w-[700px]">
@@ -282,7 +481,7 @@ export default function CompatibleItems() {
               {selectedItem?.category} | SKU: {selectedItem?.sku}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4 py-4">
             <div className="flex items-start gap-4">
               {selectedItem?.category === "Medical Equipment" && (
@@ -329,7 +528,7 @@ export default function CompatibleItems() {
                   " This maintenance kit is essential for ensuring all monitoring systems are calibrated correctly for accurate readings."}
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-semibold mb-2">Thermal Specifications</h4>
               <div className="flex items-center">
@@ -345,7 +544,7 @@ export default function CompatibleItems() {
                   "This tool ensures all temperature sensors in the transport unit are accurately calibrated."}
               </p>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-semibold mb-2">Compatible Transport Units</h4>
               <div className="flex flex-wrap gap-2 mt-1">
@@ -359,7 +558,7 @@ export default function CompatibleItems() {
                 ))}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <h4 className="text-sm font-semibold mb-2">Clinical Parameters</h4>
@@ -376,7 +575,7 @@ export default function CompatibleItems() {
                   </div>
                 )}
               </div>
-              
+
               {selectedItem?.clinicalGuidelines && (
                 <div>
                   <h4 className="text-sm font-semibold mb-2">Clinical Guidelines</h4>
@@ -387,7 +586,7 @@ export default function CompatibleItems() {
                   </ul>
                 </div>
               )}
-              
+
               {selectedItem?.safetyStandards && (
                 <div>
                   <h4 className="text-sm font-semibold mb-2">Safety Standards</h4>
@@ -398,7 +597,7 @@ export default function CompatibleItems() {
                   </ul>
                 </div>
               )}
-              
+
               <div>
                 <h4 className="text-sm font-semibold mb-2">Usage Instructions</h4>
                 <p className="text-sm">
@@ -409,7 +608,7 @@ export default function CompatibleItems() {
               </div>
             </div>
           </div>
-          
+
           <DialogFooter>
             {currentUser.role !== "Director" && (
               <Button variant="outline" onClick={() => {
