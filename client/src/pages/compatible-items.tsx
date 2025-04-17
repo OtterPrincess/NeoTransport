@@ -304,7 +304,7 @@ export default function CompatibleItems() {
                     <h3 className="text-lg font-semibold">{item.name}</h3>
                     <p className="text-sm text-[#616161]">{item.category} | SKU: {item.sku}</p>
                   </div>
-                  <div className="w-12 h-12 ml-2">
+                  <div className="w-20 h-20 ml-2">
                     {getCategoryIllustration(item.category)}
                   </div>
                 </div>
