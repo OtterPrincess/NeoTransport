@@ -35,6 +35,46 @@ interface CompatibleItem {
 const compatibleItems: CompatibleItem[] = [
   {
     id: "1",
+    name: "French Tube Set",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["Unit #1", "Unit #2", "Unit #3"],
+    sku: "FT-120-S",
+    notes: "Sterile French tube set for neonatal airways",
+    weightRange: "500g - 2500g",
+    ageRange: "Premature - 3 months",
+    clinicalGuidelines: [
+      "Use appropriate size based on patient weight",
+      "Replace every 24 hours or as needed",
+      "Maintain sterile technique during insertion"
+    ],
+    safetyStandards: [
+      "ISO 13485:2016 certified",
+      "Latex-free material",
+      "Single-use only"
+    ]
+  },
+  {
+    id: "2",
+    name: "Evacuation Apron",
+    category: "Safety Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "EA-450-M",
+    notes: "Protective apron for emergency transport situations",
+    clinicalGuidelines: [
+      "One size fits most medical staff",
+      "Must be worn during emergency evacuations",
+      "Check integrity before each use"
+    ],
+    safetyStandards: [
+      "Fire-resistant material",
+      "High-visibility reflective strips",
+      "Meets emergency transport standards"
+    ]
+  },
+  {
+    id: "3",
     name: "Thermal Blanket Pro",
     category: "Blankets",
     thermalRating: "35.5°C - 37.5°C",
@@ -43,7 +83,7 @@ const compatibleItems: CompatibleItem[] = [
     notes: "Recommended for all standard transport units"
   },
   {
-    id: "2",
+    id: "4",
     name: "Insulation Pad Plus",
     category: "Bedding",
     thermalRating: "36.0°C - 37.0°C",
@@ -52,7 +92,7 @@ const compatibleItems: CompatibleItem[] = [
     notes: "Provides additional insulation for high-risk transports"
   },
   {
-    id: "3",
+    id: "5",
     name: "Vibration Dampening Mat",
     category: "Accessories",
     thermalRating: "N/A",
@@ -61,7 +101,7 @@ const compatibleItems: CompatibleItem[] = [
     notes: "Reduces vibration exposure during transport"
   },
   {
-    id: "4",
+    id: "6",
     name: "Temperature Regulating Sheet",
     category: "Bedding",
     thermalRating: "36.0°C - 37.5°C",
@@ -70,7 +110,7 @@ const compatibleItems: CompatibleItem[] = [
     notes: "Active temperature regulation for premature infants"
   },
   {
-    id: "5",
+    id: "7",
     name: "Sensor Calibration Kit",
     category: "Maintenance",
     thermalRating: "Calibration tool",
@@ -79,7 +119,7 @@ const compatibleItems: CompatibleItem[] = [
     notes: "For monthly sensor calibration"
   },
   {
-    id: "6",
+    id: "8",
     name: "Thermal Reflective Cover",
     category: "Accessories",
     thermalRating: "35.0°C - 38.0°C",
