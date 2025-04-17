@@ -34,6 +34,160 @@ interface CompatibleItem {
 // Sample items for the page - in a real app, this would come from an API
 const compatibleItems: CompatibleItem[] = [
   {
+    id: "9",
+    name: "Portable Suction Unit",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "PSU-100",
+    notes: "For clearing airways in emergency en route situations",
+    clinicalGuidelines: [
+      "Check suction pressure before each use",
+      "Replace collection container after each use",
+      "Maintain sterile technique during operation"
+    ],
+    safetyStandards: [
+      "ISO 10079-1 certified",
+      "Meets emergency transport standards",
+      "Battery backup equipped"
+    ]
+  },
+  {
+    id: "10",
+    name: "Integrated Vital Signs Monitor Clip-on",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "VSM-200",
+    notes: "Compact, unit-attachable monitor for heart rate, SpO2, and temperature",
+    clinicalGuidelines: [
+      "Calibrate before each transport",
+      "Verify sensor placement",
+      "Monitor battery status"
+    ],
+    safetyStandards: [
+      "FDA cleared monitoring device",
+      "EMI/RFI shielded",
+      "Transport-grade durability"
+    ]
+  },
+  {
+    id: "11",
+    name: "Umbilical Catheter Kit",
+    category: "Medical Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "UCK-300",
+    notes: "For NICU-grade emergency vascular access",
+    clinicalGuidelines: [
+      "Sterile field required",
+      "Use within size-appropriate guidelines",
+      "Monitor insertion depth markers"
+    ],
+    safetyStandards: [
+      "Sterile packaging",
+      "Single-use components",
+      "Transport-compatible design"
+    ]
+  },
+  {
+    id: "12",
+    name: "Infant Restraint Harness",
+    category: "Safety Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "IRH-400",
+    notes: "Adjustable harness system designed for neonatal bodies",
+    weightRange: "500g - 5000g",
+    safetyStandards: [
+      "Crash-tested design",
+      "Quick-release mechanism",
+      "Anti-allergenic material"
+    ]
+  },
+  {
+    id: "13",
+    name: "Fire Retardant Transport Cover",
+    category: "Safety Equipment",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "FRC-500",
+    notes: "Lightweight, compliant with medical fire safety standards",
+    safetyStandards: [
+      "Meets NFPA standards",
+      "Chemical-free fire resistance",
+      "High visibility markers"
+    ]
+  },
+  {
+    id: "14",
+    name: "Moisture-Wicking Insert Pad",
+    category: "Blankets",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["All Units"],
+    sku: "MWP-600",
+    notes: "Keeps infants dry during long transports while maintaining thermal performance"
+  },
+  {
+    id: "15",
+    name: "Phototherapy-Compatible Blanket",
+    category: "Blankets",
+    thermalRating: "36.0°C - 37.5°C",
+    compatibleUnits: ["All Units"],
+    sku: "PCB-700",
+    notes: "For jaundiced infants during transport; allows for passive light therapy"
+  },
+  {
+    id: "16",
+    name: "Transport Power Adapter Kit",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "PAK-800",
+    notes: "For ambulance, helicopter, and rural facility power compatibility",
+    safetyStandards: [
+      "Multiple voltage compatibility",
+      "Surge protection",
+      "Emergency backup switch"
+    ]
+  },
+  {
+    id: "17",
+    name: "Modular Storage Pouch Set",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "MSP-900",
+    notes: "For quick access to meds, charts, or emergency tools within the unit"
+  },
+  {
+    id: "18",
+    name: "Hygienic Insert Liners",
+    category: "Accessories",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "HIL-1000",
+    notes: "Disposable, quick-change liners to prevent cross-contamination"
+  },
+  {
+    id: "19",
+    name: "Battery Health Monitor",
+    category: "Maintenance",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "BHM-1100",
+    notes: "Add-on diagnostic tool to check battery life and cycles"
+  },
+  {
+    id: "20",
+    name: "Environmental Sensor Tester",
+    category: "Maintenance",
+    thermalRating: "N/A",
+    compatibleUnits: ["All Units"],
+    sku: "EST-1200",
+    notes: "Verifies that temperature and vibration sensors are operational and within spec"
+  },
+  {
     id: "1",
     name: "French Tube Set",
     category: "Medical Equipment",
