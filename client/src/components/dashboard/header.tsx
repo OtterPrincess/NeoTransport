@@ -52,13 +52,14 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white text-[#6A1B9A] shadow-md">
+    <header className="bg-[#6A1B9A] text-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z" fill="#6A1B9A"/>
-            <path d="M28 12C25.5 18 20 20 20 20C20 20 14.5 18 12 12C9.5 6 20 6 20 6C20 6 30.5 6 28 12Z" fill="white"/>
-          </svg>
+          <div className="p-1 bg-white rounded-md">
+            <div className="w-7 h-7 bg-[#6A1B9A] rounded-md flex items-center justify-center">
+              <span className="text-white font-bold text-xs">N</span>
+            </div>
+          </div>
           <h1 className="text-xl font-semibold">Nestara Live Monitor</h1>
         </div>
         <div className="flex items-center space-x-4">

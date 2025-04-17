@@ -196,19 +196,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "resolved",
         resolvedAt: new Date()
       });
-
-      // Alert escalation for Directors
-      if (alert.status === 'active' && 
-          alert.alertType === 'critical' && 
-          ((new Date().getTime() - new Date(alert.timestamp).getTime()) > 30 * 60 * 1000)) {
-        const directors = await storage.getUsersByRole('director');
-        directors.forEach(async (director) => {
-          if (director.emailNotifications) {
-            // In a real implementation, this would send an email
-            console.log(`Escalating alert ${id} to director ${director.username}`);
-          }
-        });
-      }
       
       res.json(updatedAlert);
     } catch (error) {

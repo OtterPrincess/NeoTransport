@@ -12,7 +12,7 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
-  role: text("role").notNull().default("nurse"), // nurse, tech_support, admin, director
+  role: text("role").notNull().default("nurse"),
   displayName: text("display_name"),
 });
 
