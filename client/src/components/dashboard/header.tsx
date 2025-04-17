@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
 
 export const Header: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -98,6 +99,13 @@ export const Header: React.FC = () => {
             <span className="mx-2 opacity-50">|</span>
             <span>{formattedDate}</span>
           </div>
+          
+          {/* Apple Watch Status Indicator */}
+          <div className="hidden md:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
+            <div className="h-3 w-3 rounded-full bg-[#66BB6A] mr-1.5"></div>
+            <span className="text-xs font-medium text-[#4A148C]">Watch Alerts</span>
+          </div>
+          
           <Button 
             variant="default" 
             className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/20 rounded-md flex items-center shadow-md transition-all duration-200"
