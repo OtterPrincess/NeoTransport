@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
 import { toast } from "@/hooks/use-toast";
+import { getCategoryIllustration } from "./category-illustrations";
 
 // Import the types from the compatible-items page
 interface CompatibleItem {
@@ -176,58 +177,59 @@ export const ItemDetailDialog: React.FC<ItemDetailProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        {/* Combined Specifications Table */}
-        <div className="mt-3">
-          <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Specifications</h4>
-          <div className="rounded-lg border overflow-hidden text-sm">
-            {Object.entries(detailedSpecs).map(([key, value], index) => (
-              <div key={key} className={`flex ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
-                <div className="w-2/5 px-3 py-2 text-[#616161] font-medium border-r">{key}</div>
-                <div className="w-3/5 px-3 py-2">{value}</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+          {/* Left Column - Category Illustration */}
+          <div className="md:col-span-1">
+            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Illustration</h4>
+            <div className="border rounded-lg h-36 p-2 bg-white flex items-center justify-center">
+              {getCategoryIllustration(item.category)}
+            </div>
+          </div>
+          
+          {/* Middle + Right Columns - Specs & Info */}
+          <div className="md:col-span-2 space-y-3">
+            {/* Specifications */}
+            <div>
+              <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Specifications</h4>
+              <div className="rounded-lg border overflow-hidden text-sm max-h-36 overflow-y-auto">
+                {Object.entries(detailedSpecs).map(([key, value], index) => (
+                  <div key={key} className={`flex ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                    <div className="w-2/5 px-3 py-1.5 text-[#616161] font-medium border-r">{key}</div>
+                    <div className="w-3/5 px-3 py-1.5">{value}</div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            
+            {/* Description & Usage */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <h4 className="text-sm font-medium mb-1 text-[#6A1B9A]">Description</h4>
+                <div className="px-3 py-2 border rounded-lg text-sm bg-white">
+                  {item.notes}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium mb-1 text-[#6A1B9A]">Usage</h4>
+                <div className="px-3 py-2 border rounded-lg text-sm bg-white">
+                  {usageGuidance}
+                </div>
+              </div>
+            </div>
+            
+            {/* Warnings */}
+            <div>
+              <h4 className="text-sm font-medium mb-1 text-[#6A1B9A] flex items-center">
+                <Icon name="alert" size={14} className="mr-1 text-red-600" />
+                Warnings
+              </h4>
+              <div className="px-3 py-2 border border-red-200 rounded-lg text-sm bg-red-50 text-red-700">
+                {warnings}
+              </div>
+            </div>
           </div>
         </div>
-        
-        {/* Usage & Warnings */}
-        <div className="mt-3 space-y-2">
-          <div>
-            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Description</h4>
-            <div className="px-3 py-2 border rounded-lg text-sm bg-white">
-              {item.notes}
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Usage Guidance</h4>
-            <div className="px-3 py-2 border rounded-lg text-sm bg-white">
-              {usageGuidance}
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A] flex items-center">
-              <Icon name="alert" size={14} className="mr-1 text-red-600" />
-              Warnings
-            </h4>
-            <div className="px-3 py-2 border border-red-200 rounded-lg text-sm bg-red-50 text-red-700">
-              {warnings}
-            </div>
-          </div>
-        </div>
-        
-        {/* Optional Media Panel - only for Medical Equipment */}
-        {item.category === "Medical Equipment" && (
-          <div className="mt-3">
-            <h4 className="text-sm font-medium mb-2 text-[#6A1B9A]">Reference Diagrams</h4>
-            <div className="h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-              <p className="text-sm text-[#616161]">
-                <Icon name="report" size={20} className="inline mr-2" />
-                Media assets available in full documentation
-              </p>
-            </div>
-          </div>
-        )}
         
         <Separator className="my-3" />
         
