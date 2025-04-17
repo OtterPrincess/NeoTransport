@@ -629,5 +629,6 @@ export default function CompatibleItems() {
         </DialogContent>
       </Dialog>
     </div>
+  </div>
   );
 }
