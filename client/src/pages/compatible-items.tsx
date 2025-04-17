@@ -328,8 +328,17 @@ export default function CompatibleItems() {
                           View Details
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent className="bg-white p-2 shadow-lg rounded-md border">
-                        <p className="text-sm">See detailed specifications, compatibility information, and ordering options for this item</p>
+                      <TooltipContent className="bg-white p-3 shadow-lg rounded-md border max-w-md">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium">View detailed item information including:</p>
+                          <ul className="text-xs space-y-1 text-gray-600 pl-2">
+                            <li>• Complete technical specifications and dimensions</li>
+                            <li>• Certification and compliance documentation</li>
+                            <li>• Installation and usage instructions</li>
+                            <li>• Maintenance schedule and replacement parts</li>
+                            <li>• Order information and availability status</li>
+                          </ul>
+                        </div>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
