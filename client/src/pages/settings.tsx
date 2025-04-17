@@ -24,6 +24,11 @@ export default function Settings() {
   const [teamsIntegration, setTeamsIntegration] = useState(true);
   const [soundAlerts, setSoundAlerts] = useState(true);
   
+  // Apple Watch integration
+  const [appleWatchIntegration, setAppleWatchIntegration] = useState(false);
+  const [appleWatchModel, setAppleWatchModel] = useState("series9");
+  const [criticalAlertsOnly, setCriticalAlertsOnly] = useState(true);
+  
   // Alert settings
   const [internalTempMin, setInternalTempMin] = useState(TEMPERATURE_RANGES.internal.min.toString());
   const [internalTempMax, setInternalTempMax] = useState(TEMPERATURE_RANGES.internal.max.toString());
@@ -53,6 +58,11 @@ export default function Settings() {
     setAutoRefresh(true);
     setTeamsIntegration(true);
     setSoundAlerts(true);
+    
+    // Reset Apple Watch settings
+    setAppleWatchIntegration(false);
+    setAppleWatchModel("series9");
+    setCriticalAlertsOnly(true);
     
     setInternalTempMin(TEMPERATURE_RANGES.internal.min.toString());
     setInternalTempMax(TEMPERATURE_RANGES.internal.max.toString());
@@ -325,6 +335,53 @@ export default function Settings() {
                     />
                   </div>
                   <p className="text-sm text-[#616161]">Receive important alerts via email</p>
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium mb-4">Apple Health Watch Integration</h3>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="appleWatchIntegration">Enable Apple Watch Alerts</Label>
+                    <Switch
+                      id="appleWatchIntegration"
+                      checked={appleWatchIntegration}
+                      onCheckedChange={setAppleWatchIntegration}
+                    />
+                  </div>
+                  <p className="text-sm text-[#616161]">Receive critical alerts on your Apple Watch</p>
+                  
+                  <div className="mt-4 space-y-2">
+                    <Label htmlFor="appleWatchModel">Watch Model</Label>
+                    <Select 
+                      value={appleWatchModel} 
+                      onValueChange={setAppleWatchModel}
+                      disabled={!appleWatchIntegration}
+                    >
+                      <SelectTrigger id="appleWatchModel">
+                        <SelectValue placeholder="Select watch model" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem key="watch-series-9" value="series9">Apple Watch Series 9</SelectItem>
+                        <SelectItem key="watch-series-8" value="series8">Apple Watch Series 8</SelectItem>
+                        <SelectItem key="watch-series-7" value="series7">Apple Watch Series 7</SelectItem>
+                        <SelectItem key="watch-ultra-2" value="ultra2">Apple Watch Ultra 2</SelectItem>
+                        <SelectItem key="watch-ultra" value="ultra">Apple Watch Ultra</SelectItem>
+                        <SelectItem key="watch-se" value="se">Apple Watch SE</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <Label htmlFor="criticalAlertsOnly">Critical Alerts Only</Label>
+                    <Switch
+                      id="criticalAlertsOnly"
+                      checked={criticalAlertsOnly}
+                      onCheckedChange={setCriticalAlertsOnly}
+                      disabled={!appleWatchIntegration}
+                    />
+                    <p className="text-sm text-[#616161]">Only receive alerts for critical conditions</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
