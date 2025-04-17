@@ -58,15 +58,14 @@ export const Header: React.FC = () => {
           <div className="bg-white p-2 rounded-md shadow-lg flex items-center justify-center border-2 border-[#E1BEE7]/40">
             <div className="w-10 h-10 text-[#6A1B9A] font-bold flex items-center justify-center">
               <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Crescent moon - main shape with white overlay to create crescent */}
-                <circle cx="50" cy="50" r="40" fill="#6A1B9A"/>
-                <circle cx="65" cy="40" r="35" fill="white"/>
+                {/* Crescent moon matching the image */}
+                <path d="M25 70C35 85 50 85 65 80C80 75 85 60 85 50C85 35 75 25 65 20C55 15 40 15 30 30C40 30 50 35 55 45C60 60 55 70 40 70C35 70 30 65 25 70Z" fill="#6A1B9A"/>
                 
-                {/* Left circle (smaller) */}
-                <circle cx="30" cy="20" r="8" fill="#6A1B9A"/>
+                {/* Small circle (left) */}
+                <circle cx="18" cy="30" r="7" fill="#6A1B9A"/>
                 
-                {/* Right circle (larger) */}
-                <circle cx="60" cy="20" r="12" fill="#6A1B9A"/>
+                {/* Larger circle (right) */}
+                <circle cx="55" cy="18" r="12" fill="#6A1B9A"/>
               </svg>
             </div>
           </div>
