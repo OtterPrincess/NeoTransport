@@ -41,13 +41,28 @@ export const UnitInfo: React.FC<UnitInfoProps> = ({ unit }) => {
   
   const handleRequestTechCheck = async () => {
     try {
-      await apiRequest('POST', `/api/units/${unit.id}/request-tech-check`, {});
+      await apiRequest('POST', `/api/units/${unit.id}/request-tech-check`, {
+        requestedBy: 'Current User', // In a real app, this would be the authenticated user
+        unitStatus: unit.status,
+        priority: unit.status === 'alert' ? 'high' : 'normal'
+      });
+      
+      toast({
+        title: "Tech Check Requested",
+        description: "A technician will be notified to check this unit.",
+        variant: "default",
+      });
       
       // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ['/api/alerts'] });
       queryClient.invalidateQueries({ queryKey: ['/api/units'] });
     } catch (error) {
       console.error('Failed to request tech check:', error);
+      toast({
+        title: "Request Failed",
+        description: "Could not request tech check. Please try again.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -56,13 +71,36 @@ export const UnitInfo: React.FC<UnitInfoProps> = ({ unit }) => {
       const activeAlerts = unit.alerts.filter(alert => alert.status === 'active');
       
       if (activeAlerts.length > 0) {
-        await apiRequest('POST', `/api/alerts/${activeAlerts[0].id}/send-to-teams`, {});
+        await Promise.all(activeAlerts.map(alert => 
+          apiRequest('POST', `/api/alerts/${alert.id}/send-to-teams`, {
+            severity: unit.status === 'alert' ? 'urgent' : 'standard',
+            location: unit.room,
+            unitId: unit.unitId
+          })
+        ));
+        
+        toast({
+          title: "Sent to Teams",
+          description: `${activeAlerts.length} alert${activeAlerts.length > 1 ? 's' : ''} sent to the team.`,
+          variant: "default",
+        });
+      } else {
+        toast({
+          title: "No Active Alerts",
+          description: "There are no active alerts to send to Teams.",
+          variant: "default",
+        });
       }
       
       // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ['/api/alerts'] });
     } catch (error) {
       console.error('Failed to send to Teams:', error);
+      toast({
+        title: "Send Failed",
+        description: "Could not send alerts to Teams. Please try again.",
+        variant: "destructive",
+      });
     }
   };
   
