@@ -195,7 +195,7 @@ export const UnitInfo: React.FC<UnitInfoProps> = ({ unit }) => {
         <CardContent className="p-4">
           <div className="flex justify-between items-start mb-3">
             <div>
-              <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-300 bg-clip-text text-transparent">Unit Information</h3>
+              <h3 className="text-lg font-semibold text-[#662C6C]">Unit Information</h3>
               <p className="text-sm text-[#616161]">{unit.room} {unit.location}</p>
             </div>
             <div className="text-sm">

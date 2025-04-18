@@ -9,7 +9,7 @@ interface UnitInfoHeaderProps {
 
 const UnitInfoHeader: React.FC<UnitInfoHeaderProps> = ({ unit }) => {
   return (
-    <div className="bg-gradient-to-r from-[#6A1B9A] to-[#9C27B0] rounded-lg p-6 mb-6 text-white shadow-md">
+    <div className="bg-[#662C6C] rounded-lg p-6 mb-6 text-white shadow-md">
       <div className="flex justify-between items-center">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">{unit.unitId}</h2>
