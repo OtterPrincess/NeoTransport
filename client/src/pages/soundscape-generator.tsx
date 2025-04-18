@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { Trash2 } from "lucide-react";
 import Header from "@/components/dashboard/header";
 import TabNavigation from "@/components/dashboard/tab-navigation";
 import Footer from "@/components/dashboard/footer";
@@ -300,6 +301,34 @@ export default function SoundscapeGenerator() {
     });
   };
   
+  // Delete a profile
+  const deleteProfile = (profileId: string) => {
+    // Check if trying to delete the default profile
+    if (profileId === "default") {
+      toast({
+        title: "Cannot Delete Default",
+        description: "The default profile cannot be deleted.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Find the profile to be deleted
+    const profileToDelete = profiles.find(p => p.id === profileId);
+    if (!profileToDelete) return;
+    
+    // Filter out the profile from the profiles list
+    const updatedProfiles = profiles.filter(profile => profile.id !== profileId);
+    
+    setProfiles(updatedProfiles);
+    
+    toast({
+      title: "Profile Deleted",
+      description: `Sound profile "${profileToDelete.name}" has been deleted.`,
+      variant: "default"
+    });
+  };
+  
   return (
     <div className="min-h-screen bg-[#FAFAFA] flex flex-col">
       <Header />
@@ -326,24 +355,36 @@ export default function SoundscapeGenerator() {
                           {profile.isActive ? "Active" : "Inactive"}
                         </p>
                       </div>
-                      {!profile.isActive ? (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => activateProfile(profile.id)}
-                        >
-                          Activate
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="border border-green-500 text-green-600"
-                          disabled
-                        >
-                          Active
-                        </Button>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        {!profile.isActive ? (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => activateProfile(profile.id)}
+                            >
+                              Activate
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 border-red-200 hover:bg-red-50"
+                              onClick={() => deleteProfile(profile.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="border border-green-500 text-green-600"
+                            disabled
+                          >
+                            Active
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   ))}
                   
@@ -388,7 +429,7 @@ export default function SoundscapeGenerator() {
                           <Switch 
                             checked={config.enabled} 
                             onCheckedChange={(checked) => {
-                              updateProfileConfig(category.id, 'enabled', checked);
+                              updateProfileConfig(category.id, "enabled", checked);
                             }}
                           />
                         </div>
@@ -509,7 +550,7 @@ export default function SoundscapeGenerator() {
                               <Switch 
                                 checked={config.enabled}
                                 onCheckedChange={(checked) => {
-                                  updateProfileConfig(category.id, 'enabled', checked);
+                                  updateProfileConfig(category.id, "enabled", checked);
                                 }}
                               />
                             </div>
