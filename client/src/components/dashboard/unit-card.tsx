@@ -101,16 +101,16 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
           <div className="flex items-center">
             {isOffline || internalTemp === undefined || internalTemp === null ? (
               <>
-                <Icon name="offline" size={20} className="text-offline mr-1" />
+                <Icon name="offline" size={16} className="text-offline mr-1.5" />
                 <span className="font-medium text-offline">No Data</span>
               </>
             ) : (
               <>
                 <Icon 
                   name="internalTemp" 
-                  size={20} 
+                  size={16} 
                   className={cn(
-                    "mr-1", 
+                    "mr-1.5", 
                     getTemperatureStatusColor(internalTemp)
                   )} 
                 />
@@ -129,16 +129,16 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
           <div className="flex items-center">
             {isOffline || surfaceTemp === undefined || surfaceTemp === null ? (
               <>
-                <Icon name="offline" size={20} className="text-offline mr-1" />
+                <Icon name="offline" size={16} className="text-offline mr-1.5" />
                 <span className="font-medium text-offline">No Data</span>
               </>
             ) : (
               <>
                 <Icon 
                   name="surfaceTemp" 
-                  size={20} 
+                  size={16} 
                   className={cn(
-                    "mr-1", 
+                    "mr-1.5", 
                     getTemperatureStatusColor(surfaceTemp)
                   )} 
                 />
@@ -157,16 +157,16 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
           <div className="flex items-center">
             {isOffline || vibration === undefined || vibration === null ? (
               <>
-                <Icon name="offline" size={20} className="text-offline mr-1" />
+                <Icon name="offline" size={16} className="text-offline mr-1.5" />
                 <span className="font-medium text-offline">No Data</span>
               </>
             ) : (
               <>
                 <Icon 
                   name="vibration" 
-                  size={20} 
+                  size={16} 
                   className={cn(
-                    "mr-1",
+                    "mr-1.5",
                     vibration < VIBRATION_THRESHOLDS.normal ? "text-safe" : 
                     vibration < VIBRATION_THRESHOLDS.warning ? "text-warning" : 
                     vibration < VIBRATION_THRESHOLDS.alert ? "text-warning" : 
@@ -185,21 +185,21 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
           <div className="flex items-center">
             {isOffline ? (
               <>
-                <Icon name="offline" size={20} className="text-offline mr-1" />
+                <Icon name="offline" size={16} className="text-offline mr-1.5" />
                 <span className="font-medium text-offline">No Data</span>
               </>
             ) : isCharging ? (
               <>
-                <Icon name="battery" size={20} className="text-offline mr-1" />
+                <Icon name="battery" size={16} className="text-offline mr-1.5" />
                 <span className="font-medium text-offline">Charging</span>
               </>
             ) : (
               <>
                 <Icon 
                   name="battery" 
-                  size={20} 
+                  size={16} 
                   className={cn(
-                    "mr-1",
+                    "mr-1.5",
                     batteryLevel ? getBatteryStatusColor(batteryLevel) : "text-offline"
                   )} 
                 />
