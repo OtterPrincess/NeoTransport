@@ -179,7 +179,7 @@ export const Header: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-10 w-10 border-2 border-[#E1BEE7] hover:border-[#9C27B0]/40 transition-colors duration-200">
-                  <AvatarImage src={null} alt={user?.displayName || user?.username || "User"} />
+                  <AvatarImage src="" alt={user?.displayName || user?.username || "User"} />
                   <AvatarFallback className="bg-[#F3E5F5] text-[#4A148C] text-sm">
                     {user?.displayName ? user.displayName.substring(0, 2).toUpperCase() : 
                      (user?.username ? user.username.substring(0, 2).toUpperCase() : "U")}

@@ -89,8 +89,8 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
         </div>
         
         {/* Unit illustration */}
-        <div className="w-24 h-24 -mt-1 -mr-1">
-          {getUnitIllustration(unit.unitId)}
+        <div className="w-20 h-20 -mt-1 -mr-1">
+          {getUnitIllustration(unit.unitId, unit.status)}
         </div>
       </div>
       
