@@ -75,7 +75,7 @@ export const LiveNotifications: React.FC<LiveNotificationsProps> = ({ alerts }) 
   return (
     <Card>
       <CardContent className="p-4">
-        <h3 className="text-lg font-semibold mb-3">Live Notifications</h3>
+        <h3 className="text-lg font-semibold mb-3 text-[#662C6C]">Live Notifications</h3>
         
         {activeAlerts.length === 0 ? (
           <div className="text-center py-4 text-[#616161]">

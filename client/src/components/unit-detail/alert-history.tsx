@@ -56,7 +56,7 @@ export const AlertHistory: React.FC<AlertHistoryProps> = ({ alerts }) => {
   return (
     <Card>
       <CardContent className="p-4">
-        <h3 className="text-lg font-semibold mb-3">Alert History</h3>
+        <h3 className="text-lg font-semibold mb-3 text-[#662C6C]">Alert History</h3>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
