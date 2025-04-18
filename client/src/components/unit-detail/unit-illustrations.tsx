@@ -7,9 +7,9 @@ const AirTransportIcon: React.FC<{ size?: 'small' | 'medium' | 'large'; status?:
   status = 'normal' 
 }) => {
   const dimensions = {
-    small: { width: 30, height: 30 },
-    medium: { width: 60, height: 60 },
-    large: { width: 120, height: 120 }
+    small: { width: 50, height: 50 },
+    medium: { width: 100, height: 100 },
+    large: { width: 150, height: 150 }
   };
   
   const { width, height } = dimensions[size];
@@ -89,13 +89,13 @@ export const UnitIllustration: React.FC<{
 }> = ({ unitId, status = "normal" }) => {
   // Check if this is Unit 5 (Air Transport)
   if (unitId === "Unit #5") {
-    // Make the transport icon size consistent with other units
+    // Make the transport icon larger for better visibility
     return (
       <div className="flex items-center justify-center flex-col">
-        <div className="h-24 flex items-center justify-center">
-          <AirTransportIcon size="medium" status={status} />
+        <div className="h-32 flex items-center justify-center">
+          <AirTransportIcon size="large" status={status} />
         </div>
-        <div className="text-xs font-semibold text-[#6A1B9A]">Transport Unit</div>
+        <div className="text-xs font-semibold text-[#6A1B9A]">Aeromedical Transfer</div>
       </div>
     );
   }
