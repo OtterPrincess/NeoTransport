@@ -1,12 +1,106 @@
 import React from 'react';
 import { getBedIllustration } from '@/components/dashboard/bed-illustrations';
 
+// Define the AirTransportIcon component (modified from transport-icons.tsx)
+const AirTransportIcon: React.FC<{ size?: 'small' | 'medium' | 'large'; status?: string }> = ({ 
+  size = 'medium', 
+  status = 'normal' 
+}) => {
+  const dimensions = {
+    small: { width: 30, height: 30 },
+    medium: { width: 60, height: 60 },
+    large: { width: 120, height: 120 }
+  };
+  
+  const { width, height } = dimensions[size];
+  
+  // Colors based on status
+  const getColors = () => {
+    switch (status) {
+      case "alert":
+        return {
+          base: "#FFEBEE",
+          accent: "#E53935"
+        };
+      case "warning":
+        return {
+          base: "#FFF8E1",
+          accent: "#FFA000"
+        };
+      case "offline":
+        return {
+          base: "#F5F5F5",
+          accent: "#BDBDBD"
+        };
+      default: // normal
+        return {
+          base: "#E8F5E9",
+          accent: "#66BB6A"
+        };
+    }
+  };
+
+  const colors = getColors();
+  
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 120 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Base helicopter body */}
+      <rect x="30" y="50" width="60" height="30" rx="10" fill="#E1BEE7" stroke="#6A1B9A" strokeWidth="2" />
+      
+      {/* Helicopter rotors */}
+      <line x1="10" y1="40" x2="110" y2="40" stroke="#6A1B9A" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="60" cy="40" r="5" fill="#6A1B9A" />
+      <line x1="60" y1="40" x2="60" y2="50" stroke="#6A1B9A" strokeWidth="2" />
+      
+      {/* Helicopter skids */}
+      <rect x="35" y="80" width="20" height="3" rx="1.5" fill="#6A1B9A" />
+      <rect x="65" y="80" width="20" height="3" rx="1.5" fill="#6A1B9A" />
+      <line x1="40" y1="80" x2="40" y2="70" stroke="#6A1B9A" strokeWidth="2" />
+      <line x1="50" y1="80" x2="50" y2="70" stroke="#6A1B9A" strokeWidth="2" />
+      <line x1="70" y1="80" x2="70" y2="70" stroke="#6A1B9A" strokeWidth="2" />
+      <line x1="80" y1="80" x2="80" y2="70" stroke="#6A1B9A" strokeWidth="2" />
+      
+      {/* Tail & tail rotor */}
+      <path d="M90 65 L105 55 L105 75 L90 65" fill="#E1BEE7" stroke="#6A1B9A" strokeWidth="2" />
+      <circle cx="105" cy="65" r="4" fill="#E1BEE7" stroke="#6A1B9A" strokeWidth="2" />
+      
+      {/* Medical cross */}
+      <rect x="50" y="55" width="20" height="20" rx="2" fill="#F5F5F5" stroke="#6A1B9A" strokeWidth="1" />
+      <rect x="55" y="60" width="10" height="10" fill="#D81B60" />
+      <rect x="59" y="56" width="2" height="18" fill="#D81B60" />
+      <rect x="51" y="64" width="18" height="2" fill="#D81B60" />
+      
+      {/* Status indicator */}
+      <circle cx="90" cy="60" r="5" fill={colors.accent} />
+    </svg>
+  );
+};
+
 // Create the main wrapper component
 export const UnitIllustration: React.FC<{ 
   unitId: string; 
   status?: string;
 }> = ({ unitId, status = "normal" }) => {
-  // Check if this is a transport unit (only Units with "Transport" in room are transport)
+  // Check if this is Unit 5 (Air Transport)
+  if (unitId === "Unit #5") {
+    // Get a smaller size for the dashboard display
+    return (
+      <div className="flex items-center justify-center flex-col">
+        <div style={{ transform: "scale(0.8)", transformOrigin: "center" }}>
+          <AirTransportIcon size="small" status={status} />
+        </div>
+        <div className="mt-1 text-xs font-semibold text-[#6A1B9A]">TRANSPORT UNIT</div>
+      </div>
+    );
+  }
+  
+  // Otherwise, check if it has transport in the name
   const isTransport = unitId.toLowerCase().includes('unit') && 
                      (unitId.toLowerCase().includes('air') || 
                       unitId.toLowerCase().includes('transport'));
@@ -24,7 +118,7 @@ export const UnitIllustration: React.FC<{
   }
 };
 
-// Transport Unit Illustration Component
+// Transport Unit Illustration Component (Original fallback version)
 const TransportUnitIllustration: React.FC<{ status?: string; isAir?: boolean }> = ({ status = "normal", isAir = false }) => {
   // Colors based on status
   const getColors = () => {
@@ -177,8 +271,9 @@ const NICUBedIllustration: React.FC<{ bedNumber: number; status?: string }> = ({
 };
 
 // Function to get the appropriate unit illustration
-export const getUnitIllustration = (unitId: string, status: string = "normal"): React.ReactNode => {
+export function getUnitIllustration(unitId: string, status: string = "normal"): React.ReactNode {
   return <UnitIllustration unitId={unitId} status={status} />;
-};
+}
 
-export default getUnitIllustration;
+// Export component for use in other files
+export default UnitIllustration;
