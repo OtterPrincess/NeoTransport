@@ -39,7 +39,7 @@ export const DeviceInfo: React.FC<DeviceInfoProps> = ({ unit }) => {
   return (
     <Card>
       <CardContent className="p-4">
-        <h3 className="text-lg font-semibold mb-3">Device Information</h3>
+        <h3 className="text-lg font-semibold mb-3 text-[#662C6C]">Device Information</h3>
         <div className="space-y-3">
           <div>
             <p className="text-sm text-[#616161]">Serial Number</p>
