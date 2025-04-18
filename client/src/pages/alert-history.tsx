@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
 import Header from "@/components/dashboard/header";
 import TabNavigation from "@/components/dashboard/tab-navigation";
@@ -17,6 +20,9 @@ export default function AlertHistory() {
   const [unitFilter, setUnitFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("");
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   
   // Fetch all alerts
   const { data: alerts = [], isLoading: isLoadingAlerts } = useQuery<Alert[]>({
@@ -108,6 +114,38 @@ export default function AlertHistory() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+  
+  // Mutation for acknowledging alerts
+  const acknowledgeMutation = useMutation({
+    mutationFn: async (alertId: number) => {
+      const response = await apiRequest("PATCH", `/api/alerts/${alertId}`, {
+        status: "acknowledged",
+        acknowledgedBy: user?.displayName || user?.username
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/alerts'] });
+      toast({
+        title: "Alert Acknowledged",
+        description: "The alert has been acknowledged successfully.",
+        variant: "default"
+      });
+    },
+    onError: (error) => {
+      console.error("Failed to acknowledge alert:", error);
+      toast({
+        title: "Acknowledgement Failed",
+        description: "There was an error acknowledging the alert. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+  
+  // Handle acknowledge button click
+  const handleAcknowledge = (alertId: number) => {
+    acknowledgeMutation.mutate(alertId);
   };
 
   return (
@@ -224,6 +262,7 @@ export default function AlertHistory() {
                             <Button 
                               variant="ghost" 
                               className="text-[#6A1B9A] hover:text-[#9C27B0] p-0 h-auto"
+                              onClick={() => handleAcknowledge(alert.id)}
                             >
                               Acknowledge
                             </Button>
