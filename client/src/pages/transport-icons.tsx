@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
@@ -6,14 +7,24 @@ import { Separator } from "@/components/ui/separator";
 export default function TransportIcons() {
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold text-[#6A1B9A] mb-6">Transport Icons</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-[#6A1B9A]">Emergency Transport Partners</h1>
+        <Link href="/" className="px-4 py-2 bg-[#F3E5F5] hover:bg-[#E1BEE7] text-[#6A1B9A] rounded-md flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Dashboard
+        </Link>
+      </div>
       
       <Card>
         <CardHeader>
-          <CardTitle>Nestara Transport Icon System</CardTitle>
+          <CardTitle>Emergency Department Transport Partners</CardTitle>
           <CardDescription>
-            These icons represent different transport modes for neonatal units, 
-            designed to clearly communicate transport method at a glance.
+            Our emergency transport partners work closely with triage care to ensure 
+            safe and efficient neonatal transport across all environments. 
+            Contact information and specialized equipment details available.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -90,11 +101,41 @@ export default function TransportIcons() {
         </CardContent>
       </Card>
       
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-600">
-          These transport icons are used throughout the Nestara platform to provide consistent visual cues.
-          Each icon is custom-designed to enhance staff recognition of transport types.
-        </p>
+      <div className="mt-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Contact Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="p-3 border rounded-md">
+                <h4 className="font-medium text-[#6A1B9A] mb-2">MediFlight Partners</h4>
+                <p className="text-sm mb-1">Emergency Line: (617) 555-0199</p>
+                <p className="text-sm mb-1">Dispatch: (617) 555-0198</p>
+                <p className="text-sm text-muted-foreground">4-minute response time</p>
+              </div>
+              
+              <div className="p-3 border rounded-md">
+                <h4 className="font-medium text-[#6A1B9A] mb-2">Regional Ambulance</h4>
+                <p className="text-sm mb-1">Emergency Line: (617) 555-0123</p>
+                <p className="text-sm mb-1">Dispatch: (617) 555-0124</p>
+                <p className="text-sm text-muted-foreground">10-minute response time</p>
+              </div>
+              
+              <div className="p-3 border rounded-md">
+                <h4 className="font-medium text-[#6A1B9A] mb-2">Internal Transport</h4>
+                <p className="text-sm mb-1">Extension: 8922</p>
+                <p className="text-sm mb-1">Pager: 28922</p>
+                <p className="text-sm text-muted-foreground">Immediate response</p>
+              </div>
+            </div>
+            
+            <p className="text-sm text-center text-gray-600">
+              All transport partners are integrated with the Nestara system for real-time telemetry and 
+              maintain specialized equipment for neonatal transport with ED triage coordination.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

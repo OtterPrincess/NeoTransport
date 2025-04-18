@@ -89,13 +89,13 @@ export const UnitIllustration: React.FC<{
 }> = ({ unitId, status = "normal" }) => {
   // Check if this is Unit 5 (Air Transport)
   if (unitId === "Unit #5") {
-    // Get a smaller size for the dashboard display
+    // Make the transport icon size consistent with other units
     return (
       <div className="flex items-center justify-center flex-col">
-        <div style={{ transform: "scale(0.8)", transformOrigin: "center" }}>
-          <AirTransportIcon size="small" status={status} />
+        <div className="h-24 flex items-center justify-center">
+          <AirTransportIcon size="medium" status={status} />
         </div>
-        <div className="mt-1 text-xs font-semibold text-[#6A1B9A]">TRANSPORT UNIT</div>
+        <div className="text-xs font-semibold text-[#6A1B9A]">Transport Unit</div>
       </div>
     );
   }

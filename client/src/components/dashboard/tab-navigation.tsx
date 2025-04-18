@@ -9,7 +9,7 @@ export const TabNavigation: React.FC = () => {
     { name: "Alert History", path: "/alerts" },
     { name: "Compatible Items", path: "/items" },
     { name: "Soundscape", path: "/soundscape" },
-    { name: "Transport Icons", path: "/transport-icons" },
+    { name: "Transport Partners", path: "/transport-icons" },
     { name: "Settings", path: "/settings" }
   ];
   
