@@ -14,6 +14,7 @@ import CompatibleItems from "@/pages/compatible-items";
 import Settings from "@/pages/settings";
 import SoundscapeGenerator from "@/pages/soundscape-generator";
 import TransportIcons from "@/pages/transport-icons";
+import MobileMeasurements from "@/pages/mobile-measurements";
 import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
 
@@ -27,6 +28,7 @@ function Router() {
       <ProtectedRoute path="/settings" component={Settings} />
       <ProtectedRoute path="/soundscape" component={SoundscapeGenerator} />
       <ProtectedRoute path="/transport-icons" component={TransportIcons} />
+      <ProtectedRoute path="/mobile-measurements" component={MobileMeasurements} />
       <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
