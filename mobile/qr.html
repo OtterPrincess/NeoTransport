@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nestara Mobile QR Code</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 1rem;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      max-width: 600px;
+      margin-bottom: 1.5rem;
+    }
+    
+    #qrcode {
+      border: 10px solid white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+    
+    .link {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: var(--primary);
+      word-break: break-all;
+    }
+    
+    .logo {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" width="120" height="40">
+      <path d="M20,10 C15,10 10,15 10,20 C10,25 15,30 20,30 C15,30 10,25 10,20" fill="#9C27B0" />
+      <circle cx="25" cy="15" r="5" fill="#4A148C" />
+      <circle cx="35" cy="15" r="5" fill="#4A148C" />
+    </svg>
+    <span>Nestara</span>
+  </div>
+  
+  <h1>Nestara Mobile Shock Measurement</h1>
+  <p>Scan this QR code to open the Nestara mobile shock measurement app on your device.</p>
+  
+  <div id="qrcode"></div>
+  
+  <p>Or open the direct link:</p>
+  <div class="link" id="directLink"></div>
+  
+  <p class="instructions">
+    Place your phone on the neonatal bed tray and press "Start Measuring" to capture vibration data.
+  </p>
+  
+  <!-- QR Code library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the current URL but replace any specific page with the index
+      const currentUrl = window.location.href;
+      const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+      const appUrl = baseUrl + 'index.html';
+      
+      // Generate QR code
+      const qr = qrcode(0, 'M');
+      qr.addData(appUrl);
+      qr.make();
+      
+      // Display the QR code
+      document.getElementById('qrcode').innerHTML = qr.createImgTag(6);
+      
+      // Set the direct link
+      document.getElementById('directLink').textContent = appUrl;
+    });
+  </script>
+</body>
+</html>

@@ -1,14 +1,22 @@
-import type { Express } from "express";
+import express, { type Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
+import mobileApi from "./mobile-api";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication routes
   setupAuth(app);
   
-  // put application routes here
+  // Register mobile API routes
+  app.use('/api/mobile', mobileApi);
+  
+  // Serve mobile app static files
+  app.use('/mobile', express.static(path.join(process.cwd(), 'mobile')));
+  
+  // Other API routes
   // prefix all routes with /api
 
   // GET all units with latest telemetry
