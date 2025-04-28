@@ -4,7 +4,7 @@ import {
   mobileMeasurements, 
   mobileMeasurementPoints, 
   insertMobileMeasurementSchema 
-} from '../shared/mobile-schema';
+} from '../shared/schema';
 import { z } from 'zod';
 import { eq, desc } from 'drizzle-orm';
 
