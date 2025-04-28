@@ -5,7 +5,7 @@ import Icon from "@/components/ui/icon";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
-import logoImage from "../../assets/logo.png";
+import logoImage from "@assets/image_1745883835132.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
