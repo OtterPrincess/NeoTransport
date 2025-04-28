@@ -87,28 +87,29 @@ export const Header: React.FC = () => {
           <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
             <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
               <svg width="40" height="40" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(50, 50) scale(0.8)">
-                  {/* Small horizontal line (top left) */}
-                  <rect x="140" y="135" width="60" height="10" rx="5" fill="#662C6C" />
+                {/* This is the exact logo from the image */}
+                <g transform="translate(70, 80)">
+                  {/* Small line at top left */}
+                  <rect x="60" y="55" width="60" height="8" rx="4" fill="#662C6C" />
                   
-                  {/* Small horizontal line (middle left) */}
-                  <rect x="120" y="180" width="40" height="10" rx="5" fill="#662C6C" />
+                  {/* Small line below it */}
+                  <rect x="50" y="100" width="40" height="8" rx="4" fill="#662C6C" />
                   
-                  {/* Medium circle (left) */}
-                  <circle cx="200" cy="210" r="55" fill="#662C6C" />
+                  {/* Medium circle at left */}
+                  <circle cx="130" cy="130" r="55" fill="#662C6C" />
                   
-                  {/* Large circle (top right) */}
-                  <circle cx="340" cy="110" r="70" fill="#662C6C" />
+                  {/* Large circle at top right */}
+                  <circle cx="250" cy="50" r="70" fill="#662C6C" />
                   
-                  {/* Small horizontal line (bottom left) */}
-                  <rect x="120" y="350" width="50" height="10" rx="5" fill="#662C6C" />
-                  
-                  {/* Longer horizontal line (bottom) */}
-                  <rect x="170" y="370" width="90" height="10" rx="5" fill="#662C6C" />
-                  
-                  {/* Crescent moon shapes */}
-                  <path d="M130 270 Q 160 150, 250 170 Q 340 190, 420 260 Q 350 380, 220 350 Q 150 340, 130 270" 
+                  {/* Main curved crescent shape */}
+                  <path d="M60 170 C 90 50, 200 70, 330 170 C 280 300, 150 300, 60 170" 
                         fill="#662C6C" />
+                  
+                  {/* Small line at bottom left */}
+                  <rect x="50" y="270" width="50" height="8" rx="4" fill="#662C6C" />
+                  
+                  {/* Longer line at bottom */}
+                  <rect x="100" y="290" width="90" height="8" rx="4" fill="#662C6C" />
                 </g>
               </svg>
             </div>
