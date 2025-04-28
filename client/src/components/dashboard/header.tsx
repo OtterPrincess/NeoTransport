@@ -96,12 +96,12 @@ export const Header: React.FC = () => {
             <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-br from-[#F3E5F5] to-[#9C27B0]/10 rounded-full blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"></div>
             
             <h1 className="text-2xl sm:text-3xl tracking-wide flex items-center relative z-10">
-              <span className="font-normal text-[#662C6C]">nestara</span>
+              <span className="font-serif font-normal text-[#662C6C]">nestara</span>
               <div className="ml-2 h-5 w-0.5 bg-[#662C6C]/20 group-hover:bg-[#662C6C]/30 transition-colors duration-300"></div>
               <span className="ml-2 text-[10px] text-[#662C6C] bg-[#F3E5F5] group-hover:bg-[#E1BEE7] px-2 py-0.5 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300">v2.1</span>
             </h1>
             <div className="flex items-center mt-1 relative z-10">
-              <span className="text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight">Neonatal Transport Monitoring System</span>
+              <span className="font-serif text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight">Neonatal Transport Monitoring System</span>
             </div>
           </div>
         </div>
