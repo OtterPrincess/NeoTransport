@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -66,6 +67,7 @@ type MeasurementWithPoints = MobileMeasurement & {
 export default function MobileMeasurements() {
   const [selectedMeasurement, setSelectedMeasurement] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [, setLocation] = useLocation();
   
   // Fetch all measurements
   const { data: measurements, isLoading, error } = useQuery<MobileMeasurement[]>({
@@ -119,6 +121,17 @@ export default function MobileMeasurements() {
 
   return (
     <div className="container mx-auto py-6">
+      <div className="flex items-center mb-4">
+        <Button 
+          variant="ghost" 
+          className="mr-2 text-[#662C6C]" 
+          onClick={() => setLocation('/')}
+        >
+          <Icon name="back" size={16} className="mr-1" />
+          Back to Dashboard
+        </Button>
+      </div>
+      
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-[#4A148C]">Mobile Shock Measurements</h1>

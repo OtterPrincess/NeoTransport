@@ -13,10 +13,29 @@
   <div class="app-container">
     <header>
       <div class="logo">
-        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20,10 C15,10 10,15 10,20 C10,25 15,30 20,30 C15,30 10,25 10,20" fill="#9C27B0" />
-          <circle cx="25" cy="15" r="5" fill="#4A148C" />
-          <circle cx="35" cy="15" r="5" fill="#4A148C" />
+        <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" width="120" height="40">
+          <g transform="translate(80, 100) scale(0.9)">
+            <!-- Large circle (top right) -->
+            <circle cx="320" cy="120" r="80" fill="#662C6C" />
+            
+            <!-- Small circle (left side) -->
+            <circle cx="140" cy="180" r="50" fill="#662C6C" />
+            
+            <!-- Small line (top left) -->
+            <rect x="60" y="140" width="60" height="10" rx="5" fill="#662C6C" />
+            
+            <!-- Small line (bottom left) -->
+            <rect x="80" y="320" width="70" height="10" rx="5" fill="#662C6C" />
+            
+            <!-- Small line (bottom) -->
+            <rect x="170" y="350" width="80" height="10" rx="5" fill="#662C6C" />
+            
+            <!-- Crescent curves -->
+            <path d="M100 200 Q 130 130, 250 160 Q 370 190, a320 240 Q 250 300, 150 280 Q 90 260, 70 200" 
+                  fill="none" stroke="#662C6C" strokeWidth="28" strokeLinecap="round" />
+            <path d="M140 210 Q 160 150, 250 180 Q 340 200, 380 250 Q 250 320, 170 290 Q 120 270, 110 220" 
+                  fill="none" stroke="#662C6C" strokeWidth="28" strokeLinecap="round" />
+          </g>
         </svg>
         <span>Nestara</span>
       </div>

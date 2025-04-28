@@ -86,20 +86,29 @@ export const Header: React.FC = () => {
         <div className="flex items-center space-x-3">
           <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
             <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
-              <svg width="40" height="40" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
-                {/* Main logo group */}
-                <g>
-                  {/* Large circle (right/top) */}
-                  <path d="M114.73 43.8928C124.01 42.7368 130.595 34.2775 129.439 24.9982C128.283 15.719 119.824 9.13389 110.544 10.2898C101.265 11.4458 94.6799 19.9052 95.8359 29.1844C96.9918 38.4636 105.451 45.0488 114.73 43.8928Z" stroke="#662C6C" strokeWidth="9.23529" fill="none"/>
+              <svg width="40" height="40" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                {/* Exact logo recreation */}
+                <g transform="translate(80, 100) scale(0.9)">
+                  {/* Large circle (top right) */}
+                  <circle cx="320" cy="120" r="80" fill="#662C6C" />
                   
-                  {/* Small circle (left) */}
-                  <path d="M48.1748 94.8395C51.9709 94.3666 54.6648 90.906 54.1919 87.1099C53.719 83.3139 50.2584 80.62 46.4623 81.0929C42.6663 81.5658 39.9723 85.0264 40.4452 88.8225C40.9181 92.6185 44.3788 95.3124 48.1748 94.8395Z" fill="#662C6C" stroke="#662C6C" strokeWidth="4.61765"/>
+                  {/* Small circle (left side) */}
+                  <circle cx="140" cy="180" r="50" fill="#662C6C" />
                   
-                  {/* Crescent moon curve */}
-                  <path d="M13.5254 89.8781C16.5889 104.937 103.623 145.324 141.843 36.666" stroke="#662C6C" strokeWidth="7.69608" strokeLinecap="round" fill="none"/>
+                  {/* Small line (top left) */}
+                  <rect x="60" y="140" width="60" height="10" rx="5" fill="#662C6C" />
                   
-                  {/* Moon fill */}
-                  <path d="M145.955 42.185C145.955 38.4995 145.606 33.5818 143.5 33.9995C141.394 34.4171 137.911 41.561 138.33 43.6975L145.955 42.185ZM11.5 93.6261C25.865 128.177 68.9139 146.203 100.619 139.322C116.631 135.847 131.04 126.429 139.875 110.179C148.679 93.9874 150 71.4995 145.955 42.185L138.33 43.6975C143.5 70.0355 140.729 92.2555 133.063 106.355C125.429 120.396 113.034 128.56 98.9663 131.614C70.5113 137.789 41.5 127.602 21.6202 93.6261H11.5Z" fill="#662C6C"/>
+                  {/* Small line (bottom left) */}
+                  <rect x="80" y="320" width="70" height="10" rx="5" fill="#662C6C" />
+                  
+                  {/* Small line (bottom) */}
+                  <rect x="170" y="350" width="80" height="10" rx="5" fill="#662C6C" />
+                  
+                  {/* Crescent curves */}
+                  <path d="M100 200 Q 130 130, 250 160 Q 370 190, a320 240 Q 250 300, 150 280 Q 90 260, 70 200" 
+                        fill="none" stroke="#662C6C" strokeWidth="28" strokeLinecap="round" />
+                  <path d="M140 210 Q 160 150, 250 180 Q 340 200, 380 250 Q 250 320, 170 290 Q 120 270, 110 220" 
+                        fill="none" stroke="#662C6C" strokeWidth="28" strokeLinecap="round" />
                 </g>
               </svg>
             </div>
