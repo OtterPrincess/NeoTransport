@@ -1,0 +1,101 @@
+Here’s a **professional Replit design description prompt** you can use to guide yourself (or another developer) clearly — **focusing only on building the mobile one-touch shock measurement applet**, assuming your **desktop dashboard is already complete**:
+
+---
+
+# 📄 Replit Design Description Prompt  
+(For Mobile One-Touch Shock Measurement Applet)
+
+---
+
+**Project Title:**  
+**Mobile Shock Measurement Applet for Neonatal Transport Monitoring
+
+---
+
+**Project Overview:**  
+Develop a lightweight **mobile-optimized web applet** designed to be used on **hospital-issued smartphones**. The applet allows **nurses** and **practitioners** to **place a phone onto a neonatal bed tray** and **measure shock and vibration** with a **one-touch** interface.  
+
+Captured accelerometer data should be timestamped and optionally transmitted to the **existing desktop dashboard database**.
+
+---
+
+**Primary Goal:**  
+- Enable fast, **one-touch activation** of shock monitoring without requiring app installation.
+- Must be **compatible with iOS and Android hospital mobile browsers** (Safari and Chrome).
+
+---
+
+**Key Features:**
+- **Landing Page:**  
+  - Simple UI with hospital branding.
+  - Giant "Start Measuring" button.
+
+- **Sensor Activation:**  
+  - Upon button click, **request motion sensor permission** (for iOS 13+ and Android).
+  - Begin capturing **accelerometer data** (X, Y, Z).
+  - Display basic live readout: "Current Movement: X / Y / Z"
+
+- **Session Handling:**  
+  - Start/Stop button (toggle) to control active measurement.
+  - Automatically **timestamp** start and end of measurement sessions.
+
+- **Data Handling:**  
+  - POST accelerometer session data to backend endpoint (same database as desktop dashboard).
+  - Include metadata: Device ID (optional), session timestamp, session ID.
+
+- **Minimalism and Accessibility:**  
+  - Large fonts.
+  - Mobile-first CSS design.
+  - Responsive layout (portrait and landscape).
+  - Button padding for gloved hands.
+
+---
+
+**Technical Constraints:**
+- **Frontend:** HTML, CSS (Mobile-First Responsive), Vanilla JS.
+- **Sensor:** DeviceMotionEvent API for accelerometer access.
+- **Backend Integration:** Connect to existing backend server/database for posting session data.
+- **Security:** HTTPS only (Replit hosting is fine).
+- **No app store download.**
+- **No complex authentication needed** (secure access via protected hospital network or simple token if required).
+
+---
+
+**Success Criteria:**
+- Sensor permission request works reliably.
+- Motion data collected when phone is on tray.
+- One-touch interface feels intuitive.
+- Data successfully transmitted and visualized in the existing desktop dashboard.
+
+---
+
+# 📂 Project File Layout:
+
+```plaintext
+/
+|__ index.html    (Landing page + Start Measuring button)
+|__ measure.js    (Accelerometer capture, live readout, POST session)
+|__ style.css     (Mobile-first, accessible styles)
+|__ assets/       (Logo, icons if needed)
+|__ server.js     (ONLY if you want a small API endpoint for local dev testing)
+```
+
+---
+
+# 🎯 Final Note:
+This applet must **maximize reliability and simplicity** because it will be used in urgent hospital environments.  
+
+Focus on **large touch targets, clear feedback (e.g., "Measuring..." state), and minimizing steps.**
+
+---
+
+# ✅ Deliverable:
+- A mobile web app accessible via QR code or link.
+- Fully tested on iOS Safari and Android Chrome.
+
+---
+
+---
+
+Would you also like me to create a **super simple project board** (like a 5-card Trello or Notion kanban) based on this design so you can immediately start building or tracking?  
+🚀 (takes 1 min to generate!)

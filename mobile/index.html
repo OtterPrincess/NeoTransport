@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nestara Shock Measurement</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#4A148C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20,10 C15,10 10,15 10,20 C10,25 15,30 20,30 C15,30 10,25 10,20" fill="#9C27B0" />
+          <circle cx="25" cy="15" r="5" fill="#4A148C" />
+          <circle cx="35" cy="15" r="5" fill="#4A148C" />
+        </svg>
+        <span>Nestara</span>
+      </div>
+    </header>
+
+    <main>
+      <div id="landing-screen" class="screen active">
+        <h1>Vibration Measurement</h1>
+        <p>Place phone on the neonatal bed tray to measure shock and vibration</p>
+        <button id="start-button" class="primary-button">Start Measuring</button>
+      </div>
+
+      <div id="measuring-screen" class="screen">
+        <div class="status-indicator">
+          <div class="pulse-ring"></div>
+          <span id="status-text">Measuring</span>
+        </div>
+
+        <div class="readings-container">
+          <div class="reading">
+            <span class="label">X-axis</span>
+            <span id="x-value" class="value">0.00</span>
+          </div>
+          <div class="reading">
+            <span class="label">Y-axis</span>
+            <span id="y-value" class="value">0.00</span>
+          </div>
+          <div class="reading">
+            <span class="label">Z-axis</span>
+            <span id="z-value" class="value">0.00</span>
+          </div>
+          <div class="reading total">
+            <span class="label">Total Movement</span>
+            <span id="total-value" class="value">0.00</span>
+          </div>
+        </div>
+
+        <div class="timer">
+          <span id="timer-display">00:00</span>
+        </div>
+
+        <button id="stop-button" class="primary-button stop">Stop Measuring</button>
+      </div>
+
+      <div id="results-screen" class="screen">
+        <h1>Measurement Complete</h1>
+        
+        <div class="results-summary">
+          <div class="result-item">
+            <span class="label">Session Duration</span>
+            <span id="duration-result" class="value">00:00</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Peak Movement</span>
+            <span id="peak-result" class="value">0.00</span>
+          </div>
+          <div class="result-item">
+            <span class="label">Average Movement</span>
+            <span id="avg-result" class="value">0.00</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="send-button" class="primary-button send">Send to Dashboard</button>
+          <button id="new-measurement-button" class="secondary-button">New Measurement</button>
+        </div>
+      </div>
+    </main>
+
+    <div id="permission-denied" class="overlay">
+      <div class="dialog">
+        <h2>Sensor Access Required</h2>
+        <p>This app needs access to motion sensors to measure vibration.</p>
+        <p>Please enable motion sensors in your browser settings and try again.</p>
+        <button id="retry-button" class="primary-button">Retry</button>
+      </div>
+    </div>
+
+    <div id="no-sensors" class="overlay">
+      <div class="dialog">
+        <h2>Sensors Not Available</h2>
+        <p>Your device does not have the required motion sensors or they are not accessible.</p>
+        <p>Please try using a different device.</p>
+        <button id="ok-button" class="primary-button">OK</button>
+      </div>
+    </div>
+
+    <div id="sending-data" class="overlay">
+      <div class="dialog">
+        <div class="spinner"></div>
+        <p>Sending measurement data...</p>
+      </div>
+    </div>
+
+    <div id="success-message" class="overlay">
+      <div class="dialog">
+        <div class="success-icon">✓</div>
+        <h2>Data Sent Successfully</h2>
+        <p>Your measurement has been added to the Nestara dashboard.</p>
+        <button id="success-ok-button" class="primary-button">OK</button>
+      </div>
+    </div>
+
+    <div id="error-message" class="overlay">
+      <div class="dialog">
+        <h2>Connection Error</h2>
+        <p>Unable to send measurement data. The data will be saved locally.</p>
+        <p>You can try sending it again later.</p>
+        <button id="error-ok-button" class="primary-button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="measure.js"></script>
+</body>
+</html>
