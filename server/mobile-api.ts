@@ -176,26 +176,6 @@ router.get('/measurements', async (req: Request, res: Response) => {
   try {
     const secureMode = req.query.secure === 'true';
     
-    // Get measurements with authentication check for secure mode
-    const measurements = await db.select({
-      id: mobileMeasurements.id,
-      deviceId: mobileMeasurements.deviceId,
-      sessionId: mobileMeasurements.sessionId,
-      timestamp: mobileMeasurements.timestamp,
-      startTime: mobileMeasurements.startTime,
-      endTime: mobileMeasurements.endTime,
-      duration: mobileMeasurements.duration,
-      peakVibration: mobileMeasurements.peakVibration,
-      averageVibration: mobileMeasurements.averageVibration,
-      dataPoints: mobileMeasurements.dataPoints,
-      unitId: mobileMeasurements.unitId,
-      // Only include metadata if not in secure mode or if authenticated
-      metadata: secureMode && !req.isAuthenticated() ? null : mobileMeasurements.metadata
-    })
-    .from(mobileMeasurements)
-    .orderBy(desc(mobileMeasurements.timestamp))
-    .limit(50);
-    
     // If in secure mode, check authentication
     if (secureMode && !req.isAuthenticated()) {
       return res.status(401).json({ 
@@ -203,6 +183,24 @@ router.get('/measurements', async (req: Request, res: Response) => {
         message: 'Please log in to access secure measurements'
       });
     }
+    
+    // Get measurements with authentication check for secure mode
+    const measurements = await db.select({
+      id: mobileMeasurements.id,
+      deviceId: mobileMeasurements.deviceId,
+      sessionId: mobileMeasurements.sessionId,
+      timestamp: mobileMeasurements.timestamp,
+      startTime: mobileMeasurements.startTime,
+      duration: mobileMeasurements.duration,
+      peakVibration: mobileMeasurements.peakVibration,
+      averageVibration: mobileMeasurements.averageVibration,
+      unitId: mobileMeasurements.unitId,
+      // Only include metadata if not in secure mode or if authenticated
+      metadata: secureMode && !req.isAuthenticated() ? null : mobileMeasurements.metadata
+    })
+    .from(mobileMeasurements)
+    .orderBy(desc(mobileMeasurements.timestamp))
+    .limit(50);
     
     res.json(measurements);
   } catch (error) {

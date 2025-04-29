@@ -251,6 +251,9 @@ export default function RealTimeAccelerometer() {
           
           await apiRequest("POST", "/api/mobile/measurement-points", { points: batch });
         }
+        
+        // Invalidate the measurements query to refresh the data
+        queryClient.invalidateQueries({ queryKey: ['/api/mobile/measurements'] });
       }
       
       return savedMeasurement.id;
