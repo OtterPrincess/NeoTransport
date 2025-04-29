@@ -126,8 +126,8 @@ router.post('/measurements', async (req: Request, res: Response) => {
       delete metadata.ssn;
     }
     
-    // Insert the main measurement record
-    const [measurement] = await db.insert(mobileMeasurements).values({
+    // Prepare measurement data with proper typing
+    const measurementData = {
       deviceId: data.deviceId,
       sessionId: data.sessionId,
       timestamp: new Date(),
@@ -138,7 +138,10 @@ router.post('/measurements', async (req: Request, res: Response) => {
       dataPoints: data.dataPoints || 0,
       unitId: data.unitId || null,
       metadata: JSON.stringify(metadata),
-    }).returning();
+    };
+    
+    // Insert the main measurement record
+    const [measurement] = await db.insert(mobileMeasurements).values(measurementData).returning();
     
     // If we have readings data, insert them as measurement points
     if (data.readings && data.readings.length > 0) {
@@ -233,22 +236,40 @@ router.get('/measurements', async (req: Request, res: Response) => {
     }
     
     // Get measurements with authentication check for secure mode
-    const measurements = await db.select({
-      id: mobileMeasurements.id,
-      deviceId: mobileMeasurements.deviceId,
-      sessionId: mobileMeasurements.sessionId,
-      timestamp: mobileMeasurements.timestamp,
-      startTime: mobileMeasurements.startTime,
-      duration: mobileMeasurements.duration,
-      peakVibration: mobileMeasurements.peakVibration,
-      averageVibration: mobileMeasurements.averageVibration,
-      unitId: mobileMeasurements.unitId,
-      // Only include metadata if not in secure mode or if authenticated
-      metadata: secureMode && !req.isAuthenticated() ? null : mobileMeasurements.metadata
+    // Use different queries based on authentication status to avoid type errors
+    const measurements = secureMode && !req.isAuthenticated() 
+      ? await db.select({
+          id: mobileMeasurements.id,
+          deviceId: mobileMeasurements.deviceId,
+          sessionId: mobileMeasurements.sessionId,
+          timestamp: mobileMeasurements.timestamp,
+          startTime: mobileMeasurements.startTime,
+          duration: mobileMeasurements.duration,
+          peakVibration: mobileMeasurements.peakVibration,
+          averageVibration: mobileMeasurements.averageVibration,
+          unitId: mobileMeasurements.unitId,
+          // Exclude metadata for unauthenticated requests in secure mode
+        }).from(mobileMeasurements)
+      : await db.select({
+          id: mobileMeasurements.id,
+          deviceId: mobileMeasurements.deviceId,
+          sessionId: mobileMeasurements.sessionId,
+          timestamp: mobileMeasurements.timestamp,
+          startTime: mobileMeasurements.startTime,
+          duration: mobileMeasurements.duration,
+          peakVibration: mobileMeasurements.peakVibration,
+          averageVibration: mobileMeasurements.averageVibration,
+          unitId: mobileMeasurements.unitId,
+          metadata: mobileMeasurements.metadata
     })
     .from(mobileMeasurements)
     .orderBy(desc(mobileMeasurements.timestamp))
     .limit(50);
+    
+    // Add no-cache headers to prevent caching
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     
     res.json(measurements);
   } catch (error) {
@@ -276,6 +297,11 @@ router.get('/measurements/:id', async (req: Request, res: Response) => {
     const points = await db.select().from(mobileMeasurementPoints)
       .where(eq(mobileMeasurementPoints.measurementId, measurementId))
       .orderBy(mobileMeasurementPoints.timestamp);
+    
+    // Add no-cache headers to prevent caching
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     
     res.json({
       ...measurement,
