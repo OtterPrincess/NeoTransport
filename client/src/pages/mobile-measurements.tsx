@@ -75,14 +75,15 @@ export default function MobileMeasurements() {
   // Fetch all measurements
   const { data: measurements, isLoading, error } = useQuery<MobileMeasurement[]>({
     queryKey: ['/api/mobile/measurements'],
-    staleTime: 30000,
+    staleTime: 0, // No stale time to ensure fresh data
+    refetchInterval: 3000, // Refetch every 3 seconds to catch new measurements
   });
 
   // Fetch selected measurement details
   const { data: measurementDetail, isLoading: isDetailLoading } = useQuery<MeasurementWithPoints>({
     queryKey: ['/api/mobile/measurements', selectedMeasurement],
     enabled: !!selectedMeasurement,
-    staleTime: 30000,
+    staleTime: 0, // Always fetch fresh data
   });
   
   const formatDuration = (seconds: number) => {
