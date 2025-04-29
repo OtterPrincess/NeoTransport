@@ -104,16 +104,16 @@ export default function TransportIcons() {
       {/* Transport Partner Information Section */}
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Transport Partner Facilities</CardTitle>
+          <CardTitle>Transport Partner Network</CardTitle>
           <CardDescription>
-            Our trusted transport partner network includes the following certified healthcare facilities.
+            Our transport partner network includes certified healthcare facilities with specialized neonatal transport capabilities.
             Contact information is available to authorized personnel.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">Boston Children's Hospital</h3>
+              <h3 className="font-medium text-[#6A1B9A]">Pediatric Specialty Center</h3>
               <p className="text-sm text-gray-600 mt-1">Specialized Neonatal Care Transport</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
@@ -125,7 +125,7 @@ export default function TransportIcons() {
             </div>
             
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">Mass General Hospital</h3>
+              <h3 className="font-medium text-[#6A1B9A]">Regional Medical Center</h3>
               <p className="text-sm text-gray-600 mt-1">Neonatal Emergency Response Team</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
@@ -137,8 +137,8 @@ export default function TransportIcons() {
             </div>
             
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">Brigham & Women's Hospital</h3>
-              <p className="text-sm text-gray-600 mt-1">Maternal-Fetal Transport Service</p>
+              <h3 className="font-medium text-[#6A1B9A]">Maternal-Fetal Care Institute</h3>
+              <p className="text-sm text-gray-600 mt-1">Maternal-Fetal Transport Services</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
                 <span className="text-gray-500">Available 24/7</span>
@@ -149,7 +149,7 @@ export default function TransportIcons() {
             </div>
             
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">AirLIFE Medical Transport</h3>
+              <h3 className="font-medium text-[#6A1B9A]">AeroMedical Transport Services</h3>
               <p className="text-sm text-gray-600 mt-1">Critical Care Air Transport</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
@@ -161,8 +161,8 @@ export default function TransportIcons() {
             </div>
             
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">Northeast Medical Transport</h3>
-              <p className="text-sm text-gray-600 mt-1">Regional Emergency Transport</p>
+              <h3 className="font-medium text-[#6A1B9A]">Emergency Medical Transport</h3>
+              <p className="text-sm text-gray-600 mt-1">Regional Emergency Services</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
                 <span className="text-gray-500">Available 24/7</span>
@@ -173,7 +173,7 @@ export default function TransportIcons() {
             </div>
             
             <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
-              <h3 className="font-medium text-[#6A1B9A]">Tufts Medical Center</h3>
+              <h3 className="font-medium text-[#6A1B9A]">University Medical Network</h3>
               <p className="text-sm text-gray-600 mt-1">Neonatal Transport Program</p>
               <div className="mt-2 flex items-center text-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
