@@ -5,6 +5,8 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
 import mobileApi from "./mobile-api";
+import securityApi from "./security/security-api";
+import { trackIpActivity } from './security/ip-activity-middleware';
 import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -19,6 +21,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Register mobile API routes
   app.use('/api/mobile', mobileApi);
+  
+  // Register security API routes - these are admin-protected
+  app.use('/api/security', securityApi);
+  
+  // Enable IP activity tracking (optional - can be enabled for production)
+  // Comment this out for development to avoid unnecessary DB writes
+  // app.use(trackIpActivity);
   
   // Serve mobile app static files
   app.use('/mobile', express.static(path.join(process.cwd(), 'mobile')));

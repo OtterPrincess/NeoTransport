@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Import IP activity tracking middleware (disabled by default, enable when necessary)
+import { trackIpActivity } from './security/ip-activity-middleware';
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
