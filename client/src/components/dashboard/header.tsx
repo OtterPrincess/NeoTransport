@@ -87,7 +87,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center space-x-3">
           <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
             <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
-              <img src={logoImage} alt="Nestara Logo" width="40" height="40" className="object-contain" />
+              <img src={logoImage} alt="Nestara Logo" className="w-10 h-10 object-contain" style={{ objectFit: 'contain' }} />
             </div>
           </div>
           <div className="relative group">
