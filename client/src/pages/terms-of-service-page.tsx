@@ -4,31 +4,32 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
 
-// Import markdown parser for rendering the policy
+// Import markdown parser for rendering the terms
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeReact from 'rehype-react';
 
-export default function PrivacyPolicyPage() {
+export default function TermsOfServicePage() {
   // Set page title
   useEffect(() => {
-    document.title = 'Privacy Policy | Nestara';
+    document.title = 'Terms of Service | Nestara';
   }, []);
-  const [policyContent, setPolicyContent] = useState<string>('');
+
+  const [termsContent, setTermsContent] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the privacy policy markdown file
-    fetch('/src/assets/privacy-policy.md')
+    // Fetch the terms of service markdown file
+    fetch('/src/assets/terms-of-service.md')
       .then(response => response.text())
       .then(text => {
-        setPolicyContent(text);
+        setTermsContent(text);
         setLoading(false);
       })
       .catch(error => {
-        console.error('Error loading privacy policy:', error);
-        setPolicyContent('**Error loading privacy policy. Please try again later.**');
+        console.error('Error loading terms of service:', error);
+        setTermsContent('**Error loading terms of service. Please try again later.**');
         setLoading(false);
       });
   }, []);
@@ -41,27 +42,31 @@ export default function PrivacyPolicyPage() {
       .use(rehypeReact, { createElement: React.createElement });
   }
     
-  const contentHtml = policyContent ? createProcessor().processSync(policyContent).result : null;
+  const contentHtml = termsContent ? createProcessor().processSync(termsContent).result : null;
 
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container py-8">
       <div className="mb-6">
         <Link href="/">
-          <Button variant="outline" className="flex items-center">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" className="flex items-center gap-1">
+            <ArrowLeft size={16} />
             Back to Dashboard
           </Button>
         </Link>
       </div>
-
-      <Card>
+      
+      <Card className="max-w-4xl mx-auto">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin h-8 w-8 border-4 border-[#9C27B0] border-t-transparent rounded-full"></div>
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-4 bg-gray-200 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
             </div>
           ) : (
-            <div className="prose max-w-none">
+            <div className="prose prose-purple max-w-none">
               {contentHtml}
             </div>
           )}

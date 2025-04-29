@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "wouter";
 
 export const Footer: React.FC = () => {
   return (
@@ -7,8 +8,8 @@ export const Footer: React.FC = () => {
         <div>© {new Date().getFullYear()} Nestara Health - Neonatal Transport Platform</div>
         <div className="flex space-x-4 mt-2 md:mt-0">
           <a href="#" className="hover:text-[#6A1B9A]">Help</a>
-          <a href="#" className="hover:text-[#6A1B9A]">Privacy</a>
-          <a href="#" className="hover:text-[#6A1B9A]">Terms</a>
+          <Link href="/privacy-policy" className="hover:text-[#6A1B9A]">Privacy Policy</Link>
+          <Link href="/terms-of-service" className="hover:text-[#6A1B9A]">Terms of Service</Link>
           <a href="#" className="hover:text-[#6A1B9A]">Contact</a>
         </div>
       </div>

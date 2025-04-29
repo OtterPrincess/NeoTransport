@@ -1,0 +1,79 @@
+# Nestara Terms of Service
+Effective Date: April 29, 2025
+
+Welcome to Nestara.
+By accessing or using our services, products, prototypes, communications, or website (the "Services"), you agree to these Terms of Service ("Terms").
+Please read them carefully.
+
+## 1. Acceptance of Terms
+By using the Services, you acknowledge that you have read, understood, and agreed to be bound by these Terms and all applicable laws and regulations.
+If you do not agree to these Terms, you may not access or use the Services.
+
+These Terms form a binding agreement between you and Nestara.
+
+## 2. Eligibility
+You must be at least 18 years old to use our Services.
+By using Nestara, you represent and warrant that you meet this requirement.
+
+## 3. Use of Services
+Nestara provides tools, prototypes, and services intended to support neonatal and maternal care innovation.
+You agree to use the Services:
+
+- Only for lawful purposes
+- In accordance with any applicable healthcare, research, or data privacy regulations
+- Without violating the rights, safety, or well-being of others
+
+You agree not to:
+
+- Reverse engineer, decompile, disassemble, or attempt to derive the source code of any part of the Services
+- Interfere with or disrupt the integrity or performance of the Services
+- Use the Services to collect or process sensitive personal information without proper authorization
+
+## 4. Intellectual Property
+Unless otherwise stated, all content, designs, logos, software, and materials associated with Nestara are the property of Nestara or its licensors.
+You are granted a limited, non-exclusive, non-transferable license to use the Services for their intended purposes only.
+
+You may not copy, modify, distribute, sell, or lease any part of our Services without prior written permission.
+
+## 5. Prototypes and Research Tools
+Certain Nestara offerings may be early-stage research prototypes or pilot products.
+They are provided "as is" for informational, educational, or developmental purposes and are not certified medical devices unless explicitly stated otherwise.
+
+Use of any prototype device should be under appropriate supervision and professional discretion.
+
+## 6. Privacy
+Your use of our Services is also governed by our Privacy Policy.
+Please review it carefully to understand how we collect, use, and protect your information.
+
+## 7. Disclaimers
+Nestara makes no guarantees or warranties regarding the accuracy, completeness, reliability, or suitability of the Services for any particular purpose.
+
+The Services may be subject to interruptions, delays, or inaccuracies.
+
+Nestara disclaims all warranties, express or implied, to the fullest extent permitted by law, including but not limited to implied warranties of merchantability and fitness for a particular purpose.
+
+## 8. Limitation of Liability
+To the maximum extent permitted by law:
+
+Nestara and its officers, directors, employees, partners, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly.
+
+Our total liability for any claims arising out of or relating to the use of the Services is limited to the amount you paid us (if any) for access to the Services during the twelve (12) months prior to the event giving rise to the claim.
+
+## 9. Indemnification
+You agree to indemnify, defend, and hold harmless Nestara and its affiliates from and against any claims, liabilities, damages, losses, and expenses arising out of or related to your violation of these Terms or your misuse of the Services.
+
+## 10. Changes to the Terms
+We may update these Terms from time to time.
+If we make material changes, we will notify you via our website or direct communication.
+Your continued use of the Services after changes become effective means you accept the revised Terms.
+
+## 11. Governing Law
+These Terms are governed by and construed in accordance with the laws of the State of Massachusetts, without regard to its conflict of law principles.
+Any disputes arising from or relating to these Terms shall be resolved exclusively in the courts located within Suffolk County, Massachusetts.
+
+## 12. Contact Us
+For any questions about these Terms, please contact:
+
+Nestara, Inc.
+Cambridge, MA 02139
+support@nestara.health

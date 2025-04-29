@@ -16,6 +16,7 @@ import SoundscapeGenerator from "@/pages/soundscape-generator";
 import TransportIcons from "@/pages/transport-icons";
 import MobileMeasurements from "@/pages/mobile-measurements";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
+import TermsOfServicePage from "@/pages/terms-of-service-page";
 import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
 
@@ -32,6 +33,7 @@ function Router() {
       <ProtectedRoute path="/mobile-measurements" component={MobileMeasurements} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
+      <Route path="/terms-of-service" component={TermsOfServicePage} />
       <Route component={NotFound} />
     </Switch>
   );
