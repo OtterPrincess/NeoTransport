@@ -6,11 +6,11 @@ export const TabNavigation: React.FC = () => {
   
   const tabs = [
     { name: "Dashboard", path: "/" },
+    { name: "Mobile Measurements", path: "/mobile-measurements" },
     { name: "Alert History", path: "/alerts" },
     { name: "Compatible Items", path: "/items" },
     { name: "Soundscape", path: "/soundscape" },
     { name: "Transport Partners", path: "/transport-icons" },
-    { name: "Mobile Measurements", path: "/mobile-measurements" },
     { name: "Settings", path: "/settings" }
   ];
   

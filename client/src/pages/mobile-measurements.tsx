@@ -134,7 +134,12 @@ export default function MobileMeasurements() {
       
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-[#4A148C]">Mobile Shock Measurements</h1>
+          <div className="flex items-center">
+            <h1 className="text-3xl font-bold text-[#4A148C] font-libre">Mobile Shock Measurements</h1>
+            <span className="ml-3 text-xs bg-[#E1BEE7] text-[#4A148C] px-2 py-1 rounded-md font-medium">
+              Accelerometer App v2.1.0
+            </span>
+          </div>
           <p className="text-muted-foreground">
             View and analyze shock measurements collected from mobile devices
           </p>
