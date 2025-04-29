@@ -122,37 +122,29 @@ export default function MobileMeasurements() {
   };
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="flex items-center mb-4">
+    <div className="container mx-auto">
+      <div className="flex items-center py-4 bg-white border-b border-gray-200 sticky top-0 z-10">
         <Button 
           variant="ghost" 
-          className="mr-2 text-[#662C6C]" 
+          className="mr-4" 
           onClick={() => setLocation('/')}
         >
           <Icon name="back" size={16} className="mr-1" />
-          Back to Dashboard
+          Back
         </Button>
-      </div>
-      
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <div className="flex items-center">
-            <h1 className="text-3xl font-bold text-[#4A148C] font-libre">Mobile Shock Measurements</h1>
-            <span className="ml-3 text-xs bg-[#E1BEE7] text-[#4A148C] px-2 py-1 rounded-md font-medium">
-              Accelerometer App v2.1.0
-            </span>
-          </div>
-          <p className="text-muted-foreground">
-            View and analyze shock measurements collected from mobile devices
-          </p>
+        
+        <h1 className="text-2xl font-semibold">Mobile Measurements</h1>
+        
+        <div className="ml-auto flex items-center">
+          <Button 
+            onClick={generateQrCode}
+            variant="outline"
+            className="border-gray-300"
+          >
+            <Icon name="scan" size={16} className="mr-2" />
+            QR Code
+          </Button>
         </div>
-        <Button 
-          onClick={generateQrCode}
-          className="bg-[#4A148C] hover:bg-[#6A1B9A]"
-        >
-          <Icon name="mobile" size={16} className="mr-2" />
-          Generate QR Code
-        </Button>
       </div>
       
       <Tabs defaultValue="mobile" className="w-full">

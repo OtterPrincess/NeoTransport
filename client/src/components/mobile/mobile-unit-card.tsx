@@ -62,63 +62,62 @@ const MobileUnitCard: React.FC<MobileUnitCardProps> = ({ unit }) => {
   };
 
   return (
-    <Card className="mb-4 overflow-hidden border-b border-gray-200 shadow-sm">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">NICU-{unit.unitId.replace(/Unit\s*#/i, '')}</h3>
-          {hasAlert && (
-            <Badge variant="destructive" className="rounded-md font-medium">
-              Alert
-            </Badge>
-          )}
-        </div>
-        
-        <div className="flex items-center mb-6">
-          <h2 className="text-5xl font-bold">
-            {shakeIndex}<span className="text-2xl font-normal ml-1">g</span>
-          </h2>
-          <div className="ml-4 flex flex-col">
-            <div className="flex items-center">
-              {generateWaveform()}
-            </div>
-            <span className="text-lg mt-1 font-medium">
-              {getVibrationStatus()}
-            </span>
+    <div className="border-b border-gray-200 py-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl">NICU-{unit.unitId.replace(/Unit\s*#/i, '')} {unit.location || 'Room 101'}</h2>
+        {hasAlert && (
+          <span className="bg-red-500 text-white rounded-md px-4 py-1 text-base">
+            Alert
+          </span>
+        )}
+      </div>
+      
+      <div className="mt-8 flex items-center">
+        <div className="flex flex-col">
+          <div className="text-7xl font-bold tracking-tight">
+            {shakeIndex}<span className="text-4xl ml-1">g</span>
+          </div>
+          <div className="flex items-center mt-1">
+            <div className="text-xl mr-6">Vibration</div>
+            <div className="text-xl">{getVibrationStatus()}</div>
+            {generateWaveform()}
           </div>
         </div>
-        
-        <div className="grid grid-cols-2 gap-y-4 mb-6">
-          <div className="text-gray-700 text-lg">Surface Temp</div>
-          <div className="text-right font-medium text-lg">
-            {telemetry?.surfaceTemp ? `${telemetry.surfaceTemp.toFixed(1)} °C` : 'N/A'}
-          </div>
-          
-          <div className="text-gray-700 text-lg">Internal Temp</div>
-          <div className="text-right font-medium text-lg">
-            {telemetry?.internalTemp ? `${telemetry.internalTemp.toFixed(1)} °C` : 'N/A'}
-          </div>
-          
-          <div className="text-gray-700 text-lg">Battery</div>
-          <div className="text-right font-medium text-lg">
-            {telemetry?.batteryLevel ? `${telemetry.batteryLevel} %` : 'N/A'}
-          </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-y-6 mt-8">
+        <div className="text-xl">Surface Temp</div>
+        <div className="text-right text-xl font-medium">
+          {telemetry?.surfaceTemp ? `${telemetry.surfaceTemp.toFixed(1)} °` : 'N/A'}
         </div>
         
+        <div className="text-xl">Internal Temp</div>
+        <div className="text-right text-xl font-medium">
+          {telemetry?.internalTemp ? `${telemetry.internalTemp.toFixed(1)} °` : 'N/A'}
+        </div>
+        
+        <div className="text-xl">Battery</div>
+        <div className="text-right text-xl font-medium">
+          {telemetry?.batteryLevel ? `${telemetry.batteryLevel} %` : 'N/A'}
+        </div>
+      </div>
+      
+      <div className="mt-8">
         <Button 
           variant="outline"
-          className="w-full py-6 text-lg font-medium border-gray-300 hover:bg-gray-50"
+          className="w-full py-5 text-lg font-medium border-gray-300 hover:bg-gray-50 rounded-md"
         >
           View Details
         </Button>
-        
-        <div className="mt-4 text-sm text-gray-500 text-center">
-          v2.1.0 • Last updated {telemetry 
-            ? formatDistanceToNow(new Date(telemetry.timestamp), { addSuffix: false })
-            : 'unknown'
-          } ago
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+      
+      <div className="mt-4 text-base text-gray-500">
+        v2.1.0 • Last updated {telemetry 
+          ? formatDistanceToNow(new Date(telemetry.timestamp), { addSuffix: false })
+          : 'unknown'
+        } ago
+      </div>
+    </div>
   );
 };
 

@@ -50,9 +50,9 @@ const MobileView: React.FC = () => {
   const appVersion = "v2.1.0";
   
   return (
-    <div className="container max-w-md mx-auto">
-      <div className="flex justify-between items-center py-4 bg-white border-b border-gray-200 sticky top-0 z-10">
-        <h1 className="text-2xl font-semibold">Mobile Dashboard</h1>
+    <div className="max-w-lg mx-auto">
+      <div className="flex justify-between items-center py-4 border-b border-gray-200 sticky top-0 bg-white z-10 px-4">
+        <h1 className="text-3xl font-bold">Mobile Dashboard</h1>
         <div className="flex items-center">
           <span className="mr-4 text-base">Real-Time Data</span>
           <span className="inline-flex items-center text-base">
@@ -70,49 +70,37 @@ const MobileView: React.FC = () => {
           <div className="animate-spin h-8 w-8 border-4 border-gray-300 border-t-gray-600 rounded-full"></div>
         </div>
       ) : error ? (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 m-4 rounded-md">
+        <div className="bg-red-50 px-4 py-3 text-red-700">
           Error loading data. Please refresh the page.
         </div>
       ) : units && units.length > 0 ? (
-        <div className="px-4">
-          <div className="flex flex-row border-b border-gray-200 overflow-x-auto py-2 sticky top-16 bg-white z-10">
-            {units.map(unit => (
-              <button
-                key={unit.id}
-                onClick={() => setSelectedUnit(unit.id)}
-                className={`whitespace-nowrap px-4 py-2 mr-2 text-base font-medium ${
-                  selectedUnit === unit.id 
-                    ? 'text-black border-b-2 border-black' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Unit #{unit.unitId.replace(/Unit\s*#/i, '')}
-                {unit.alerts && unit.alerts.some(alert => alert.status === 'active') && (
-                  <span className="inline-block ml-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                )}
-              </button>
-            ))}
+        <>
+          <div className="border-b border-gray-200 overflow-x-auto sticky top-16 bg-white z-10">
+            <div className="flex">
+              {units.map(unit => (
+                <button
+                  key={unit.id}
+                  onClick={() => setSelectedUnit(unit.id)}
+                  className={`whitespace-nowrap px-4 py-3 text-base ${
+                    selectedUnit === unit.id 
+                      ? 'text-black border-b-2 border-black font-medium' 
+                      : 'text-gray-500'
+                  }`}
+                >
+                  Unit #{unit.unitId.replace(/Unit\s*#/i, '')}
+                </button>
+              ))}
+            </div>
           </div>
         
           {selectedUnitData && (
-            <div className="py-4">
+            <div className="px-4">
               <MobileUnitCard unit={selectedUnitData} />
             </div>
           )}
-          
-          <div className="mt-4 mb-8">
-            <div className="p-4 bg-white rounded-lg border border-gray-200">
-              <p className="text-center text-gray-700 mb-4">
-                To take real-time measurements, place your device on the unit tray
-              </p>
-              <button className="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-lg font-medium text-lg">
-                Start New Measurement
-              </button>
-            </div>
-          </div>
-        </div>
+        </>
       ) : (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 m-4 rounded-md">
+        <div className="px-4 py-3 text-yellow-700">
           No units found. Please check your connection.
         </div>
       )}
