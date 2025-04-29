@@ -31,13 +31,15 @@ export default function PrivacyPolicyPage() {
       });
   }, []);
 
-  // Process markdown content to HTML using remark/rehype
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkRehype)
-    .use(rehypeReact, { createElement: React.createElement })
+  // Process markdown content to HTML
+  const createProcessor = () => {
+    return unified()
+      .use(remarkParse)
+      .use(remarkRehype)
+      .use(rehypeReact, { createElement: React.createElement });
+  }
     
-  const contentHtml = policyContent ? processor.processSync(policyContent).result : null;
+  const contentHtml = policyContent ? createProcessor().processSync(policyContent).result : null;
 
   return (
     <div className="container max-w-4xl py-8">
