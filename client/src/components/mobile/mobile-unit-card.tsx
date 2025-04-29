@@ -62,62 +62,60 @@ const MobileUnitCard: React.FC<MobileUnitCardProps> = ({ unit }) => {
   };
 
   return (
-    <Card className="mb-4 overflow-hidden border-2 border-gray-100">
-      <CardContent className="p-0">
-        <div className="p-4">
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <h3 className="text-xl font-semibold">{unit.unitId}</h3>
-              <p className="text-gray-600">{unit.location || 'Unknown Location'}</p>
+    <Card className="mb-4 overflow-hidden border-b border-gray-200 shadow-sm">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-semibold">NICU-{unit.unitId.replace(/Unit\s*#/i, '')}</h3>
+          {hasAlert && (
+            <Badge variant="destructive" className="rounded-md font-medium">
+              Alert
+            </Badge>
+          )}
+        </div>
+        
+        <div className="flex items-center mb-6">
+          <h2 className="text-5xl font-bold">
+            {shakeIndex}<span className="text-2xl font-normal ml-1">g</span>
+          </h2>
+          <div className="ml-4 flex flex-col">
+            <div className="flex items-center">
+              {generateWaveform()}
             </div>
-            {hasAlert && (
-              <Badge variant="destructive" className="rounded-md px-3 py-1">
-                Alert
-              </Badge>
-            )}
-          </div>
-          
-          <div className="flex items-center mb-4">
-            <h2 className="text-4xl font-bold">
-              {shakeIndex}<span className="text-xl font-normal">g</span>
-            </h2>
-            {generateWaveform()}
-          </div>
-          
-          <div className="grid grid-cols-2 gap-y-2">
-            <div className="text-gray-700">Surface Temp</div>
-            <div className="text-right font-medium">
-              {telemetry?.surfaceTemp ? `${telemetry.surfaceTemp.toFixed(1)} °C` : 'N/A'}
-            </div>
-            
-            <div className="text-gray-700">Internal Temp</div>
-            <div className="text-right font-medium">
-              {telemetry?.internalTemp ? `${telemetry.internalTemp.toFixed(1)} °C` : 'N/A'}
-            </div>
-            
-            <div className="text-gray-700">Battery</div>
-            <div className="text-right font-medium">
-              {telemetry?.batteryLevel ? `${telemetry.batteryLevel} %` : 'N/A'}
-            </div>
-            
-            <div className="text-gray-700">Vibration</div>
-            <div className="text-right font-medium">
+            <span className="text-lg mt-1 font-medium">
               {getVibrationStatus()}
-            </div>
+            </span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-y-4 mb-6">
+          <div className="text-gray-700 text-lg">Surface Temp</div>
+          <div className="text-right font-medium text-lg">
+            {telemetry?.surfaceTemp ? `${telemetry.surfaceTemp.toFixed(1)} °C` : 'N/A'}
           </div>
           
-          <div className="mt-4 text-sm text-gray-500">
-            Updated {telemetry 
-              ? formatDistanceToNow(new Date(telemetry.timestamp), { addSuffix: true })
-              : 'unknown'
-            }
+          <div className="text-gray-700 text-lg">Internal Temp</div>
+          <div className="text-right font-medium text-lg">
+            {telemetry?.internalTemp ? `${telemetry.internalTemp.toFixed(1)} °C` : 'N/A'}
           </div>
           
-          <Button 
-            className="w-full mt-4 bg-[#6A1B9A] hover:bg-[#8E24AA]"
-          >
-            View All Units
-          </Button>
+          <div className="text-gray-700 text-lg">Battery</div>
+          <div className="text-right font-medium text-lg">
+            {telemetry?.batteryLevel ? `${telemetry.batteryLevel} %` : 'N/A'}
+          </div>
+        </div>
+        
+        <Button 
+          variant="outline"
+          className="w-full py-6 text-lg font-medium border-gray-300 hover:bg-gray-50"
+        >
+          View Details
+        </Button>
+        
+        <div className="mt-4 text-sm text-gray-500 text-center">
+          v2.1.0 • Last updated {telemetry 
+            ? formatDistanceToNow(new Date(telemetry.timestamp), { addSuffix: false })
+            : 'unknown'
+          } ago
         </div>
       </CardContent>
     </Card>

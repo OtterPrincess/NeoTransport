@@ -50,62 +50,69 @@ const MobileView: React.FC = () => {
   const appVersion = "v2.1.0";
   
   return (
-    <div className="container px-4 py-6 max-w-md mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-libre text-gray-900">Mobile Measurements</h1>
-        <div className="text-xs bg-[#E1BEE7] text-[#4A148C] px-2 py-1 rounded-md font-medium">
-          Accelerometer App {appVersion}
+    <div className="container max-w-md mx-auto">
+      <div className="flex justify-between items-center py-4 bg-white border-b border-gray-200 sticky top-0 z-10">
+        <h1 className="text-2xl font-semibold">Mobile Dashboard</h1>
+        <div className="flex items-center">
+          <span className="mr-4 text-base">Real-Time Data</span>
+          <span className="inline-flex items-center text-base">
+            <svg className="w-5 h-5 text-green-500 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" fillOpacity="0.2"/>
+              <path d="M16.5 8.5L10.5 14.5L7.5 11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            HIPAA-compliant
+          </span>
         </div>
       </div>
       
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin h-8 w-8 border-4 border-[#9C27B0] border-t-transparent rounded-full"></div>
+          <div className="animate-spin h-8 w-8 border-4 border-gray-300 border-t-gray-600 rounded-full"></div>
         </div>
       ) : error ? (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 m-4 rounded-md">
           Error loading data. Please refresh the page.
         </div>
       ) : units && units.length > 0 ? (
-        <>
-          <Tabs defaultValue={selectedUnit?.toString() || "all"} className="w-full mb-4">
-            <TabsList className="w-full overflow-x-auto">
-              {units.map(unit => (
-                <TabsTrigger 
-                  key={unit.id} 
-                  value={unit.id.toString()}
-                  onClick={() => setSelectedUnit(unit.id)}
-                  className="relative"
-                >
-                  {unit.unitId}
-                  {unit.alerts && unit.alerts.some(alert => alert.status === 'active') && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            
+        <div className="px-4">
+          <div className="flex flex-row border-b border-gray-200 overflow-x-auto py-2 sticky top-16 bg-white z-10">
             {units.map(unit => (
-              <TabsContent key={unit.id} value={unit.id.toString()}>
-                <MobileUnitCard unit={unit} />
-              </TabsContent>
+              <button
+                key={unit.id}
+                onClick={() => setSelectedUnit(unit.id)}
+                className={`whitespace-nowrap px-4 py-2 mr-2 text-base font-medium ${
+                  selectedUnit === unit.id 
+                    ? 'text-black border-b-2 border-black' 
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Unit #{unit.unitId.replace(/Unit\s*#/i, '')}
+                {unit.alerts && unit.alerts.some(alert => alert.status === 'active') && (
+                  <span className="inline-block ml-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                )}
+              </button>
             ))}
-          </Tabs>
+          </div>
+        
+          {selectedUnitData && (
+            <div className="py-4">
+              <MobileUnitCard unit={selectedUnitData} />
+            </div>
+          )}
           
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Real-time Measurement</h2>
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-center text-gray-500 mb-2">
+          <div className="mt-4 mb-8">
+            <div className="p-4 bg-white rounded-lg border border-gray-200">
+              <p className="text-center text-gray-700 mb-4">
                 To take real-time measurements, place your device on the unit tray
               </p>
-              <button className="w-full bg-[#6A1B9A] hover:bg-[#8E24AA] text-white py-3 rounded-lg font-medium">
+              <button className="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-lg font-medium text-lg">
                 Start New Measurement
               </button>
             </div>
           </div>
-        </>
+        </div>
       ) : (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-md">
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 m-4 rounded-md">
           No units found. Please check your connection.
         </div>
       )}
