@@ -16,18 +16,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup WebSocket server for real-time data
   const wss = new WebSocketServer({ server, path: '/ws' });
   
-  // Setup authentication routes
+  // Setup authentication routes with security monitoring
+  // Apply tracking to auth endpoints to detect login attacks
+  app.use('/api/login', trackIpActivity);
+  app.use('/api/register', trackIpActivity);
   setupAuth(app);
   
-  // Register mobile API routes
-  app.use('/api/mobile', mobileApi);
+  // Register mobile API routes with IP tracking for sensitive operations
+  app.use('/api/mobile', (req, res, next) => {
+    // Only track POST requests that might contain sensitive data
+    if (req.method === 'POST') {
+      trackIpActivity(req, res, next);
+    } else {
+      next();
+    }
+  }, mobileApi);
   
   // Register security API routes - these are admin-protected
-  app.use('/api/security', securityApi);
-  
-  // Enable IP activity tracking (optional - can be enabled for production)
-  // Comment this out for development to avoid unnecessary DB writes
-  // app.use(trackIpActivity);
+  // Always apply IP tracking to security routes
+  app.use('/api/security', trackIpActivity, securityApi);
   
   // Serve mobile app static files
   app.use('/mobile', express.static(path.join(process.cwd(), 'mobile')));
