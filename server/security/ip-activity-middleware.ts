@@ -26,8 +26,10 @@ export const trackIpActivity = async (req: Request, res: Response, next: NextFun
   const requestMethod = req.method;
   const userAgent = req.headers['user-agent'] || '';
   const referer = req.headers['referer'] || '';
-  const userId = req.isAuthenticated() ? (req.user as any)?.id : null;
-  const sessionId = req.sessionID || '';
+  // Safely check if authenticated function exists (in case middleware runs before auth setup)
+  const userId = typeof req.isAuthenticated === 'function' ? 
+    (req.isAuthenticated() ? (req.user as any)?.id : null) : null;
+  const sessionId = (req as any).sessionID || '';
   const requestPayloadSize = req.headers['content-length'] ? parseInt(req.headers['content-length'] as string) : 0;
   
   // Store headers as JSON for analysis

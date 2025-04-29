@@ -16,11 +16,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup WebSocket server for real-time data
   const wss = new WebSocketServer({ server, path: '/ws' });
   
-  // Setup authentication routes with security monitoring
-  // Apply tracking to auth endpoints to detect login attacks
+  // Setup authentication first, then apply security monitoring
+  setupAuth(app);
+  
+  // Apply tracking to auth endpoints to detect login attacks after auth setup
   app.use('/api/login', trackIpActivity);
   app.use('/api/register', trackIpActivity);
-  setupAuth(app);
   
   // Register mobile API routes with IP tracking for sensitive operations
   app.use('/api/mobile', (req, res, next) => {
