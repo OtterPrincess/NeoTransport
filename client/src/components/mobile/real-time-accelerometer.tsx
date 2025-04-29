@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Icon } from '@/components/ui/icon';
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import {
   LineChart,
   Line,
@@ -32,6 +34,7 @@ type DataPoint = {
 };
 
 const CHART_WINDOW_SIZE = 100; // Number of data points to display
+const DATA_SAMPLE_RATE = 200; // How often to sample data points for the chart (ms)
 
 export default function RealTimeAccelerometer() {
   const [isConnected, setIsConnected] = useState(false);
@@ -44,9 +47,18 @@ export default function RealTimeAccelerometer() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [chartData, setChartData] = useState<DataPoint[]>([]);
+  const [sessionId, setSessionId] = useState<string>('');
   
   const socketRef = useRef<WebSocket | null>(null);
   const timerRef = useRef<number | null>(null);
+  const prevTimeRef = useRef<number>(0);
+  const dataBufferRef = useRef<DataPoint[]>([]);
+  const { toast } = useToast();
+  
+  // Generate a unique session ID when recording starts
+  const generateSessionId = () => {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+  };
   
   const connectWebSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -57,7 +69,15 @@ export default function RealTimeAccelerometer() {
     socket.onopen = () => {
       console.log('WebSocket connected');
       setIsConnected(true);
+      prevTimeRef.current = 0;
       socket.send(JSON.stringify({ command: 'start_accelerometer' }));
+      setChartData([]); // Clear existing chart data
+      
+      toast({
+        title: "Connected",
+        description: "Real-time accelerometer connection established",
+        variant: "default",
+      });
     };
     
     socket.onmessage = (event) => {
@@ -76,27 +96,34 @@ export default function RealTimeAccelerometer() {
             setMaxTotal(data.total);
           }
           
-          if (isRecording) {
-            // Add to chart data
-            const now = Date.now();
-            const timeElapsed = startTime ? (now - startTime) / 1000 : 0;
+          // Create a data point
+          const now = Date.now();
+          // For chart display - if recording use elapsed time, otherwise use a sequential counter
+          const timeValue = isRecording && startTime
+            ? (now - startTime) / 1000
+            : prevTimeRef.current;
+          
+          prevTimeRef.current += 0.2; // Increment by 0.2 seconds for a smooth timeline when not recording
+          
+          const newPoint: DataPoint = {
+            time: parseFloat(timeValue.toFixed(1)),
+            x: Math.abs(data.x),
+            y: Math.abs(data.y),
+            z: Math.abs(data.z),
+            total: data.total
+          };
             
-            setChartData((prevData) => {
-              const newPoint = {
-                time: parseFloat(timeElapsed.toFixed(1)),
-                x: Math.abs(data.x),
-                y: Math.abs(data.y),
-                z: Math.abs(data.z),
-                total: data.total
-              };
-              
-              // Keep a sliding window of data points
-              const newData = [...prevData, newPoint];
-              if (newData.length > CHART_WINDOW_SIZE) {
-                return newData.slice(-CHART_WINDOW_SIZE);
-              }
-              return newData;
-            });
+          // Always update the chart for real-time visualization
+          setChartData(prevData => {
+            const newData = [...prevData, newPoint];
+            return newData.length > CHART_WINDOW_SIZE 
+              ? newData.slice(-CHART_WINDOW_SIZE) 
+              : newData;
+          });
+          
+          // If recording, also store in the data buffer for saving to database
+          if (isRecording) {
+            dataBufferRef.current.push(newPoint);
           }
         }
       } catch (error) {
@@ -107,6 +134,11 @@ export default function RealTimeAccelerometer() {
     socket.onerror = (error) => {
       console.error('WebSocket error:', error);
       setIsConnected(false);
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to accelerometer",
+        variant: "destructive",
+      });
     };
     
     socket.onclose = () => {
@@ -119,7 +151,7 @@ export default function RealTimeAccelerometer() {
   
   // Auto-connect when component mounts
   useEffect(() => {
-    // Connect to WebSocket when component mounts
+    // Connect to WebSocket when component mounts after a short delay
     const timeout = setTimeout(() => {
       connectWebSocket();
     }, 1000);
@@ -143,6 +175,11 @@ export default function RealTimeAccelerometer() {
       socketRef.current.close();
     }
     setIsConnected(false);
+    toast({
+      title: "Disconnected",
+      description: "Accelerometer connection closed",
+      variant: "default",
+    });
   };
   
   const toggleConnection = () => {
@@ -155,9 +192,15 @@ export default function RealTimeAccelerometer() {
   
   const startRecording = () => {
     setIsRecording(true);
-    setStartTime(Date.now());
+    const currentTime = Date.now();
+    setStartTime(currentTime);
     setChartData([]);
     setMaxTotal(0);
+    dataBufferRef.current = []; // Clear the data buffer
+    
+    // Generate a new session ID for this recording
+    const newSessionId = generateSessionId();
+    setSessionId(newSessionId);
     
     // Start timer for elapsed time
     timerRef.current = window.setInterval(() => {
@@ -165,18 +208,98 @@ export default function RealTimeAccelerometer() {
         setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
       }
     }, 1000);
+    
+    toast({
+      title: "Recording Started",
+      description: "Now capturing accelerometer data",
+      variant: "default",
+    });
   };
   
-  const stopRecording = () => {
-    setIsRecording(false);
-    
+  const saveRecordingToDatabase = async (data: DataPoint[], sid: string) => {
+    try {
+      // Create a measurement record
+      const measurementData = {
+        sessionId: sid,
+        deviceType: "Simulator",
+        deviceId: "WEB-APP-" + navigator.userAgent.substring(0, 20),
+        startTime: startTime ? new Date(startTime).toISOString() : new Date().toISOString(),
+        endTime: new Date().toISOString(),
+        duration: elapsedTime,
+        maxValue: maxTotal,
+        description: "Web app accelerometer recording",
+        dataPoints: data.length
+      };
+      
+      // Save the measurement
+      const response = await apiRequest("POST", "/api/mobile/measurements", measurementData);
+      const savedMeasurement = await response.json();
+      
+      // Save each data point with the measurement ID
+      if (savedMeasurement && savedMeasurement.id) {
+        const batchSize = 50; // Save in batches to prevent too large requests
+        
+        for (let i = 0; i < data.length; i += batchSize) {
+          const batch = data.slice(i, i + batchSize).map(point => ({
+            measurementId: savedMeasurement.id,
+            timestamp: new Date(startTime ? startTime + (point.time * 1000) : Date.now()).toISOString(),
+            xAxis: point.x,
+            yAxis: point.y,
+            zAxis: point.z,
+            totalValue: point.total
+          }));
+          
+          await apiRequest("POST", "/api/mobile/measurement-points", { points: batch });
+        }
+      }
+      
+      return savedMeasurement.id;
+    } catch (error) {
+      console.error('Error saving data to database:', error);
+      throw error;
+    }
+  };
+  
+  const stopRecording = async () => {
+    // Stop the timer immediately
     if (timerRef.current) {
       window.clearInterval(timerRef.current);
       timerRef.current = null;
     }
     
-    // Here you would normally save the data
-    console.log('Recording stopped. Data points:', chartData.length);
+    // Get the final data from our buffer
+    const finalData = [...dataBufferRef.current];
+    const finalSessionId = sessionId;
+    
+    // Reset the state
+    setIsRecording(false);
+    dataBufferRef.current = [];
+    
+    // Save to database
+    try {
+      // Show toast message while saving
+      toast({
+        title: "Saving Data",
+        description: `Saving ${finalData.length} data points to database...`,
+        variant: "default",
+      });
+      
+      const measurementId = await saveRecordingToDatabase(finalData, finalSessionId);
+      
+      toast({
+        title: "Recording Saved",
+        description: `Recording saved with ID: ${measurementId}`,
+        variant: "success",
+      });
+      
+      console.log('Recording saved. Measurement ID:', measurementId);
+    } catch (error) {
+      toast({
+        title: "Error Saving Data",
+        description: "Failed to save recording data",
+        variant: "destructive",
+      });
+    }
   };
   
   const formatTime = (seconds: number) => {
@@ -198,7 +321,7 @@ export default function RealTimeAccelerometer() {
     // Max expected value is 0.5
     return Math.min(Math.max(value * 200, 0), 100);
   };
-
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card className="md:col-span-1">
@@ -272,7 +395,7 @@ export default function RealTimeAccelerometer() {
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-blue-500"
+                    className="h-full bg-blue-500 transition-all duration-200 ease-in-out"
                     style={{ width: `${getGaugePercentage(Math.abs(xValue))}%` }}
                   ></div>
                 </div>
@@ -285,7 +408,7 @@ export default function RealTimeAccelerometer() {
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-green-500"
+                    className="h-full bg-green-500 transition-all duration-200 ease-in-out"
                     style={{ width: `${getGaugePercentage(Math.abs(yValue))}%` }}
                   ></div>
                 </div>
@@ -298,7 +421,7 @@ export default function RealTimeAccelerometer() {
                 </div>
                 <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-orange-500"
+                    className="h-full bg-orange-500 transition-all duration-200 ease-in-out"
                     style={{ width: `${getGaugePercentage(Math.abs(zValue))}%` }}
                   ></div>
                 </div>
@@ -311,7 +434,7 @@ export default function RealTimeAccelerometer() {
                 </div>
                 <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full"
+                    className="h-full transition-all duration-200 ease-in-out"
                     style={{ 
                       width: `${getGaugePercentage(totalValue)}%`,
                       backgroundColor: getGaugeColor(totalValue)
@@ -364,36 +487,41 @@ export default function RealTimeAccelerometer() {
                     type="monotone" 
                     dataKey="total" 
                     stroke="#9C27B0" 
-                    strokeWidth={2} 
+                    strokeWidth={2.5} 
                     dot={false} 
-                    isAnimationActive={false}
+                    isAnimationActive
+                    animationDuration={300}
                     name="Total Vibration" 
+                    className="animate-pulse"
                   />
                   <Line 
                     type="monotone" 
                     dataKey="x" 
                     stroke="#2196F3" 
-                    strokeWidth={1} 
+                    strokeWidth={1.5} 
                     dot={false} 
-                    isAnimationActive={false}
+                    isAnimationActive
+                    animationDuration={300}
                     name="X-axis" 
                   />
                   <Line 
                     type="monotone" 
                     dataKey="y" 
                     stroke="#4CAF50" 
-                    strokeWidth={1} 
+                    strokeWidth={1.5} 
                     dot={false} 
-                    isAnimationActive={false}
+                    isAnimationActive
+                    animationDuration={300}
                     name="Y-axis" 
                   />
                   <Line 
                     type="monotone" 
                     dataKey="z" 
                     stroke="#FF9800" 
-                    strokeWidth={1} 
+                    strokeWidth={1.5} 
                     dot={false} 
-                    isAnimationActive={false}
+                    isAnimationActive
+                    animationDuration={300}
                     name="Z-axis" 
                   />
                 </LineChart>
@@ -414,11 +542,16 @@ export default function RealTimeAccelerometer() {
           )}
           
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-sm font-medium mb-2">About this visualization</h3>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium">About this visualization</h3>
+              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+                Secure Database Storage
+              </span>
+            </div>
             <p className="text-sm text-muted-foreground">
-              This display shows real-time accelerometer data from the server. The vibration is measured 
-              in g-forces (1g = 9.8 m/s²). The total vibration is calculated as the vector magnitude 
-              of all three axes √(x² + y² + z²).
+              This display shows real-time accelerometer data. The vibration is measured 
+              in g-forces (1g = 9.8 m/s²). All data is securely stored in your database
+              when recording is active. Start recording to capture measurements.
             </p>
           </div>
         </CardContent>

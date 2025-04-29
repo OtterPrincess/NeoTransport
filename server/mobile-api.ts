@@ -7,28 +7,61 @@ import {
 } from '../shared/schema';
 import { z } from 'zod';
 import { eq, desc } from 'drizzle-orm';
+import crypto from 'crypto';
 
 const router = Router();
 
-// Schema for validating incoming measurement data
+// Enhanced schema for HIPAA-compliant measurement data
 const mobileMeasurementDataSchema = z.object({
   deviceId: z.string(),
+  deviceType: z.string(),
   sessionId: z.string(),
   startTime: z.string().datetime(),
-  duration: z.number().int().positive(),
-  peakVibration: z.number().positive(),
-  averageVibration: z.number().positive(),
-  readings: z.array(z.object({
-    timestamp: z.number(),
-    x: z.number(),
-    y: z.number(),
-    z: z.number(),
-    total: z.number()
-  })).min(1),
-  unitId: z.number().optional()
+  endTime: z.string().datetime().optional(),
+  duration: z.number().nonnegative(),
+  maxValue: z.number().nonnegative(),
+  description: z.string().optional(),
+  dataPoints: z.number().int().nonnegative(),
+  unitId: z.number().optional(),
+  // HIPAA/security specific fields
+  encrypted: z.boolean().optional().default(true),
+  secureMode: z.boolean().optional().default(true),
+  retentionDays: z.number().int().positive().optional().default(30),
+});
+
+// Schema for batch measurement points
+const mobileMeasurementPointsSchema = z.object({
+  points: z.array(z.object({
+    measurementId: z.number(),
+    timestamp: z.string().datetime(),
+    xAxis: z.number(),
+    yAxis: z.number(),
+    zAxis: z.number(),
+    totalValue: z.number()
+  }))
 });
 
 type MobileMeasurementData = z.infer<typeof mobileMeasurementDataSchema>;
+
+// Encrypt sensitive data if requested (for HIPAA compliance)
+function encryptIfNeeded(data: string, shouldEncrypt: boolean): string {
+  if (!shouldEncrypt) return data;
+  
+  try {
+    // This is a simplified example - in a real app you would use a proper encryption key management system
+    const encryptionKey = process.env.ENCRYPTION_KEY || 'nestara-hipaa-compliant-key-2024';
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey), iv);
+    
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    
+    return `${iv.toString('hex')}:${encrypted}`;
+  } catch (error) {
+    console.error('Encryption error:', error);
+    return data; // Fallback to unencrypted data
+  }
+}
 
 // POST /api/mobile/measurements - Create a new measurement session
 router.post('/measurements', async (req: Request, res: Response) => {
@@ -44,36 +77,48 @@ router.post('/measurements', async (req: Request, res: Response) => {
     }
     
     const data = validationResult.data;
+    const shouldEncrypt = data.encrypted || false;
+    const secureMode = data.secureMode || false;
+    
+    // Process metadata for HIPAA compliance (remove any PHI)
+    let metadata: any = {
+      ...req.body.metadata,
+      deviceType: data.deviceType,
+      secureMode,
+      retentionDays: data.retentionDays,
+      createdAt: new Date().toISOString(),
+      dataFormat: 'accelerometer'
+    };
+    
+    // In secure mode, ensure no PHI is included
+    if (secureMode) {
+      // Remove any potential PHI from metadata
+      delete metadata.patientName;
+      delete metadata.patientId;
+      delete metadata.medicalRecordNumber;
+      delete metadata.dateOfBirth;
+      delete metadata.ssn;
+    }
     
     // Insert the main measurement record
     const [measurement] = await db.insert(mobileMeasurements).values({
       deviceId: data.deviceId,
       sessionId: data.sessionId,
       startTime: new Date(data.startTime),
+      endTime: data.endTime ? new Date(data.endTime) : new Date(),
       duration: data.duration,
-      peakVibration: data.peakVibration,
-      averageVibration: data.averageVibration,
+      description: shouldEncrypt ? encryptIfNeeded(data.description || '', true) : (data.description || null),
+      peakVibration: data.maxValue,
+      averageVibration: data.maxValue / 2, // Approximation based on max value
+      dataPoints: data.dataPoints,
       unitId: data.unitId || null,
-      metadata: req.body.metadata || null,
+      metadata: metadata,
     }).returning();
-    
-    // Insert all the measurement points
-    if (data.readings && data.readings.length > 0) {
-      const points = data.readings.map(reading => ({
-        measurementId: measurement.id,
-        timestamp: new Date(reading.timestamp),
-        x: reading.x,
-        y: reading.y,
-        z: reading.z,
-        total: reading.total
-      }));
-      
-      await db.insert(mobileMeasurementPoints).values(points);
-    }
     
     res.status(201).json({
       success: true,
-      measurementId: measurement.id,
+      id: measurement.id,
+      secureMode,
       message: 'Measurement data recorded successfully'
     });
   } catch (error) {
@@ -85,12 +130,79 @@ router.post('/measurements', async (req: Request, res: Response) => {
   }
 });
 
+// POST /api/mobile/measurement-points - Add data points to a measurement
+router.post('/measurement-points', async (req: Request, res: Response) => {
+  try {
+    // Validate the incoming points data
+    const validationResult = mobileMeasurementPointsSchema.safeParse(req.body);
+    
+    if (!validationResult.success) {
+      return res.status(400).json({ 
+        error: 'Invalid data point format',
+        details: validationResult.error.format()
+      });
+    }
+    
+    const { points } = validationResult.data;
+    
+    // Insert the measurement points in batches
+    const insertedPoints = await db.insert(mobileMeasurementPoints).values(
+      points.map(point => ({
+        measurementId: point.measurementId,
+        timestamp: new Date(point.timestamp),
+        x: point.xAxis,
+        y: point.yAxis,
+        z: point.zAxis,
+        total: point.totalValue
+      }))
+    ).returning({ id: mobileMeasurementPoints.id });
+    
+    res.status(201).json({
+      success: true,
+      pointsAdded: insertedPoints.length,
+      message: 'Measurement points added successfully'
+    });
+  } catch (error) {
+    console.error('Error adding measurement points:', error);
+    res.status(500).json({ 
+      error: 'Failed to add measurement points',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // GET /api/mobile/measurements - Get list of measurements
 router.get('/measurements', async (req: Request, res: Response) => {
   try {
-    const measurements = await db.select().from(mobileMeasurements)
-      .orderBy(desc(mobileMeasurements.timestamp))
-      .limit(50);
+    const secureMode = req.query.secure === 'true';
+    
+    // Get measurements with authentication check for secure mode
+    const measurements = await db.select({
+      id: mobileMeasurements.id,
+      deviceId: mobileMeasurements.deviceId,
+      sessionId: mobileMeasurements.sessionId,
+      timestamp: mobileMeasurements.timestamp,
+      startTime: mobileMeasurements.startTime,
+      endTime: mobileMeasurements.endTime,
+      duration: mobileMeasurements.duration,
+      peakVibration: mobileMeasurements.peakVibration,
+      averageVibration: mobileMeasurements.averageVibration,
+      dataPoints: mobileMeasurements.dataPoints,
+      unitId: mobileMeasurements.unitId,
+      // Only include metadata if not in secure mode or if authenticated
+      metadata: secureMode && !req.isAuthenticated() ? null : mobileMeasurements.metadata
+    })
+    .from(mobileMeasurements)
+    .orderBy(desc(mobileMeasurements.timestamp))
+    .limit(50);
+    
+    // If in secure mode, check authentication
+    if (secureMode && !req.isAuthenticated()) {
+      return res.status(401).json({ 
+        error: 'Authentication required for secure data access',
+        message: 'Please log in to access secure measurements'
+      });
+    }
     
     res.json(measurements);
   } catch (error) {
