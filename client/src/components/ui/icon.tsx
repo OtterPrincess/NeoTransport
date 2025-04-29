@@ -21,7 +21,12 @@ import {
   ExternalLink,
   Plus,
   Minus,
-  AlertCircle
+  AlertCircle,
+  PlayCircle,
+  StopCircle,
+  BarChart,
+  BarChart2,
+  CircleDot
 } from "lucide-react";
 
 export type IconName = 
@@ -53,7 +58,11 @@ export type IconName =
   | "refresh-cw"
   | "user"
   | "log-out"
-  | "mobile";
+  | "mobile"
+  | "play"
+  | "stop"
+  | "record"
+  | "waveform";
 
 interface IconProps {
   name: IconName;
@@ -124,6 +133,14 @@ export const Icon: React.FC<IconProps> = ({ name, className, size = 24 }) => {
       return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={cn(className)}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>;
     case "mobile":
       return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={cn(className)}><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>;
+    case "play":
+      return <PlayCircle {...iconProps} />;
+    case "stop":
+      return <StopCircle {...iconProps} />;
+    case "record":
+      return <CircleDot {...iconProps} />;
+    case "waveform":
+      return <BarChart2 {...iconProps} />;
     default:
       return <AlertCircle {...iconProps} />;
   }
