@@ -1,5 +1,5 @@
 // ===== Constants =====
-const API_ENDPOINT = '/api/telemetry'; // Endpoint for sending data to main dashboard
+const API_ENDPOINT = '/api/mobile/measurements'; // Endpoint for sending data to main dashboard
 const SAMPLE_RATE = 50; // Number of samples per second
 const VIBRATION_THRESHOLD = 0.1; // Minimum vibration to record (to filter noise)
 

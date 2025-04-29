@@ -14,19 +14,45 @@ const router = Router();
 // Enhanced schema for HIPAA-compliant measurement data
 const mobileMeasurementDataSchema = z.object({
   deviceId: z.string(),
-  deviceType: z.string(),
+  deviceType: z.string().optional().default("Mobile App"),
   sessionId: z.string(),
   startTime: z.string().datetime(),
   endTime: z.string().datetime().optional(),
   duration: z.number().nonnegative(),
-  maxValue: z.number().nonnegative(),
+  maxValue: z.number().nonnegative().optional(),
+  peakVibration: z.number().nonnegative().optional(),
   description: z.string().optional(),
-  dataPoints: z.number().int().nonnegative(),
+  dataPoints: z.number().int().nonnegative().optional(),
+  averageVibration: z.number().nonnegative().optional(),
   unitId: z.number().optional(),
+  readings: z.array(z.object({
+    timestamp: z.number().or(z.string()),
+    x: z.number(),
+    y: z.number(),
+    z: z.number(),
+    total: z.number()
+  })).optional(),
   // HIPAA/security specific fields
   encrypted: z.boolean().optional().default(true),
   secureMode: z.boolean().optional().default(true),
   retentionDays: z.number().int().positive().optional().default(30),
+}).transform(data => {
+  // If we have maxValue and not peakVibration, use maxValue for peakVibration
+  if (data.maxValue !== undefined && data.peakVibration === undefined) {
+    data.peakVibration = data.maxValue;
+  }
+  
+  // If we have peakVibration and not maxValue, use peakVibration for maxValue
+  if (data.peakVibration !== undefined && data.maxValue === undefined) {
+    data.maxValue = data.peakVibration;
+  }
+  
+  // If we have readings array but no dataPoints count, count them
+  if (data.readings && data.dataPoints === undefined) {
+    data.dataPoints = data.readings.length;
+  }
+  
+  return data;
 });
 
 // Schema for batch measurement points
@@ -107,17 +133,40 @@ router.post('/measurements', async (req: Request, res: Response) => {
       timestamp: new Date(),
       startTime: new Date(data.startTime),
       duration: data.duration,
-      peakVibration: data.maxValue,
-      averageVibration: data.maxValue / 2, // Approximation based on max value
-      dataPoints: data.dataPoints,
+      peakVibration: data.peakVibration || data.maxValue || 0,
+      averageVibration: data.averageVibration || (data.maxValue ? data.maxValue / 2 : 0),
+      dataPoints: data.dataPoints || 0,
       unitId: data.unitId || null,
-      metadata: metadata,
+      metadata: JSON.stringify(metadata),
     }).returning();
+    
+    // If we have readings data, insert them as measurement points
+    if (data.readings && data.readings.length > 0) {
+      try {
+        await db.insert(mobileMeasurementPoints).values(
+          data.readings.map(reading => ({
+            measurementId: measurement.id,
+            timestamp: new Date(typeof reading.timestamp === 'number' 
+              ? reading.timestamp 
+              : Date.parse(reading.timestamp)),
+            x: reading.x,
+            y: reading.y,
+            z: reading.z,
+            total: reading.total
+          }))
+        );
+        console.log(`Inserted ${data.readings.length} measurement points for measurement ID ${measurement.id}`);
+      } catch (error) {
+        console.error('Error inserting measurement points:', error);
+        // Continue anyway since we already created the measurement record
+      }
+    }
     
     res.status(201).json({
       success: true,
       id: measurement.id,
       secureMode,
+      pointsRecorded: data.readings?.length || 0,
       message: 'Measurement data recorded successfully'
     });
   } catch (error) {
