@@ -161,13 +161,16 @@ const HipaaCompliantAccelerometer: React.FC<HipaaCompliantAccelerometerProps> = 
   const hasAlert = shakeIndex > 2.0;
 
   return (
-    <Card className="mb-4 max-w-md mx-auto border border-gray-100 shadow-sm">
+    <Card className="mb-4 max-w-md mx-auto border-b border-gray-200 shadow-sm">
       <CardContent className="p-4">
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h3 className="text-xl font-semibold">{unitId}</h3>
-            <p className="text-gray-600">{location}</p>
-          </div>
+        <div className="flex justify-between items-center mb-6">
+          <Badge variant="outline" className="rounded-md font-medium bg-green-50 text-green-700 border-green-200 flex items-center">
+            <svg className="w-4 h-4 text-green-500 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor" fillOpacity="0.2"/>
+              <path d="M16.5 8.5L10.5 14.5L7.5 11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            HIPAA-compliant
+          </Badge>
           
           {hasAlert && (
             <Badge variant="destructive" className="rounded-md px-3 py-1">
@@ -176,44 +179,47 @@ const HipaaCompliantAccelerometer: React.FC<HipaaCompliantAccelerometerProps> = 
           )}
         </div>
         
-        <div className="flex items-center mb-4">
-          <h2 className="text-4xl font-bold">
-            {shakeIndex.toFixed(1)}<span className="text-xl font-normal">g</span>
-          </h2>
-          <VibrationWaveform amplitude={Math.min(shakeIndex / 3, 1)} />
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold mb-1">{unitId}</h3>
+          <p className="text-gray-600">{location}</p>
         </div>
         
-        <div className="grid grid-cols-2 gap-y-2">
-          <div className="text-gray-700">Surface Temp</div>
-          <div className="text-right font-medium">
-            {surfaceTemp.toFixed(1)} °C
+        <div className="flex items-center mb-6">
+          <div className="text-7xl font-bold tracking-tight">
+            {shakeIndex.toFixed(1)}<span className="text-4xl ml-1">g</span>
+          </div>
+          <div className="ml-6 flex flex-col">
+            <div className="flex items-center">
+              <VibrationWaveform amplitude={Math.min(shakeIndex / 3, 1)} />
+            </div>
+            <span className="text-xl mt-1 font-medium">
+              {vibrationStatus}
+            </span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-y-6 mb-6">
+          <div className="text-xl">Surface Temp</div>
+          <div className="text-right font-medium text-xl">
+            {surfaceTemp.toFixed(1)} °
           </div>
           
-          <div className="text-gray-700">Internal Temp</div>
-          <div className="text-right font-medium">
-            {internalTemp.toFixed(1)} °C
+          <div className="text-xl">Internal Temp</div>
+          <div className="text-right font-medium text-xl">
+            {internalTemp.toFixed(1)} °
           </div>
           
-          <div className="text-gray-700">Battery</div>
-          <div className="text-right font-medium">
+          <div className="text-xl">Battery</div>
+          <div className="text-right font-medium text-xl">
             {batteryLevel} %
           </div>
-          
-          <div className="text-gray-700">Vibration</div>
-          <div className="text-right font-medium">
-            {vibrationStatus}
-          </div>
         </div>
         
-        <div className="mt-4 text-sm text-gray-500">
-          Updated {lastUpdated} min ago
-        </div>
-        
-        <div className="mt-4">
+        <div className="mt-8">
           {isRecording ? (
             <Button
               onClick={stopRecording}
-              className="w-full bg-red-500 hover:bg-red-600"
+              className="w-full py-5 text-lg font-medium border-gray-300 bg-red-500 hover:bg-red-600 text-white"
             >
               <svg 
                 className="mr-2 h-4 w-4" 
@@ -227,27 +233,19 @@ const HipaaCompliantAccelerometer: React.FC<HipaaCompliantAccelerometerProps> = 
               Stop Recording
             </Button>
           ) : (
-            <Button
+            <Button 
+              variant="outline"
+              className="w-full py-5 text-lg font-medium border-gray-300 hover:bg-gray-50 rounded-md"
               onClick={startRecording}
-              className="w-full bg-[#6A1B9A] hover:bg-[#8E24AA]"
             >
-              <svg 
-                className="mr-2 h-4 w-4" 
-                viewBox="0 0 24 24" 
-                fill="currentColor"
-              >
-                <circle cx="12" cy="12" r="8" />
-              </svg>
-              Start HIPAA Recording
+              View Details
             </Button>
           )}
         </div>
         
-        <Button 
-          className="w-full mt-3 bg-[#6A1B9A] hover:bg-[#8E24AA]"
-        >
-          View All Units
-        </Button>
+        <div className="mt-4 text-base text-gray-500 text-center">
+          v2.1.0 • Last updated {lastUpdated} min ago
+        </div>
         
         {showSecurityNotice && (
           <div className="mt-3 p-2 bg-green-50 rounded-md border border-green-100 text-center">
