@@ -48,18 +48,6 @@ export default function RealTimeAccelerometer() {
   const socketRef = useRef<WebSocket | null>(null);
   const timerRef = useRef<number | null>(null);
   
-  useEffect(() => {
-    // Cleanup when the component unmounts
-    return () => {
-      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-        socketRef.current.close();
-      }
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-      }
-    };
-  }, []);
-  
   const connectWebSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsUrl = `${protocol}//${window.location.host}/ws`;
@@ -128,6 +116,26 @@ export default function RealTimeAccelerometer() {
     
     socketRef.current = socket;
   };
+  
+  // Auto-connect when component mounts
+  useEffect(() => {
+    // Connect to WebSocket when component mounts
+    const timeout = setTimeout(() => {
+      connectWebSocket();
+    }, 1000);
+    
+    // Cleanup when the component unmounts
+    return () => {
+      clearTimeout(timeout);
+      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+        socketRef.current.send(JSON.stringify({ command: 'stop_accelerometer' }));
+        socketRef.current.close();
+      }
+      if (timerRef.current) {
+        window.clearInterval(timerRef.current);
+      }
+    };
+  }, []);
   
   const disconnectWebSocket = () => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
