@@ -101,7 +101,91 @@ export default function TransportIcons() {
         </CardContent>
       </Card>
       
-
+      {/* Transport Partner Information Section */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle>Transport Partner Facilities</CardTitle>
+          <CardDescription>
+            Our trusted transport partner network includes the following certified healthcare facilities.
+            Contact information is available to authorized personnel.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">Boston Children's Hospital</h3>
+              <p className="text-sm text-gray-600 mt-1">Specialized Neonatal Care Transport</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Air, Ground, Intrahospital
+              </p>
+            </div>
+            
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">Mass General Hospital</h3>
+              <p className="text-sm text-gray-600 mt-1">Neonatal Emergency Response Team</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Ground, Intrahospital
+              </p>
+            </div>
+            
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">Brigham & Women's Hospital</h3>
+              <p className="text-sm text-gray-600 mt-1">Maternal-Fetal Transport Service</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Air, Ground
+              </p>
+            </div>
+            
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">AirLIFE Medical Transport</h3>
+              <p className="text-sm text-gray-600 mt-1">Critical Care Air Transport</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Air (Fixed-wing & Rotary)
+              </p>
+            </div>
+            
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">Northeast Medical Transport</h3>
+              <p className="text-sm text-gray-600 mt-1">Regional Emergency Transport</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Ground
+              </p>
+            </div>
+            
+            <div className="p-4 border rounded-md hover:shadow-md transition-shadow">
+              <h3 className="font-medium text-[#6A1B9A]">Tufts Medical Center</h3>
+              <p className="text-sm text-gray-600 mt-1">Neonatal Transport Program</p>
+              <div className="mt-2 flex items-center text-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="text-gray-500">Available 24/7</span>
+              </div>
+              <p className="text-sm mt-2">
+                <strong>Transport Types:</strong> Ground, Intrahospital
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
