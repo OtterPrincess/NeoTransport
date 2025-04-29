@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Unit } from '@shared/schema';
 import { Badge } from "@/components/ui/badge";
 import { 
   Table, 
@@ -72,11 +73,16 @@ export default function MobileMeasurements() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [, setLocation] = useLocation();
   
+  // Fetch all units to correlate with measurement data
+  const { data: units } = useQuery<Unit[]>({
+    queryKey: ['/api/units'],
+  });
+  
   // Fetch all measurements
   const { data: measurements, isLoading, error } = useQuery<MobileMeasurement[]>({
     queryKey: ['/api/mobile/measurements'],
     staleTime: 0, // No stale time to ensure fresh data
-    refetchInterval: 3000, // Refetch every 3 seconds to catch new measurements
+    refetchInterval: 3000 // Refetch every 3 seconds to catch new measurements
   });
 
   // Fetch selected measurement details
@@ -239,34 +245,44 @@ export default function MobileMeasurements() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {measurements.map((measurement) => (
-                        <TableRow key={measurement.id}>
-                          <TableCell>{formatTimestamp(measurement.timestamp)}</TableCell>
-                          <TableCell>{formatDuration(measurement.duration)}</TableCell>
-                          <TableCell>{measurement.deviceId}</TableCell>
-                          <TableCell>
-                            {measurement.unitId ? (
-                              <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
-                                Unit #{measurement.unitId}
-                              </Badge>
-                            ) : (
-                              <span className="text-muted-foreground">Not assigned</span>
-                            )}
-                          </TableCell>
-                          <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
-                          <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
-                          <TableCell>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleViewDetails(measurement.id)}
-                            >
-                              <Icon name="info" size={16} className="mr-1" />
-                              Details
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {measurements.map((measurement) => {
+                        // Find the unit information if unitId is present
+                        const linkedUnit = measurement.unitId && units ? 
+                          units.find(unit => unit.id === measurement.unitId) : null;
+                        
+                        return (
+                          <TableRow key={measurement.id}>
+                            <TableCell>{formatTimestamp(measurement.timestamp)}</TableCell>
+                            <TableCell>{formatDuration(measurement.duration)}</TableCell>
+                            <TableCell>{measurement.deviceId}</TableCell>
+                            <TableCell>
+                              {linkedUnit ? (
+                                <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                  {linkedUnit.unitId}
+                                </Badge>
+                              ) : measurement.unitId ? (
+                                <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                  Unit #{measurement.unitId}
+                                </Badge>
+                              ) : (
+                                <span className="text-muted-foreground">Not assigned</span>
+                              )}
+                            </TableCell>
+                            <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
+                            <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
+                            <TableCell>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleViewDetails(measurement.id)}
+                              >
+                                <Icon name="info" size={16} className="mr-1" />
+                                Details
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </>
@@ -360,33 +376,43 @@ export default function MobileMeasurements() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {recentMeasurements.map((measurement) => (
-                              <TableRow key={measurement.id}>
-                                <TableCell>{format(new Date(measurement.timestamp), 'h:mm a')}</TableCell>
-                                <TableCell>{formatDuration(measurement.duration)}</TableCell>
-                                <TableCell>
-                                  {measurement.unitId ? (
-                                    <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
-                                      Unit #{measurement.unitId}
-                                    </Badge>
-                                  ) : (
-                                    <span className="text-muted-foreground">Not assigned</span>
-                                  )}
-                                </TableCell>
-                                <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
-                                <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
-                                <TableCell>
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    onClick={() => handleViewDetails(measurement.id)}
-                                  >
-                                    <Icon name="info" size={16} className="mr-1" />
-                                    Details
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                            {recentMeasurements.map((measurement) => {
+                              // Find the unit information if unitId is present
+                              const linkedUnit = measurement.unitId && units ? 
+                                units.find(unit => unit.id === measurement.unitId) : null;
+                                
+                              return (
+                                <TableRow key={measurement.id}>
+                                  <TableCell>{format(new Date(measurement.timestamp), 'h:mm a')}</TableCell>
+                                  <TableCell>{formatDuration(measurement.duration)}</TableCell>
+                                  <TableCell>
+                                    {linkedUnit ? (
+                                      <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                        {linkedUnit.unitId}
+                                      </Badge>
+                                    ) : measurement.unitId ? (
+                                      <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                        Unit #{measurement.unitId}
+                                      </Badge>
+                                    ) : (
+                                      <span className="text-muted-foreground">Not assigned</span>
+                                    )}
+                                  </TableCell>
+                                  <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
+                                  <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
+                                  <TableCell>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm"
+                                      onClick={() => handleViewDetails(measurement.id)}
+                                    >
+                                      <Icon name="info" size={16} className="mr-1" />
+                                      Details
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
                           </TableBody>
                         </Table>
                       </>
@@ -447,13 +473,27 @@ export default function MobileMeasurements() {
                 <div>
                   <h3 className="font-medium text-sm text-muted-foreground">Unit/Bed</h3>
                   <p>
-                    {measurementDetail.unitId ? (
-                      <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
-                        Unit #{measurementDetail.unitId}
-                      </Badge>
-                    ) : (
-                      <span className="text-muted-foreground">Not assigned</span>
-                    )}
+                    {(() => {
+                      // Find the unit information if unitId is present
+                      const linkedUnit = measurementDetail.unitId && units ? 
+                        units.find(unit => unit.id === measurementDetail.unitId) : null;
+                        
+                      if (linkedUnit) {
+                        return (
+                          <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                            {linkedUnit.unitId}
+                          </Badge>
+                        );
+                      } else if (measurementDetail.unitId) {
+                        return (
+                          <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                            Unit #{measurementDetail.unitId}
+                          </Badge>
+                        );
+                      } else {
+                        return <span className="text-muted-foreground">Not assigned</span>;
+                      }
+                    })()}
                   </p>
                 </div>
               </div>
