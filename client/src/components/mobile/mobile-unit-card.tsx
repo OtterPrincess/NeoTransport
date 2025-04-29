@@ -97,7 +97,7 @@ const MobileUnitCard: React.FC<MobileUnitCardProps> = ({ unit }) => {
             
             <div className="text-gray-700">Battery</div>
             <div className="text-right font-medium">
-              {telemetry?.battery ? `${telemetry.battery} %` : 'N/A'}
+              {telemetry?.batteryLevel ? `${telemetry.batteryLevel} %` : 'N/A'}
             </div>
             
             <div className="text-gray-700">Vibration</div>

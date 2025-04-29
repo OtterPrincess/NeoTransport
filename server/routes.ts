@@ -1,5 +1,6 @@
 import express, { type Express } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { z } from "zod";
 import { setupAuth } from "./auth";
@@ -7,6 +8,12 @@ import mobileApi from "./mobile-api";
 import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Create HTTP server
+  const server = createServer(app);
+  
+  // Setup WebSocket server for real-time data
+  const wss = new WebSocketServer({ server, path: '/ws' });
+  
   // Setup authentication routes
   setupAuth(app);
   
@@ -276,7 +283,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  const httpServer = createServer(app);
+  // WebSocket connection handling
+  wss.on('connection', (ws: WebSocket) => {
+    console.log('WebSocket client connected');
+    
+    // Send mock accelerometer data every 100ms to simulate real-time readings
+    const mockDataInterval = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        const mockX = (Math.random() * 0.2 - 0.1).toFixed(3);
+        const mockY = (Math.random() * 0.2 - 0.1).toFixed(3);
+        const mockZ = (Math.random() * 0.3 - 0.2).toFixed(3);
+        const mockTotal = Math.sqrt(
+          Math.pow(parseFloat(mockX), 2) + 
+          Math.pow(parseFloat(mockY), 2) + 
+          Math.pow(parseFloat(mockZ), 2)
+        ).toFixed(3);
+        
+        ws.send(JSON.stringify({
+          type: 'accelerometer',
+          x: parseFloat(mockX),
+          y: parseFloat(mockY),
+          z: parseFloat(mockZ),
+          total: parseFloat(mockTotal),
+          timestamp: new Date().toISOString()
+        }));
+      }
+    }, 100);
+    
+    ws.on('message', (message: string) => {
+      try {
+        const data = JSON.parse(message.toString());
+        console.log('Received WebSocket message:', data);
+        
+        // Handle client commands
+        if (data.command === 'start_accelerometer') {
+          console.log('Starting accelerometer data stream');
+          // The mockDataInterval is already running
+        } else if (data.command === 'stop_accelerometer') {
+          console.log('Stopping accelerometer data stream');
+          // We're using mock data, so we don't need to stop anything real
+        }
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
+      }
+    });
+    
+    ws.on('close', () => {
+      console.log('WebSocket client disconnected');
+      clearInterval(mockDataInterval);
+    });
+  });
 
-  return httpServer;
+  return server;
 }

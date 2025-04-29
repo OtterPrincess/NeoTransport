@@ -17,6 +17,7 @@ import {
 import { format } from 'date-fns';
 import { queryClient } from '@/lib/queryClient';
 import { Icon } from '@/components/ui/icon';
+import RealTimeAccelerometer from '@/components/mobile/real-time-accelerometer';
 import { 
   Dialog,
   DialogContent,
@@ -153,11 +154,16 @@ export default function MobileMeasurements() {
         </Button>
       </div>
       
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="realtime" className="w-full">
         <TabsList>
+          <TabsTrigger value="realtime">Real-Time Accelerometer</TabsTrigger>
           <TabsTrigger value="all">All Measurements</TabsTrigger>
           <TabsTrigger value="recent">Recent (24h)</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="realtime" className="mt-4">
+          <RealTimeAccelerometer />
+        </TabsContent>
         
         <TabsContent value="all" className="mt-4">
           <Card>
