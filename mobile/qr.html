@@ -86,10 +86,10 @@
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Get the current URL but replace any specific page with the index
+      // Get the current URL but replace any specific page with the mobile view
       const currentUrl = window.location.href;
       const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-      const appUrl = baseUrl + 'index.html';
+      const appUrl = baseUrl + 'mobile-view.html';
       
       // Generate QR code
       const qr = qrcode(0, 'M');

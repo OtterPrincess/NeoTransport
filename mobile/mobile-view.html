@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nestara Mobile View</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --primary: #6A1B9A;
+      --primary-light: #9C27B0;
+      --primary-dark: #4A148C;
+      --background: #FAFAFA;
+      --card-background: #FFFFFF;
+      --text: #1A1A1A;
+      --text-light: #666666;
+      --border: #E0E0E0;
+      --error: #E53935;
+      --success: #43A047;
+      --warning: #FFA000;
+      --focus-outline: 2px solid rgba(106, 27, 154, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo span {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.5rem;
+      margin-left: 0.5rem;
+    }
+
+    .settings-icon {
+      width: 24px;
+      height: 24px;
+      color: #666;
+    }
+
+    main {
+      padding: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+    }
+
+    .version-badge {
+      background-color: #E1BEE7;
+      color: #4A148C;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+    }
+
+    .unit-card {
+      background-color: var(--card-background);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .card-header {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .unit-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .unit-location {
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+
+    .alert-badge {
+      background-color: var(--error);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .shake-index {
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .shake-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .shake-unit {
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-left: 0.25rem;
+    }
+
+    .waveform {
+      margin-left: 1rem;
+    }
+
+    .stats-grid {
+      padding: 0 1rem 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.875rem;
+    }
+
+    .stat-value {
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .updated-time {
+      padding: 0 1rem;
+      color: var(--text-light);
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .action-button {
+      display: block;
+      width: calc(100% - 2rem);
+      margin: 0 1rem 1rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .action-button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .measurement-section {
+      margin-top: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .prompt-card {
+      background-color: #F5F5F5;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .prompt-text {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .start-button {
+      display: block;
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tab.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: var(--error);
+      border-radius: 50%;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 0;
+    }
+
+    .spinner {
+      width: 2rem;
+      height: 2rem;
+      border: 0.25rem solid rgba(156, 39, 176, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error-message {
+      background-color: #FFEBEE;
+      border: 1px solid #FFCDD2;
+      color: #B71C1C;
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="assets/logo.png" alt="Nestara Logo" width="32" height="32">
+      <span>nestara</span>
+    </div>
+    <svg class="settings-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+  </header>
+
+  <main id="app">
+    <div class="page-title">
+      <h1>Mobile Measurements</h1>
+      <span class="version-badge">Accelerometer App v2.1.0</span>
+    </div>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="error-container" style="display: none;">
+      <div class="error-message">
+        Error loading data. Please refresh the page.
+      </div>
+    </div>
+
+    <div id="content" style="display: none;">
+      <div id="tabs" class="tabs">
+        <!-- Tabs will be dynamically generated -->
+      </div>
+
+      <div id="unit-container">
+        <!-- Unit cards will be dynamically generated -->
+      </div>
+
+      <div class="measurement-section">
+        <h2 class="section-title">Real-time Measurement</h2>
+        <div class="prompt-card">
+          <p class="prompt-text">
+            To take real-time measurements, place your device on the unit tray
+          </p>
+          <button class="start-button" onclick="window.location.href='index.html'">
+            Start New Measurement
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadingElement = document.getElementById('loading');
+      const errorContainer = document.getElementById('error-container');
+      const contentElement = document.getElementById('content');
+      const tabsElement = document.getElementById('tabs');
+      const unitContainer = document.getElementById('unit-container');
+      
+      let units = [];
+      let selectedUnitId = null;
+      
+      // Fetch units data
+      fetch('/api/units')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          units = data;
+          
+          if (units.length === 0) {
+            showError('No units found');
+            return;
+          }
+          
+          // Find unit with active alerts
+          const unitWithAlert = units.find(unit => 
+            unit.alerts && unit.alerts.some(alert => alert.status === 'active')
+          );
+          
+          // Select unit with alert or first unit
+          selectedUnitId = unitWithAlert ? unitWithAlert.id : units[0].id;
+          
+          // Render the UI
+          renderTabs();
+          renderSelectedUnit();
+          
+          // Hide loading, show content
+          loadingElement.style.display = 'none';
+          contentElement.style.display = 'block';
+        })
+        .catch(error => {
+          console.error('Error fetching units:', error);
+          showError('Failed to load data');
+        });
+      
+      function showError(message) {
+        const errorElement = errorContainer.querySelector('.error-message');
+        errorElement.textContent = message;
+        loadingElement.style.display = 'none';
+        errorContainer.style.display = 'block';
+      }
+      
+      function renderTabs() {
+        tabsElement.innerHTML = '';
+        
+        units.forEach(unit => {
+          const hasAlert = unit.alerts && unit.alerts.some(alert => alert.status === 'active');
+          
+          const tabElement = document.createElement('div');
+          tabElement.className = `tab ${unit.id === selectedUnitId ? 'active' : ''}`;
+          tabElement.textContent = unit.unitId;
+          tabElement.onclick = () => {
+            selectUnit(unit.id);
+          };
+          
+          if (hasAlert) {
+            const indicator = document.createElement('span');
+            indicator.className = 'tab-indicator';
+            tabElement.appendChild(indicator);
+          }
+          
+          tabsElement.appendChild(tabElement);
+        });
+      }
+      
+      function renderSelectedUnit() {
+        unitContainer.innerHTML = '';
+        
+        const unit = units.find(u => u.id === selectedUnitId);
+        if (!unit) return;
+        
+        const telemetry = unit.telemetry;
+        const hasAlert = unit.alerts && unit.alerts.some(a => a.status === 'active');
+        
+        // Calculate shake index based on vibration
+        const shakeIndex = telemetry?.vibration 
+          ? (telemetry.vibration > 10 ? 3.5 : telemetry.vibration / 3).toFixed(1)
+          : '0.0';
+        
+        // Determine vibration status text
+        const getVibrationStatus = () => {
+          if (!telemetry) return 'Unknown';
+          
+          const vibration = telemetry.vibration;
+          if (vibration < 3) return 'Stable';
+          if (vibration < 6) return 'Moderate';
+          return 'High';
+        };
+        
+        // Generate waveform SVG
+        const generateWaveform = () => {
+          if (!telemetry) return '';
+          
+          const amplitude = Math.min(telemetry.vibration / 3, 10);
+          const frequency = Math.max(1, Math.min(4, telemetry.vibration / 2));
+          
+          // Generate SVG path points
+          const points = [];
+          const segments = 20;
+          const step = 60 / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const x = i * step;
+            const y = amplitude * Math.sin(i * frequency * 0.5) + 10;  // Center on 10
+            points.push(`${x},${y}`);
+          }
+          
+          return `
+            <svg class="waveform" width="60" height="20" viewBox="0 0 60 20">
+              <path
+                d="M0,10 ${points.join(' L ')}"
+                fill="none"
+                stroke="#8338EC"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          `;
+        };
+        
+        // Format relative time
+        const formatRelativeTime = (timestamp) => {
+          if (!timestamp) return 'unknown';
+          
+          const date = new Date(timestamp);
+          const now = new Date();
+          const diffMs = now - date;
+          const diffSecs = Math.floor(diffMs / 1000);
+          const diffMins = Math.floor(diffSecs / 60);
+          const diffHours = Math.floor(diffMins / 60);
+          
+          if (diffMins < 1) return 'just now';
+          if (diffMins < 60) return `${diffMins} min ago`;
+          return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+        };
+        
+        const unitCardHTML = `
+          <div class="unit-card">
+            <div class="card-header">
+              <div>
+                <div class="unit-title">${unit.unitId}</div>
+                <div class="unit-location">${unit.location || 'Unknown Location'}</div>
+              </div>
+              ${hasAlert ? '<div class="alert-badge">Alert</div>' : ''}
+            </div>
+            
+            <div class="shake-index">
+              <div>
+                <span class="shake-value">${shakeIndex}</span>
+                <span class="shake-unit">g</span>
+              </div>
+              ${generateWaveform()}
+            </div>
+            
+            <div class="stats-grid">
+              <div class="stat-label">Surface Temp</div>
+              <div class="stat-value">
+                ${telemetry?.surfaceTemp ? `${telemetry.surfaceTemp.toFixed(1)} °C` : 'N/A'}
+              </div>
+              
+              <div class="stat-label">Internal Temp</div>
+              <div class="stat-value">
+                ${telemetry?.internalTemp ? `${telemetry.internalTemp.toFixed(1)} °C` : 'N/A'}
+              </div>
+              
+              <div class="stat-label">Battery</div>
+              <div class="stat-value">
+                ${telemetry?.battery ? `${telemetry.battery} %` : 'N/A'}
+              </div>
+              
+              <div class="stat-label">Vibration</div>
+              <div class="stat-value">
+                ${getVibrationStatus()}
+              </div>
+            </div>
+            
+            <div class="updated-time">
+              Updated ${telemetry ? formatRelativeTime(telemetry.timestamp) : 'unknown'}
+            </div>
+            
+            <button class="action-button">View All Units</button>
+          </div>
+        `;
+        
+        unitContainer.innerHTML = unitCardHTML;
+      }
+      
+      function selectUnit(unitId) {
+        selectedUnitId = unitId;
+        renderTabs();
+        renderSelectedUnit();
+      }
+      
+      // Poll for updates every 30 seconds
+      setInterval(() => {
+        fetch('/api/units')
+          .then(response => response.json())
+          .then(data => {
+            units = data;
+            renderTabs();
+            renderSelectedUnit();
+          })
+          .catch(error => {
+            console.error('Error polling units:', error);
+          });
+      }, 30000);
+    });
+  </script>
+</body>
+</html>
