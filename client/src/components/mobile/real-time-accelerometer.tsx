@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Icon } from '@/components/ui/icon';
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   LineChart,
   Line,
@@ -292,7 +292,7 @@ export default function RealTimeAccelerometer() {
       toast({
         title: "Recording Saved",
         description: `Recording saved with ID: ${measurementId}`,
-        variant: "success",
+        variant: "default",
       });
       
       console.log('Recording saved. Measurement ID:', measurementId);

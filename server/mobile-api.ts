@@ -104,10 +104,9 @@ router.post('/measurements', async (req: Request, res: Response) => {
     const [measurement] = await db.insert(mobileMeasurements).values({
       deviceId: data.deviceId,
       sessionId: data.sessionId,
+      timestamp: new Date(),
       startTime: new Date(data.startTime),
-      endTime: data.endTime ? new Date(data.endTime) : new Date(),
       duration: data.duration,
-      description: shouldEncrypt ? encryptIfNeeded(data.description || '', true) : (data.description || null),
       peakVibration: data.maxValue,
       averageVibration: data.maxValue / 2, // Approximation based on max value
       dataPoints: data.dataPoints,
