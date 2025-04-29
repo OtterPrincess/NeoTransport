@@ -168,3 +168,150 @@ export const mobileMeasurementPointsRelations = relations(mobileMeasurementPoint
     references: [mobileMeasurements.id]
   })
 }));
+
+// Security database tables for IP activity tracking and bot detection
+
+// Threat severity levels for security events
+export const ThreatSeverityEnum = z.enum([
+  "none",       // No threat detected
+  "low",        // Low threat (e.g., slightly unusual patterns)
+  "medium",     // Medium threat (e.g., suspicious behavior)
+  "high",       // High threat (e.g., likely bot activity)
+  "critical"    // Critical threat (e.g., confirmed attack)
+]);
+
+export type ThreatSeverity = z.infer<typeof ThreatSeverityEnum>;
+
+// IP geolocation data
+export const ipGeoData = pgTable("ip_geo_data", {
+  id: serial("id").primaryKey(),
+  ipAddress: text("ip_address").notNull().unique(),
+  country: text("country"),
+  region: text("region"),
+  city: text("city"),
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  isp: text("isp"),
+  organization: text("organization"),
+  asn: text("asn"),
+  isProxy: boolean("is_proxy").default(false),
+  isVpn: boolean("is_vpn").default(false),
+  isTor: boolean("is_tor").default(false),
+  isHosting: boolean("is_hosting").default(false),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+});
+
+// IP activity logging
+export const ipActivity = pgTable("ip_activity", {
+  id: serial("id").primaryKey(),
+  ipAddress: text("ip_address").notNull(),
+  userId: integer("user_id"), // Null for unauthenticated requests
+  requestPath: text("request_path").notNull(),
+  requestMethod: text("request_method").notNull(),
+  userAgent: text("user_agent"),
+  referer: text("referer"),
+  timestamp: timestamp("timestamp").defaultNow(),
+  responseStatus: integer("response_status"),
+  responseTime: integer("response_time"), // in milliseconds
+  requestPayloadSize: integer("request_payload_size"), // in bytes
+  responseSize: integer("response_size"), // in bytes
+  requestHeaders: text("request_headers"), // JSON string of relevant headers
+  sessionId: text("session_id"),
+});
+
+// Bot detection and threat assessment
+export const botThreatDetection = pgTable("bot_threat_detection", {
+  id: serial("id").primaryKey(),
+  ipAddress: text("ip_address").notNull(),
+  timestamp: timestamp("timestamp").defaultNow(),
+  
+  // Request frequency metrics
+  requestsPerMinute: integer("requests_per_minute"),
+  requestsPerHour: integer("requests_per_hour"),
+  uniquePathsAccessed: integer("unique_paths_accessed"),
+  
+  // Behavioral patterns
+  hasAbnormalTiming: boolean("has_abnormal_timing").default(false),
+  hasUncommonHeaders: boolean("has_uncommon_headers").default(false),
+  hasFingerprintEvasion: boolean("has_fingerprint_evasion").default(false),
+  failedLoginAttempts: integer("failed_login_attempts").default(0),
+  accessedHoneypotRoutes: boolean("accessed_honeypot_routes").default(false),
+  
+  // Threat assessment
+  threatScore: real("threat_score").notNull(),
+  threatSeverity: text("threat_severity").notNull().$type<ThreatSeverity>().default("none"),
+  
+  // Actions taken
+  actionTaken: text("action_taken"), // e.g., "blocked", "rate-limited", "monitored", "allowed"
+  isBlocked: boolean("is_blocked").default(false),
+  blockExpiration: timestamp("block_expiration"),
+  
+  // Analysis
+  analysisNotes: text("analysis_notes"),
+  falsePositive: boolean("false_positive"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+});
+
+// IP watchlist for known threats
+export const ipWatchlist = pgTable("ip_watchlist", {
+  id: serial("id").primaryKey(),
+  ipAddress: text("ip_address").notNull().unique(),
+  reason: text("reason").notNull(),
+  threatSeverity: text("threat_severity").notNull().$type<ThreatSeverity>(),
+  addedBy: integer("added_by"), // User ID who added this entry
+  addedAt: timestamp("added_at").defaultNow(),
+  expiresAt: timestamp("expires_at"), // Optional expiration
+  isActive: boolean("is_active").default(true),
+  notes: text("notes"),
+  evidence: text("evidence"), // JSON string with evidence details
+});
+
+// Security audit log for administrative actions
+export const securityAuditLog = pgTable("security_audit_log", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  action: text("action").notNull(), // e.g., "block_ip", "unblock_ip", "update_threat_rules"
+  details: text("details").notNull(), // JSON string with action details
+  ipAddress: text("ip_address").notNull(),
+  timestamp: timestamp("timestamp").defaultNow(),
+  affectedResource: text("affected_resource"), // e.g., IP address or user affected
+  success: boolean("success").default(true),
+});
+
+// Relations
+export const ipActivityRelations = relations(ipActivity, ({ one }) => ({
+  user: one(users, {
+    fields: [ipActivity.userId],
+    references: [users.id],
+  }),
+}));
+
+export const securityAuditLogRelations = relations(securityAuditLog, ({ one }) => ({
+  user: one(users, {
+    fields: [securityAuditLog.userId],
+    references: [users.id],
+  }),
+}));
+
+// Insert schemas for security tables
+export const insertIpGeoDataSchema = createInsertSchema(ipGeoData);
+export const insertIpActivitySchema = createInsertSchema(ipActivity);
+export const insertBotThreatDetectionSchema = createInsertSchema(botThreatDetection);
+export const insertIpWatchlistSchema = createInsertSchema(ipWatchlist);
+export const insertSecurityAuditLogSchema = createInsertSchema(securityAuditLog);
+
+// Type exports for security tables
+export type IpGeoData = typeof ipGeoData.$inferSelect;
+export type InsertIpGeoData = z.infer<typeof insertIpGeoDataSchema>;
+
+export type IpActivity = typeof ipActivity.$inferSelect;
+export type InsertIpActivity = z.infer<typeof insertIpActivitySchema>;
+
+export type BotThreatDetection = typeof botThreatDetection.$inferSelect;
+export type InsertBotThreatDetection = z.infer<typeof insertBotThreatDetectionSchema>;
+
+export type IpWatchlist = typeof ipWatchlist.$inferSelect;
+export type InsertIpWatchlist = z.infer<typeof insertIpWatchlistSchema>;
+
+export type SecurityAuditLog = typeof securityAuditLog.$inferSelect;
+export type InsertSecurityAuditLog = z.infer<typeof insertSecurityAuditLogSchema>;
