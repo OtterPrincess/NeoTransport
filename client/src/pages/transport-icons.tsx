@@ -101,42 +101,7 @@ export default function TransportIcons() {
         </CardContent>
       </Card>
       
-      <div className="mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Contact Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="p-3 border rounded-md">
-                <h4 className="font-medium text-[#6A1B9A] mb-2">MediFlight Partners</h4>
-                <p className="text-sm mb-1">Emergency Line: (617) 555-0199</p>
-                <p className="text-sm mb-1">Dispatch: (617) 555-0198</p>
-                <p className="text-sm text-muted-foreground">4-minute response time</p>
-              </div>
-              
-              <div className="p-3 border rounded-md">
-                <h4 className="font-medium text-[#6A1B9A] mb-2">Regional Ambulance</h4>
-                <p className="text-sm mb-1">Emergency Line: (617) 555-0123</p>
-                <p className="text-sm mb-1">Dispatch: (617) 555-0124</p>
-                <p className="text-sm text-muted-foreground">10-minute response time</p>
-              </div>
-              
-              <div className="p-3 border rounded-md">
-                <h4 className="font-medium text-[#6A1B9A] mb-2">Internal Transport</h4>
-                <p className="text-sm mb-1">Extension: 8922</p>
-                <p className="text-sm mb-1">Pager: 28922</p>
-                <p className="text-sm text-muted-foreground">Immediate response</p>
-              </div>
-            </div>
-            
-            <p className="text-sm text-center text-gray-600">
-              All transport partners are integrated with the Nestara system for real-time telemetry and 
-              maintain specialized equipment for neonatal transport with ED triage coordination.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+
     </div>
   );
 }

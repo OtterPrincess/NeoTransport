@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { 
   Table, 
   TableBody, 
@@ -141,7 +142,16 @@ export default function MobileMeasurements() {
             variant="outline"
             className="border-gray-300"
           >
-            <Icon name="qrcode" className="mr-2 h-4 w-4" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
+              <rect x="2" y="2" width="8" height="8" rx="1" />
+              <rect x="14" y="2" width="8" height="8" rx="1" />
+              <rect x="2" y="14" width="8" height="8" rx="1" />
+              <path d="M14 14h8v8h-8z" />
+              <path d="M6 6h.01v.01H6z" />
+              <path d="M18 6h.01v.01H18z" />
+              <path d="M6 18h.01v.01H6z" />
+              <path d="M18 18h.01v.01H18z" />
+            </svg>
             QR Code
           </Button>
         </div>
@@ -221,6 +231,7 @@ export default function MobileMeasurements() {
                         <TableHead>Date & Time</TableHead>
                         <TableHead>Duration</TableHead>
                         <TableHead>Device ID</TableHead>
+                        <TableHead>Unit/Bed</TableHead>
                         <TableHead>Peak Vibration</TableHead>
                         <TableHead>Avg Vibration</TableHead>
                         <TableHead>Actions</TableHead>
@@ -232,6 +243,15 @@ export default function MobileMeasurements() {
                           <TableCell>{formatTimestamp(measurement.timestamp)}</TableCell>
                           <TableCell>{formatDuration(measurement.duration)}</TableCell>
                           <TableCell>{measurement.deviceId}</TableCell>
+                          <TableCell>
+                            {measurement.unitId ? (
+                              <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                Unit #{measurement.unitId}
+                              </Badge>
+                            ) : (
+                              <span className="text-muted-foreground">Not assigned</span>
+                            )}
+                          </TableCell>
                           <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
                           <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
                           <TableCell>
@@ -332,6 +352,7 @@ export default function MobileMeasurements() {
                             <TableRow>
                               <TableHead>Time</TableHead>
                               <TableHead>Duration</TableHead>
+                              <TableHead>Unit/Bed</TableHead>
                               <TableHead>Peak Vibration</TableHead>
                               <TableHead>Avg Vibration</TableHead>
                               <TableHead>Actions</TableHead>
@@ -342,6 +363,15 @@ export default function MobileMeasurements() {
                               <TableRow key={measurement.id}>
                                 <TableCell>{format(new Date(measurement.timestamp), 'h:mm a')}</TableCell>
                                 <TableCell>{formatDuration(measurement.duration)}</TableCell>
+                                <TableCell>
+                                  {measurement.unitId ? (
+                                    <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                                      Unit #{measurement.unitId}
+                                    </Badge>
+                                  ) : (
+                                    <span className="text-muted-foreground">Not assigned</span>
+                                  )}
+                                </TableCell>
                                 <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
                                 <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
                                 <TableCell>
@@ -412,6 +442,18 @@ export default function MobileMeasurements() {
                 <div>
                   <h3 className="font-medium text-sm text-muted-foreground">Average Vibration</h3>
                   <p>{measurementDetail.averageVibration.toFixed(2)}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-sm text-muted-foreground">Unit/Bed</h3>
+                  <p>
+                    {measurementDetail.unitId ? (
+                      <Badge variant="outline" className="bg-purple-50 text-purple-800 border-purple-200">
+                        Unit #{measurementDetail.unitId}
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground">Not assigned</span>
+                    )}
+                  </p>
                 </div>
               </div>
               
