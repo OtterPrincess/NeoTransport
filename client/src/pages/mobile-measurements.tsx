@@ -141,7 +141,7 @@ export default function MobileMeasurements() {
             variant="outline"
             className="border-gray-300"
           >
-            <Icon name="scan" size={16} className="mr-2" />
+            <Icon name="qrcode" className="mr-2 h-4 w-4" />
             QR Code
           </Button>
         </div>
@@ -174,47 +174,81 @@ export default function MobileMeasurements() {
             <CardContent>
               {isLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin h-8 w-8 border-4 border-[#9C27B0] border-t-transparent rounded-full"></div>
+                  <div className="animate-spin h-8 w-8 border-4 border-gray-300 border-t-gray-600 rounded-full"></div>
                 </div>
               ) : error ? (
                 <div className="py-8 text-center text-red-500">
                   Error loading measurements
                 </div>
               ) : measurements && measurements.length > 0 ? (
-                <Table>
-                  <TableCaption>List of all mobile shock measurements</TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date & Time</TableHead>
-                      <TableHead>Duration</TableHead>
-                      <TableHead>Device ID</TableHead>
-                      <TableHead>Peak Vibration</TableHead>
-                      <TableHead>Avg Vibration</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {measurements.map((measurement) => (
-                      <TableRow key={measurement.id}>
-                        <TableCell>{formatTimestamp(measurement.timestamp)}</TableCell>
-                        <TableCell>{formatDuration(measurement.duration)}</TableCell>
-                        <TableCell>{measurement.deviceId}</TableCell>
-                        <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
-                        <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
-                        <TableCell>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => handleViewDetails(measurement.id)}
-                          >
-                            <Icon name="info" size={16} className="mr-1" />
-                            Details
-                          </Button>
-                        </TableCell>
+                <>
+                  {/* Visual chart summary */}
+                  <div className="mb-8">
+                    <h3 className="text-lg font-medium mb-4">Measurement Summary</h3>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart
+                          data={measurements.map(m => ({
+                            time: new Date(m.timestamp).getTime(),
+                            peak: m.peakVibration,
+                            avg: m.averageVibration
+                          }))}
+                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+                          <XAxis 
+                            dataKey="time" 
+                            tickFormatter={(timestamp) => format(new Date(timestamp), 'MMM d')}
+                            label={{ value: 'Date', position: 'insideBottomRight', offset: -10 }} 
+                          />
+                          <YAxis label={{ value: 'g-force', angle: -90, position: 'insideLeft' }} />
+                          <Tooltip 
+                            formatter={(value) => [(value as number).toFixed(2) + 'g', '']}
+                            labelFormatter={(label) => format(new Date(label as number), 'MMM d, yyyy h:mm a')}
+                          />
+                          <Legend />
+                          <Line type="monotone" dataKey="peak" stroke="#f44336" name="Peak Vibration" strokeWidth={2} dot={{ r: 4 }} />
+                          <Line type="monotone" dataKey="avg" stroke="#2196f3" name="Avg Vibration" strokeWidth={2} dot={{ r: 4 }} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                  
+                  <Table>
+                    <TableCaption>List of all mobile shock measurements</TableCaption>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date & Time</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead>Device ID</TableHead>
+                        <TableHead>Peak Vibration</TableHead>
+                        <TableHead>Avg Vibration</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {measurements.map((measurement) => (
+                        <TableRow key={measurement.id}>
+                          <TableCell>{formatTimestamp(measurement.timestamp)}</TableCell>
+                          <TableCell>{formatDuration(measurement.duration)}</TableCell>
+                          <TableCell>{measurement.deviceId}</TableCell>
+                          <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
+                          <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
+                          <TableCell>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleViewDetails(measurement.id)}
+                            >
+                              <Icon name="info" size={16} className="mr-1" />
+                              Details
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
               ) : (
                 <div className="py-8 text-center">
                   <p className="text-muted-foreground">No measurements recorded yet.</p>
@@ -238,47 +272,96 @@ export default function MobileMeasurements() {
             <CardContent>
               {isLoading ? (
                 <div className="flex justify-center py-8">
-                  <div className="animate-spin h-8 w-8 border-4 border-[#9C27B0] border-t-transparent rounded-full"></div>
+                  <div className="animate-spin h-8 w-8 border-4 border-gray-300 border-t-gray-600 rounded-full"></div>
                 </div>
               ) : measurements && measurements.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Time</TableHead>
-                      <TableHead>Duration</TableHead>
-                      <TableHead>Peak Vibration</TableHead>
-                      <TableHead>Avg Vibration</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {measurements
-                      .filter(m => {
-                        const measurementDate = new Date(m.timestamp);
-                        const oneDayAgo = new Date();
-                        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-                        return measurementDate >= oneDayAgo;
-                      })
-                      .map((measurement) => (
-                        <TableRow key={measurement.id}>
-                          <TableCell>{format(new Date(measurement.timestamp), 'h:mm a')}</TableCell>
-                          <TableCell>{formatDuration(measurement.duration)}</TableCell>
-                          <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
-                          <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
-                          <TableCell>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => handleViewDetails(measurement.id)}
-                            >
-                              <Icon name="info" size={16} className="mr-1" />
-                              Details
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
+                <>
+                  {/* Filter measurements for last 24 hours */}
+                  {(() => {
+                    const recentMeasurements = measurements.filter(m => {
+                      const measurementDate = new Date(m.timestamp);
+                      const oneDayAgo = new Date();
+                      oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+                      return measurementDate >= oneDayAgo;
+                    });
+                    
+                    if (recentMeasurements.length === 0) {
+                      return (
+                        <div className="py-8 text-center">
+                          <p className="text-muted-foreground">No measurements recorded in the last 24 hours.</p>
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <>
+                        {/* Visual chart summary for 24h */}
+                        <div className="mb-8">
+                          <h3 className="text-lg font-medium mb-4">24 Hour Trends</h3>
+                          <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart
+                                data={recentMeasurements.map(m => ({
+                                  time: new Date(m.timestamp).getTime(),
+                                  peak: m.peakVibration,
+                                  avg: m.averageVibration
+                                }))}
+                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
+                                <XAxis 
+                                  dataKey="time" 
+                                  tickFormatter={(timestamp) => format(new Date(timestamp), 'h:mm a')}
+                                  label={{ value: 'Time', position: 'insideBottomRight', offset: -10 }} 
+                                />
+                                <YAxis label={{ value: 'g-force', angle: -90, position: 'insideLeft' }} />
+                                <Tooltip 
+                                  formatter={(value) => [(value as number).toFixed(2) + 'g', '']}
+                                  labelFormatter={(label) => format(new Date(label as number), 'MMM d, yyyy h:mm a')}
+                                />
+                                <Legend />
+                                <Line type="monotone" dataKey="peak" stroke="#f44336" name="Peak Vibration" strokeWidth={2} dot={{ r: 4 }} />
+                                <Line type="monotone" dataKey="avg" stroke="#2196f3" name="Avg Vibration" strokeWidth={2} dot={{ r: 4 }} />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+                  
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Time</TableHead>
+                              <TableHead>Duration</TableHead>
+                              <TableHead>Peak Vibration</TableHead>
+                              <TableHead>Avg Vibration</TableHead>
+                              <TableHead>Actions</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {recentMeasurements.map((measurement) => (
+                              <TableRow key={measurement.id}>
+                                <TableCell>{format(new Date(measurement.timestamp), 'h:mm a')}</TableCell>
+                                <TableCell>{formatDuration(measurement.duration)}</TableCell>
+                                <TableCell>{measurement.peakVibration.toFixed(2)}</TableCell>
+                                <TableCell>{measurement.averageVibration.toFixed(2)}</TableCell>
+                                <TableCell>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm"
+                                    onClick={() => handleViewDetails(measurement.id)}
+                                  >
+                                    <Icon name="info" size={16} className="mr-1" />
+                                    Details
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </>
+                    );
+                  })()}
+                </>
               ) : (
                 <div className="py-8 text-center">
                   <p className="text-muted-foreground">No measurements recorded in the last 24 hours.</p>
