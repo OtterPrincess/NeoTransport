@@ -98,7 +98,7 @@ export const Header: React.FC = () => {
           {/* Hospital System Branding */}
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900" style={{ fontFamily: "'Libre Baskerville', serif" }}>
-              <span className="text-slate-800">NESTARA</span>
+              <span className="text-purple-700">NESTARA</span>
               <span className="text-slate-600 ml-2 text-sm font-normal hidden lg:inline">Medical Transport System</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">
