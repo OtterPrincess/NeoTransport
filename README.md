@@ -1,48 +1,26 @@
-# stage everything you intend to ship
-git add -A
+git add apps/web apps/api packages/ui
+git commit -m "feat(dashboard): medical-style interface with real-time unit monitoring and RBAC"
 
-git commit -m "release(2025.01): neonatal transport safety platform upgrades" -m "\
-### Current (January 2025)
-- **Core Dashboard & Monitoring**
-  - Medical-style dashboard with real-time unit monitoring
-  - Live unit tracking (temperature + vibration) for neonatal transport beds
-  - Alert system with severity levels + automatic notifications
-  - Role-based access (director, head_nurse, nurse, tech_support, admin)
+git add apps/web apps/api
+git commit -m "feat(alerts): severity levels with auto notifications for critical conditions"
 
-- **Advanced Analytics & Safety**
-  - NEW: Transport Vibration Index (TVI) with standardized analysis + safety ratings
-  - NEW: TVI dashboard with charts, trends, safety statistics
-  - Automated safety ratings (excellent/good/fair/poor/critical)
-  - Real-time risk assessment with actionable recommendations
+git add services/analytics apps/web
+git commit -m "feat(analytics): introduce Transport Vibration Index (TVI) with safety ratings and risk assessment"
 
-- **Mobile Measurement System**
-  - HIPAA-compliant mobile app for vibration measurement
-  - Real-time accelerometer data capture during transport
-  - Encrypted storage + retention policies
-  - Offline capability
+git add apps/web
+git commit -m "feat(analytics): TVI dashboard with charts, trends, and safety stats"
 
-- **Specialized Tools**
-  - Personalized Alert Soundscape Generator (custom alert tones)
-  - Compatible Items Catalog (equipment compatibility tracking)
-  - Transport Partners Integration (hospital + transport coordination)
-  - Security monitoring (IP activity tracking + threat detection)
+git add apps/mobile services/ingest
+git commit -m "feat(mobile): HIPAA-compliant vibration measurement app with live accelerometer capture and offline mode"
 
-- **Technical Infrastructure**
-  - Real-time updates: 30s polling with WebSocket fallback
-  - PostgreSQL via Drizzle ORM
-  - Modern React (TypeScript, shadcn/ui) frontend
-  - Express backend with REST API + session-based auth
+git add apps/mobile services/security
+git commit -m "feat(security): encrypted storage, retention policies, IP activity tracking, and threat detection"
 
-### Development History (previous)
-- Baseline dashboard with simple temperature/vibration
-- Basic alerts + standard web UI
-- UI evolution to medical-style (NESTARA purple, Libre Baskerville), responsive
-- Security & compliance: HIPAA, stronger encryption, IP monitoring, RBAC
-- Mobile PWA, Device Motion API, secure/offline transmission
+git add apps/web services/integrations
+git commit -m "feat(tools): personalized alert soundscape generator + compatible items catalog + transport partners integration"
 
-**Summary:** Transitioned from basic monitoring to a medical-grade neonatal transport safety platform with TVI analytics and a professional clinical interface. All features are integrated and functional.
-"
+git add apps/web apps/api packages/db
+git commit -m "chore(infra): 30s polling with WebSocket fallback; PostgreSQL via Drizzle ORM; Express REST with session auth; React TS + shadcn/ui"
 
-# optional: tag this as a calendar-based release
-git tag -a v2025.01 -m "January 2025 release: TVI + medical dashboard + HIPAA mobile"
-git push origin HEAD && git push origin v2025.01
+git add docs CHANGELOG.md
+git commit -m "docs: update development history and current feature set"
