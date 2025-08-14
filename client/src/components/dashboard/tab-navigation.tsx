@@ -7,6 +7,7 @@ export const TabNavigation: React.FC = () => {
   const tabs = [
     { name: "Dashboard", path: "/" },
     { name: "Mobile Measurements", path: "/mobile-measurements" },
+    { name: "TVI Analysis", path: "/tvi-dashboard" },
     { name: "Alert History", path: "/alerts" },
     { name: "Compatible Items", path: "/items" },
     { name: "Soundscape", path: "/soundscape" },
@@ -39,6 +40,7 @@ export const TabNavigation: React.FC = () => {
                   <span className="sm:hidden">
                     {tab.name === "Dashboard" ? "Home" :
                      tab.name === "Mobile Measurements" ? "Mobile" :
+                     tab.name === "TVI Analysis" ? "TVI" :
                      tab.name === "Alert History" ? "Alerts" :
                      tab.name === "Compatible Items" ? "Items" :
                      tab.name === "Soundscape" ? "Sound" :

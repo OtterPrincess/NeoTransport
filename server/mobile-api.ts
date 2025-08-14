@@ -3,11 +3,13 @@ import { db } from './db';
 import { 
   mobileMeasurements, 
   mobileMeasurementPoints, 
-  insertMobileMeasurementSchema 
+  insertMobileMeasurementSchema,
+  transportVibrationIndex 
 } from '../shared/schema';
 import { z } from 'zod';
 import { eq, desc } from 'drizzle-orm';
 import crypto from 'crypto';
+import { tviCalculator } from './tvi-calculator';
 
 const router = Router();
 
@@ -165,11 +167,28 @@ router.post('/measurements', async (req: Request, res: Response) => {
       }
     }
     
+    // Calculate TVI for the measurement if we have sufficient data
+    let tviAnalysis = null;
+    if (data.readings && data.readings.length >= 10) {
+      try {
+        console.log(`Calculating TVI for measurement ${measurement.id}`);
+        tviAnalysis = await tviCalculator.calculateTVI(measurement.id);
+        await tviCalculator.saveTVIAnalysis(measurement.id, tviAnalysis, data.unitId);
+        console.log(`TVI calculated: ${tviAnalysis.tviScore} (${tviAnalysis.safetyRating})`);
+      } catch (error) {
+        console.error('Error calculating TVI:', error);
+        // Don't fail the entire request if TVI calculation fails
+      }
+    }
+
     res.status(201).json({
       success: true,
       id: measurement.id,
       secureMode,
       pointsRecorded: data.readings?.length || 0,
+      tviCalculated: tviAnalysis !== null,
+      tviScore: tviAnalysis?.tviScore,
+      safetyRating: tviAnalysis?.safetyRating,
       message: 'Measurement data recorded successfully'
     });
   } catch (error) {
@@ -316,6 +335,205 @@ router.get('/measurements/:id', async (req: Request, res: Response) => {
 // Serve the mobile app static files
 router.get('/', (req: Request, res: Response) => {
   res.redirect('/mobile/index.html');
+});
+
+// GET /api/mobile/tvi/:measurementId - Get TVI analysis for a measurement
+router.get('/tvi/:measurementId', async (req: Request, res: Response) => {
+  try {
+    const measurementId = parseInt(req.params.measurementId);
+    
+    if (isNaN(measurementId)) {
+      return res.status(400).json({ error: 'Invalid measurement ID' });
+    }
+    
+    const tviRecord = await db.query.transportVibrationIndex.findFirst({
+      where: eq(transportVibrationIndex.measurementId, measurementId),
+      with: {
+        measurement: true,
+        unit: true
+      }
+    });
+    
+    if (!tviRecord) {
+      return res.status(404).json({ error: 'TVI analysis not found for this measurement' });
+    }
+    
+    // Parse recommendations back from JSON
+    const recommendations = tviRecord.recommendedActions 
+      ? JSON.parse(tviRecord.recommendedActions) 
+      : [];
+    
+    res.json({
+      ...tviRecord,
+      recommendedActions: recommendations
+    });
+  } catch (error) {
+    console.error('Error fetching TVI analysis:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch TVI analysis',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// POST /api/mobile/calculate-tvi/:measurementId - Calculate TVI for existing measurement
+router.post('/calculate-tvi/:measurementId', async (req: Request, res: Response) => {
+  try {
+    const measurementId = parseInt(req.params.measurementId);
+    
+    if (isNaN(measurementId)) {
+      return res.status(400).json({ error: 'Invalid measurement ID' });
+    }
+    
+    // Check if measurement exists
+    const measurement = await db.query.mobileMeasurements.findFirst({
+      where: eq(mobileMeasurements.id, measurementId)
+    });
+    
+    if (!measurement) {
+      return res.status(404).json({ error: 'Measurement not found' });
+    }
+    
+    // Calculate TVI
+    const tviAnalysis = await tviCalculator.calculateTVI(measurementId);
+    const tviId = await tviCalculator.saveTVIAnalysis(measurementId, tviAnalysis, measurement.unitId);
+    
+    res.json({
+      success: true,
+      tviId,
+      analysis: tviAnalysis,
+      message: 'TVI calculated successfully'
+    });
+  } catch (error) {
+    console.error('Error calculating TVI:', error);
+    res.status(500).json({ 
+      error: 'Failed to calculate TVI',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// GET /api/mobile/tvi/unit/:unitId - Get TVI history for a unit
+router.get('/tvi/unit/:unitId', async (req: Request, res: Response) => {
+  try {
+    const unitId = parseInt(req.params.unitId);
+    const limit = parseInt(req.query.limit as string) || 50;
+    
+    if (isNaN(unitId)) {
+      return res.status(400).json({ error: 'Invalid unit ID' });
+    }
+    
+    const tviHistory = await db.query.transportVibrationIndex.findMany({
+      where: eq(transportVibrationIndex.unitId, unitId),
+      orderBy: desc(transportVibrationIndex.calculatedAt),
+      limit,
+      with: {
+        measurement: true
+      }
+    });
+    
+    // Parse recommendations for each record
+    const enrichedHistory = tviHistory.map(record => ({
+      ...record,
+      recommendedActions: record.recommendedActions 
+        ? JSON.parse(record.recommendedActions) 
+        : []
+    }));
+    
+    res.json(enrichedHistory);
+  } catch (error) {
+    console.error('Error fetching TVI history:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch TVI history',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// GET /api/mobile/tvi/summary - Get TVI summary statistics
+router.get('/tvi/summary', async (req: Request, res: Response) => {
+  try {
+    const unitId = req.query.unitId ? parseInt(req.query.unitId as string) : undefined;
+    const days = parseInt(req.query.days as string) || 30;
+    
+    const whereClause = unitId 
+      ? eq(transportVibrationIndex.unitId, unitId)
+      : undefined;
+    
+    // Get recent TVI records
+    const recentTVI = await db.query.transportVibrationIndex.findMany({
+      where: whereClause,
+      orderBy: desc(transportVibrationIndex.calculatedAt),
+      limit: 100
+    });
+    
+    if (recentTVI.length === 0) {
+      return res.json({
+        totalMeasurements: 0,
+        averageTVIScore: 0,
+        safetyDistribution: {},
+        riskDistribution: {},
+        trends: {
+          improving: false,
+          stable: true,
+          declining: false
+        }
+      });
+    }
+    
+    // Calculate summary statistics
+    const totalMeasurements = recentTVI.length;
+    const averageTVIScore = recentTVI.reduce((sum, tvi) => sum + tvi.tviScore, 0) / totalMeasurements;
+    
+    // Safety rating distribution
+    const safetyDistribution = recentTVI.reduce((acc: any, tvi) => {
+      acc[tvi.safetyRating] = (acc[tvi.safetyRating] || 0) + 1;
+      return acc;
+    }, {});
+    
+    // Risk level distribution
+    const riskDistribution = recentTVI.reduce((acc: any, tvi) => {
+      acc[tvi.riskLevel] = (acc[tvi.riskLevel] || 0) + 1;
+      return acc;
+    }, {});
+    
+    // Trend analysis (last 10 vs previous 10)
+    const recent10 = recentTVI.slice(0, 10);
+    const previous10 = recentTVI.slice(10, 20);
+    
+    let trends = {
+      improving: false,
+      stable: true,
+      declining: false
+    };
+    
+    if (recent10.length >= 5 && previous10.length >= 5) {
+      const recentAvg = recent10.reduce((sum, tvi) => sum + tvi.tviScore, 0) / recent10.length;
+      const previousAvg = previous10.reduce((sum, tvi) => sum + tvi.tviScore, 0) / previous10.length;
+      const change = recentAvg - previousAvg;
+      
+      if (change > 2) {
+        trends = { improving: true, stable: false, declining: false };
+      } else if (change < -2) {
+        trends = { improving: false, stable: false, declining: true };
+      }
+    }
+    
+    res.json({
+      totalMeasurements,
+      averageTVIScore: Math.round(averageTVIScore * 100) / 100,
+      safetyDistribution,
+      riskDistribution,
+      trends,
+      timeRange: `${days} days`
+    });
+  } catch (error) {
+    console.error('Error generating TVI summary:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate TVI summary',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 });
 
 export default router;

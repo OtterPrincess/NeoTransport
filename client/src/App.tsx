@@ -16,6 +16,7 @@ import Settings from "@/pages/settings-new";
 import SoundscapeGenerator from "@/pages/soundscape-generator";
 import TransportIcons from "@/pages/transport-icons";
 import MobileMeasurements from "@/pages/mobile-measurements";
+import TVIDashboard from "@/pages/tvi-dashboard";
 import PrivacyPolicyPage from "@/pages/privacy-policy-page";
 import TermsOfServicePage from "@/pages/terms-of-service-page";
 import NotFound from "@/pages/not-found";
@@ -33,6 +34,7 @@ function Router() {
       <ProtectedRoute path="/soundscape" component={SoundscapeGenerator} />
       <ProtectedRoute path="/transport-icons" component={TransportIcons} />
       <ProtectedRoute path="/mobile-measurements" component={MobileMeasurements} />
+      <ProtectedRoute path="/tvi-dashboard" component={TVIDashboard} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/privacy-policy" component={PrivacyPolicyPage} />
       <Route path="/terms-of-service" component={TermsOfServicePage} />

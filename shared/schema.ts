@@ -169,6 +169,59 @@ export const mobileMeasurementPointsRelations = relations(mobileMeasurementPoint
   })
 }));
 
+// Transport Vibration Index (TVI) calculations and scoring table
+export const transportVibrationIndex = pgTable("transport_vibration_index", {
+  id: serial("id").primaryKey(),
+  measurementId: integer("measurement_id").notNull().references(() => mobileMeasurements.id),
+  unitId: integer("unit_id").references(() => units.id),
+  timestamp: timestamp("timestamp").notNull().defaultNow(),
+  
+  // TVI Core Metrics
+  tviScore: real("tvi_score").notNull(), // Overall TVI score (0-100, lower is better)
+  safetyRating: text("safety_rating").notNull(), // "excellent", "good", "fair", "poor", "critical"
+  
+  // Vibration Analysis Components
+  peakVibrationScore: real("peak_vibration_score").notNull(), // Peak intensity analysis
+  sustainedVibrationScore: real("sustained_vibration_score").notNull(), // Duration-weighted analysis
+  frequencyPatternScore: real("frequency_pattern_score").notNull(), // Pattern consistency
+  
+  // Statistical Measures
+  vibrationVariance: real("vibration_variance").notNull(), // Data variance
+  vibrationStdDev: real("vibration_std_dev").notNull(), // Standard deviation
+  smoothnessIndex: real("smoothness_index").notNull(), // Movement smoothness
+  
+  // Risk Assessment
+  riskLevel: text("risk_level").notNull(), // "low", "moderate", "high", "critical"
+  recommendedActions: text("recommended_actions"), // JSON array of recommendations
+  
+  // Comparative Analysis
+  percentileRank: real("percentile_rank"), // Percentile vs historical data
+  baselineComparison: real("baseline_comparison"), // % difference from unit baseline
+  
+  // Metadata
+  analysisVersion: text("analysis_version").notNull().default("1.0"),
+  calculatedAt: timestamp("calculated_at").notNull().defaultNow(),
+});
+
+export const insertTransportVibrationIndexSchema = createInsertSchema(transportVibrationIndex).omit({
+  id: true,
+  calculatedAt: true,
+});
+
+export type TransportVibrationIndex = typeof transportVibrationIndex.$inferSelect;
+export type InsertTransportVibrationIndex = z.infer<typeof insertTransportVibrationIndexSchema>;
+
+export const transportVibrationIndexRelations = relations(transportVibrationIndex, ({ one }) => ({
+  measurement: one(mobileMeasurements, {
+    fields: [transportVibrationIndex.measurementId],
+    references: [mobileMeasurements.id]
+  }),
+  unit: one(units, {
+    fields: [transportVibrationIndex.unitId],
+    references: [units.id]
+  })
+}));
+
 // Security database tables for IP activity tracking and bot detection
 
 // Threat severity levels for security events
