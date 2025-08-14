@@ -61,7 +61,7 @@ export default function MedicalDashboard() {
 
       <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-grow">
         {/* Filter Bar */}
-        <FilterBar onApplyFilters={handleApplyFilters} />
+        <FilterBar onApplyFilters={handleApplyFilters} units={units} />
         
         {/* Medical Statistics Overview */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">

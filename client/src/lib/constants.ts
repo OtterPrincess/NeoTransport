@@ -68,6 +68,8 @@ export const BRAND_COLORS = {
   }
 };
 
+
+
 // Temperature ranges
 export const TEMPERATURE_RANGES = {
   internal: {
