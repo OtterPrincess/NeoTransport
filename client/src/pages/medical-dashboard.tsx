@@ -63,107 +63,93 @@ export default function MedicalDashboard() {
         {/* Filter Bar */}
         <FilterBar onApplyFilters={handleApplyFilters} units={units} />
         
-        {/* Medical Statistics Overview */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          {/* Total Units */}
-          <Card className="bg-white border-l-4 border-l-blue-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Total Units</p>
-                  <p className="text-2xl font-bold text-slate-900">{stats.total}</p>
-                </div>
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47.901-6.06 2.37M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        {/* Compact Medical Statistics Overview */}
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 mb-6">
+          <div className="px-4 py-3">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              {/* Total Units */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-slate-400">
+                <div className="w-5 h-5 text-slate-500">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
                   </svg>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Normal Status */}
-          <Card className="bg-white border-l-4 border-l-green-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Stable</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.normal}</p>
+                  <p className="text-lg font-bold text-slate-900">{stats.total}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Total Units</p>
                 </div>
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </div>
+
+              {/* Stable */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-green-500">
+                <div className="w-5 h-5 text-green-600">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M9 12l2 2 4-4"/>
                   </svg>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Warning Status */}
-          <Card className="bg-white border-l-4 border-l-amber-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Warning</p>
-                  <p className="text-2xl font-bold text-amber-600">{stats.warning}</p>
+                  <p className="text-lg font-bold text-slate-900">{stats.normal}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Stable</p>
                 </div>
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </div>
+
+              {/* Warning */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-amber-500">
+                <div className="w-5 h-5 text-amber-600">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8v4m0 4h.01"/>
                   </svg>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Critical/Alert Status */}
-          <Card className="bg-white border-l-4 border-l-red-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Critical</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.alert}</p>
+                  <p className="text-lg font-bold text-slate-900">{stats.warning}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Warning</p>
                 </div>
-                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </div>
+
+              {/* Critical */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-red-500">
+                <div className="w-5 h-5 text-red-600">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8v4m0 4h.01"/>
                   </svg>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Offline Status */}
-          <Card className="bg-white border-l-4 border-l-slate-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Offline</p>
-                  <p className="text-2xl font-bold text-slate-600">{stats.offline}</p>
+                  <p className="text-lg font-bold text-slate-900">{stats.alert}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Critical</p>
                 </div>
-                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 1v6m0 10v6m11-7h-6m-10 0H1" />
+              </div>
+
+              {/* Offline */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-slate-300">
+                <div className="w-5 h-5 text-slate-400">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M15 9l-6 6m0-6l6 6"/>
                   </svg>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Active Monitoring */}
-          <Card className="bg-white border-l-4 border-l-purple-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-medium text-slate-600 uppercase tracking-wide">Active</p>
-                  <p className="text-2xl font-bold text-purple-600">{recentActivity.length}</p>
-                </div>
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></div>
+                  <p className="text-lg font-bold text-slate-900">{stats.offline}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Offline</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* Active */}
+              <div className="flex items-center space-x-3 p-2 border-l-4 border-l-purple-500">
+                <div className="w-5 h-5 text-purple-600">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full" strokeWidth={1.5}>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-slate-900">{recentActivity.length}</p>
+                  <p className="text-xs text-slate-500 uppercase tracking-wide">Active</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Critical Alerts Banner */}
