@@ -82,28 +82,27 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-white to-[#F5F0FF] border-b border-[#E1BEE7] shadow-sm">
+    <header className="bg-white border-b-2 border-blue-200 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
-            <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
-              <img src={logoImage} alt="Nestara Logo" className="w-10 h-10 object-contain" style={{ objectFit: 'contain' }} />
-            </div>
+        <div className="flex items-center space-x-4">
+          {/* Medical Logo */}
+          <div className="bg-blue-600 rounded-lg p-2 shadow-md">
+            <img 
+              src={logoImage} 
+              alt="Nestara Medical" 
+              className="h-8 w-8 object-contain filter brightness-0 invert"
+            />
           </div>
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5] via-[#E1BEE7] to-[#F3E5F5]/30 rounded-lg blur-xl opacity-30 group-hover:opacity-50 transition-all duration-700"></div>
-            <div className="absolute top-0 -left-4 w-20 h-20 bg-gradient-to-tl from-[#9C27B0]/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-all duration-700 group-hover:scale-150"></div>
-            <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-br from-[#F3E5F5] to-[#9C27B0]/10 rounded-full blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"></div>
-            
-            <h1 className="text-xl sm:text-2xl lg:text-3xl tracking-wide flex items-center relative z-10">
-              <span className="font-serif font-normal text-[#662C6C]">nestara</span>
-              <div className="ml-1 sm:ml-2 h-4 sm:h-5 w-0.5 bg-[#662C6C]/20 group-hover:bg-[#662C6C]/30 transition-colors duration-300"></div>
-              <span className="ml-1 sm:ml-2 text-[8px] sm:text-[10px] text-[#662C6C] bg-[#F3E5F5] group-hover:bg-[#E1BEE7] px-1.5 sm:px-2 py-0.5 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300">v2.1</span>
+          
+          {/* Hospital System Branding */}
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900" style={{ fontFamily: "'Libre Baskerville', serif" }}>
+              <span className="text-blue-600">NESTARA</span>
+              <span className="text-slate-600 ml-2 text-sm font-normal hidden lg:inline">Medical Transport System</span>
             </h1>
-            <div className="flex items-center mt-1 relative z-10">
-              <span className="font-serif text-[10px] sm:text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight hidden sm:block">Neonatal Transport Monitoring System</span>
-              <span className="font-serif text-[9px] tracking-wider text-[#662C6C]/80 font-medium leading-tight sm:hidden">Transport Monitor</span>
-            </div>
+            <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">
+              Neonatal Care Monitoring • Real-time Patient Safety
+            </p>
           </div>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4">
@@ -115,33 +114,48 @@ export const Header: React.FC = () => {
                 placeholder="Search units, alerts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-48 sm:w-80 h-9 pl-10 pr-4 border border-[#E1BEE7] text-[#4A148C] bg-white/80 shadow-sm focus-visible:ring-[#9C27B0]/40"
+                className="w-48 sm:w-80 h-9 pl-10 pr-4 border-2 border-slate-200 text-slate-900 bg-white focus-visible:ring-blue-500 focus-visible:border-blue-500"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Icon name="search" size={16} className="text-[#4A148C]/40" />
+                <Icon name="search" size={16} className="text-slate-400" />
               </div>
             </div>
             <Button type="submit" size="sm" variant="ghost" className="absolute right-1 top-1 h-7 px-2">
-              <Icon name="arrow-right" size={14} className="text-[#4A148C]/70" />
+              <Icon name="arrow-right" size={14} className="text-slate-600" />
             </Button>
           </form>
 
-          <div className="bg-[#4A148C]/30 px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm hidden sm:block">
-            <span className="font-medium">{formattedTime}</span>
-            <span className="mx-1 sm:mx-2 opacity-50 hidden md:inline">|</span>
-            <span className="hidden md:inline">{formattedDate}</span>
-          </div>
-          
-          {/* Apple Watch Status Indicator - Mobile optimized */}
-          {appleWatchIntegration && (
-            <div className="hidden sm:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
-              <div className="h-2 sm:h-3 w-2 sm:w-3 rounded-full bg-[#66BB6A] mr-1 sm:mr-1.5"></div>
-              <span className="text-[10px] sm:text-xs font-medium text-[#4A148C]">
-                <span className="hidden lg:inline">Watch {appleWatchModel.includes('ultra') ? 'Ultra' : 'Series'} Alerts</span>
-                <span className="lg:hidden">Watch</span>
-              </span>
+          {/* System Status Indicators */}
+          <div className="flex items-center space-x-3">
+            {/* Active Alerts Indicator */}
+            {activeAlertsCount > 0 && (
+              <Badge className="bg-red-100 text-red-800 border-red-200 px-3 py-1 hidden sm:flex">
+                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {activeAlertsCount} ALERT{activeAlertsCount > 1 ? 'S' : ''}
+              </Badge>
+            )}
+
+            {/* System Time */}
+            <div className="hidden sm:flex items-center bg-slate-100 px-3 py-2 rounded-lg">
+              <svg className="w-4 h-4 mr-2 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-sm font-mono font-bold text-slate-900">{formattedTime}</span>
+              <span className="text-xs text-slate-500 ml-2 hidden md:inline">{formattedDate}</span>
             </div>
-          )}
+
+            {/* Apple Watch Integration Status */}
+            {appleWatchIntegration && (
+              <div className="hidden md:flex items-center bg-green-50 border border-green-200 px-3 py-2 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                <span className="text-xs font-medium text-green-700">
+                  Watch Connected
+                </span>
+              </div>
+            )}
+          </div>
           
           <Button 
             variant="outline" 

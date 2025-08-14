@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UnitWithTelemetry } from "@shared/schema";
-import MedicalHeader from "@/components/dashboard/medical-header";
-import MedicalUnitCard from "@/components/dashboard/medical-unit-card";
+import Header from "@/components/dashboard/header";
+import UnitCard from "@/components/dashboard/unit-card-new";
+import TabNavigation from "@/components/dashboard/tab-navigation";
+import FilterBar from "@/components/dashboard/filter-bar";
 import Footer from "@/components/dashboard/footer";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +25,12 @@ export default function MedicalDashboard() {
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 
-  // Apply filters
+  // Apply filters function
+  const handleApplyFilters = (newFilters: { room: string; unitId: string; status: string; bed: string }) => {
+    setFilters(newFilters);
+  };
+  
+  // Filter units based on user selections
   const filteredUnits = units.filter(unit => {
     if (filters.room && unit.room !== filters.room) return false;
     if (filters.unitId && unit.unitId !== filters.unitId) return false;
@@ -48,48 +55,14 @@ export default function MedicalDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
-      <MedicalHeader />
-      
-      {/* Medical Navigation Tabs */}
-      <div className="bg-white border-b border-slate-200 shadow-sm">
-        <div className="container mx-auto px-4 sm:px-6">
-          <nav className="flex space-x-8" aria-label="Medical Navigation">
-            {[
-              { name: "Patient Monitor", path: "/", icon: "monitor", active: true },
-              { name: "Mobile Units", path: "/mobile-measurements", icon: "smartphone" },
-              { name: "Alert Center", path: "/alerts", icon: "bell" },
-              { name: "Equipment", path: "/items", icon: "package" },
-              { name: "Audio Alerts", path: "/soundscape", icon: "volume-2" },
-              { name: "Transport", path: "/transport-icons", icon: "truck" },
-              { name: "System", path: "/settings", icon: "settings" }
-            ].map((tab) => (
-              <button
-                key={tab.path}
-                className={cn(
-                  "flex items-center px-4 py-4 text-sm font-medium border-b-2 transition-colors duration-200",
-                  tab.active 
-                    ? "border-blue-600 text-blue-600 bg-blue-50" 
-                    : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
-                )}
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {tab.icon === "monitor" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />}
-                  {tab.icon === "smartphone" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />}
-                  {tab.icon === "bell" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />}
-                  {tab.icon === "package" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />}
-                  {tab.icon === "volume-2" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M6.343 6.343A8 8 0 004.222 18.94" />}
-                  {tab.icon === "truck" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 17l4 4 4-4m-4-5v9" />}
-                  {tab.icon === "settings" && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />}
-                </svg>
-                <span className="hidden sm:inline">{tab.name}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex flex-col">
+      <Header />
+      <TabNavigation />
 
-      <main className="container mx-auto px-4 sm:px-6 py-6">
+      <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-grow">
+        {/* Filter Bar */}
+        <FilterBar onApplyFilters={handleApplyFilters} />
+        
         {/* Medical Statistics Overview */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           {/* Total Units */}
@@ -235,9 +208,9 @@ export default function MedicalDashboard() {
             <p className="text-slate-500">Check system connections or adjust filter criteria</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
             {filteredUnits.map(unit => (
-              <MedicalUnitCard 
+              <UnitCard 
                 key={unit.id} 
                 unit={unit} 
                 onViewDetails={(unitId) => {

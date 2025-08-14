@@ -16,7 +16,7 @@ const MedicalUnitCard: React.FC<MedicalUnitCardProps> = ({ unit, onViewDetails }
   const internalTemp = telemetry?.internalTemp;
   const vibration = telemetry?.vibration;
   const batteryLevel = telemetry?.batteryLevel;
-  const isCharging = telemetry?.isCharging;
+  const isCharging = telemetry?.batteryCharging;
   const isOffline = unit.status === 'offline';
 
   const getTemperatureStatus = () => {
