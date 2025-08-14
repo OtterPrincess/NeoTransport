@@ -46,10 +46,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <Card className="mb-4 relative group overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5]/0 via-[#E1BEE7]/0 to-[#F3E5F5]/0 opacity-0 group-hover:opacity-20 group-hover:from-[#F3E5F5]/30 group-hover:via-[#E1BEE7]/20 group-hover:to-[#F3E5F5]/10 transition-all duration-500 pointer-events-none"></div>
-      <CardContent className="p-4 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 mb-8">
+      <div className="p-6">
+        <div className="flex items-center mb-4">
+          <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+            <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-slate-900">Filter Units</h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <Label htmlFor="room-filter" className="text-sm font-medium text-[#616161] mb-1">Room</Label>
             <Select value={room} onValueChange={setRoom}>
@@ -125,8 +132,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

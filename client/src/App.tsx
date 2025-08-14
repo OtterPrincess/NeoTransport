@@ -9,9 +9,9 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 // Import pages
 import Dashboard from "@/pages/dashboard";
 import UnitDetail from "@/pages/unit-detail";
-import AlertHistory from "@/pages/alert-history";
+import AlertHistory from "@/pages/alert-history-new";
 import CompatibleItems from "@/pages/compatible-items";
-import Settings from "@/pages/settings";
+import Settings from "@/pages/settings-new";
 import SoundscapeGenerator from "@/pages/soundscape-generator";
 import TransportIcons from "@/pages/transport-icons";
 import MobileMeasurements from "@/pages/mobile-measurements";

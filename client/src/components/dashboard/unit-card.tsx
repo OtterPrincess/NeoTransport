@@ -60,68 +60,68 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
     : isOffline ? "2 hours ago" : "Unknown";
   
   return (
-    <Card 
-      className={cn(
-        "rounded-lg shadow-sm border-l-4 p-4 hover:shadow-md transition-all duration-300 cursor-pointer relative group",
-        statusColors.border
-      )}
-    >
-      <div className="absolute inset-0 bg-gradient-to-tr from-[#F3E5F5]/0 via-[#E1BEE7]/0 to-[#F3E5F5]/0 rounded-lg opacity-0 group-hover:opacity-30 group-hover:from-[#F3E5F5]/40 group-hover:via-[#E1BEE7]/30 group-hover:to-[#F3E5F5]/20 transition-all duration-500 pointer-events-none"></div>
-      <div className={cn(
-        "absolute top-2 right-2 text-white px-2 py-1 rounded-md text-xs font-semibold flex items-center",
-        statusColors.bg
-      )}>
-        <Icon 
-          name={unit.status === "normal" ? "success" : unit.status === "offline" ? "offline" : "warning"} 
-          size={16} 
-          className="mr-1" 
-        />
-        {getStatusDisplayText()}
-      </div>
-      
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <h3 className={cn(
-            "text-lg font-semibold",
-            isOffline && "text-offline"
-          )}>{unit.unitId}</h3>
-          <p className="text-sm text-[#616161]">{unit.room} {unit.location}</p>
+    <Link href={`/unit/${unit.id}`}>
+      <Card 
+        className={cn(
+          "bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 cursor-pointer relative group overflow-hidden",
+          unit.status === 'alert' && "ring-2 ring-red-200",
+          unit.status === 'warning' && "ring-2 ring-amber-200"
+        )}
+      >
+        {/* Status indicator */}
+        <div className={cn(
+          "absolute top-4 right-4 w-3 h-3 rounded-full",
+          unit.status === 'normal' && "bg-green-500",
+          unit.status === 'warning' && "bg-amber-500",
+          unit.status === 'alert' && "bg-red-500",
+          unit.status === 'offline' && "bg-slate-400"
+        )}>
+          <div className={cn(
+            "absolute inset-0 rounded-full animate-pulse",
+            unit.status === 'normal' && "bg-green-500",
+            unit.status === 'warning' && "bg-amber-500",
+            unit.status === 'alert' && "bg-red-500",
+            unit.status === 'offline' && "bg-slate-400"
+          )}></div>
         </div>
         
-        {/* Unit illustration */}
-        <div className="w-20 h-20 -mt-1 -mr-1">
-          {getUnitIllustration(unit.unitId, unit.status)}
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        {/* Internal Temperature */}
-        <div>
-          <p className="text-xs text-[#616161] mb-1">Internal Temp</p>
-          <div className="flex items-center">
-            {isOffline || internalTemp === undefined || internalTemp === null ? (
-              <>
-                <Icon name="offline" size={16} className="text-offline mr-1.5" />
-                <span className="font-medium text-offline">No Data</span>
-              </>
-            ) : (
-              <>
-                <Icon 
-                  name="internalTemp" 
-                  size={16} 
-                  className={cn(
-                    "mr-1.5", 
-                    getTemperatureStatusColor(internalTemp)
-                  )} 
-                />
-                <span className={cn(
-                  "font-medium",
-                  getTemperatureStatusColor(internalTemp)
-                )}>{internalTemp.toFixed(1)}°C</span>
-              </>
-            )}
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h3 className="text-xl font-bold text-slate-900 mb-1">{unit.unitId}</h3>
+            <div className="flex items-center text-sm text-slate-600">
+              <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              {unit.room} • {unit.location}
+            </div>
+          </div>
+          
+          {/* Unit illustration */}
+          <div className="w-16 h-16 flex-shrink-0">
+            {getUnitIllustration(unit.unitId, unit.status)}
           </div>
         </div>
+        
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Temperature */}
+          <div className="bg-slate-50 rounded-lg p-3">
+            <div className="flex items-center mb-2">
+              <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <p className="text-xs font-medium text-slate-600">Temperature</p>
+            </div>
+            {isOffline || internalTemp === undefined ? (
+              <p className="text-sm font-semibold text-slate-400">No Data</p>
+            ) : (
+              <p className={cn(
+                "text-lg font-bold",
+                internalTemp > 37.5 ? "text-red-600" : "text-slate-900"
+              )}>{internalTemp.toFixed(1)}°C</p>
+            )}
+          </div>
         
         {/* Surface Temperature */}
         <div>
