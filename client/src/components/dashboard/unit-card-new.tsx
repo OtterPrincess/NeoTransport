@@ -99,8 +99,8 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
             ) : (
               <p className={cn(
                 "text-lg font-bold",
-                internalTemp > 37.5 ? "text-red-600" : "text-slate-900"
-              )}>{internalTemp.toFixed(1)}°C</p>
+                internalTemp && internalTemp > 37.5 ? "text-red-600" : "text-slate-900"
+              )}>{internalTemp?.toFixed(1)}°C</p>
             )}
           </div>
           
@@ -117,8 +117,8 @@ export const UnitCard: React.FC<UnitCardProps> = ({ unit }) => {
             ) : (
               <p className={cn(
                 "text-lg font-bold",
-                vibration < VIBRATION_THRESHOLDS.normal ? "text-green-600" :
-                vibration < VIBRATION_THRESHOLDS.warning ? "text-amber-600" :
+                vibration && vibration < VIBRATION_THRESHOLDS.normal ? "text-green-600" :
+                vibration && vibration < VIBRATION_THRESHOLDS.warning ? "text-amber-600" :
                 "text-red-600"
               )}>{getVibrationStatusText()}</p>
             )}

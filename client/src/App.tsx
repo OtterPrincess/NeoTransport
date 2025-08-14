@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Import pages
 import Dashboard from "@/pages/dashboard";
+import MedicalDashboard from "@/pages/medical-dashboard";
 import UnitDetail from "@/pages/unit-detail";
 import AlertHistory from "@/pages/alert-history-new";
 import CompatibleItems from "@/pages/compatible-items";
@@ -23,7 +24,8 @@ import AuthPage from "@/pages/auth-page";
 function Router() {
   return (
     <Switch>
-      <ProtectedRoute path="/" component={Dashboard} />
+      <ProtectedRoute path="/" component={MedicalDashboard} />
+      <ProtectedRoute path="/original" component={Dashboard} />
       <ProtectedRoute path="/unit/:id" component={UnitDetail} />
       <ProtectedRoute path="/alerts" component={AlertHistory} />
       <ProtectedRoute path="/items" component={CompatibleItems} />
