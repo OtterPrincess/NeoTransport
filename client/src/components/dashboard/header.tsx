@@ -83,22 +83,22 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white border-b-2 border-blue-200 shadow-sm">
+    <header className="bg-white border-b border-slate-200 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           {/* Medical Logo */}
-          <div className="bg-blue-600 rounded-lg p-2 shadow-md">
+          <div className="bg-slate-100 border border-slate-200 rounded-lg p-2 shadow-sm">
             <img 
               src={logoImage} 
               alt="Nestara Medical" 
-              className="h-8 w-8 object-contain filter brightness-0 invert"
+              className="h-8 w-8 object-contain"
             />
           </div>
           
           {/* Hospital System Branding */}
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900" style={{ fontFamily: "'Libre Baskerville', serif" }}>
-              <span className="text-blue-600">NESTARA</span>
+              <span className="text-slate-800">NESTARA</span>
               <span className="text-slate-600 ml-2 text-sm font-normal hidden lg:inline">Medical Transport System</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">
@@ -115,7 +115,7 @@ export const Header: React.FC = () => {
                 placeholder="Search units, alerts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-48 sm:w-80 h-9 pl-10 pr-4 border-2 border-slate-200 text-slate-900 bg-white focus-visible:ring-blue-500 focus-visible:border-blue-500"
+                className="w-48 sm:w-80 h-9 pl-10 pr-4 border border-slate-200 text-slate-900 bg-white focus-visible:ring-slate-400 focus-visible:border-slate-400"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Icon name="search" size={16} className="text-slate-400" />
