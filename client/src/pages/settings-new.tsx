@@ -12,8 +12,17 @@ import Footer from "@/components/dashboard/footer";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function SettingsNew() {
-  const { settings, updateSettings } = useAppSettings();
-  const { user, logoutMutation } = useAuth();
+  const {
+    soundEnabled,
+    teamsIntegrationEnabled,
+    autoRefresh,
+    soundProfile,
+    setSoundEnabled,
+    setTeamsIntegrationEnabled,
+    setAutoRefresh,
+    setSoundProfile
+  } = useAppSettings();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
 
@@ -29,7 +38,8 @@ export default function SettingsNew() {
   };
 
   const handleLogout = () => {
-    logoutMutation.mutate();
+    // Implement logout functionality
+    window.location.href = '/auth';
   };
 
   return (
@@ -119,8 +129,8 @@ export default function SettingsNew() {
                     <p className="text-sm text-slate-600">Play sounds for alerts and notifications</p>
                   </div>
                   <Switch
-                    checked={settings.soundEnabled}
-                    onCheckedChange={(checked) => updateSettings({ soundEnabled: checked })}
+                    checked={soundEnabled}
+                    onCheckedChange={setSoundEnabled}
                   />
                 </div>
 
@@ -130,8 +140,8 @@ export default function SettingsNew() {
                     <p className="text-sm text-slate-600">Send alerts to Teams channels</p>
                   </div>
                   <Switch
-                    checked={settings.teamsIntegrationEnabled}
-                    onCheckedChange={(checked) => updateSettings({ teamsIntegrationEnabled: checked })}
+                    checked={teamsIntegrationEnabled}
+                    onCheckedChange={setTeamsIntegrationEnabled}
                   />
                 </div>
 
@@ -141,8 +151,8 @@ export default function SettingsNew() {
                     <p className="text-sm text-slate-600">Automatically update data every 30 seconds</p>
                   </div>
                   <Switch
-                    checked={settings.autoRefresh}
-                    onCheckedChange={(checked) => updateSettings({ autoRefresh: checked })}
+                    checked={autoRefresh}
+                    onCheckedChange={setAutoRefresh}
                   />
                 </div>
 
@@ -152,8 +162,8 @@ export default function SettingsNew() {
                   <h3 className="font-medium text-slate-900">Sound Profile</h3>
                   <p className="text-sm text-slate-600">Choose your preferred alert sound style</p>
                   <Select
-                    value={settings.soundProfile}
-                    onValueChange={(value) => updateSettings({ soundProfile: value })}
+                    value={soundProfile}
+                    onValueChange={setSoundProfile}
                   >
                     <SelectTrigger>
                       <SelectValue />

@@ -15,9 +15,9 @@ export const TabNavigation: React.FC = () => {
   ];
   
   return (
-    <div className="container mx-auto mt-4 px-4">
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-2" aria-label="Main Navigation">
+    <div className="bg-white border-b border-slate-200 shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6">
+        <nav className="flex overflow-x-auto scrollbar-hide" aria-label="Main Navigation">
           {tabs.map((tab) => {
             const isActive = 
               (tab.path === "/" && location === "/") || 
@@ -29,13 +29,22 @@ export const TabNavigation: React.FC = () => {
                   role="tab"
                   aria-selected={isActive}
                   className={`
-                    px-4 py-2 font-medium text-sm rounded-t-lg focus:outline-none focus:ring-2 focus:ring-[#6A1B9A]
+                    whitespace-nowrap px-3 sm:px-4 py-3 font-medium text-xs sm:text-sm border-b-2 transition-colors duration-200
                     ${isActive 
-                      ? 'bg-[#6A1B9A] text-white' 
-                      : 'text-[#616161] hover:bg-[#F3E5F5]'}
+                      ? 'border-purple-600 text-purple-600 bg-purple-50' 
+                      : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'}
                   `}
                 >
-                  {tab.name}
+                  <span className="hidden sm:inline">{tab.name}</span>
+                  <span className="sm:hidden">
+                    {tab.name === "Dashboard" ? "Home" :
+                     tab.name === "Mobile Measurements" ? "Mobile" :
+                     tab.name === "Alert History" ? "Alerts" :
+                     tab.name === "Compatible Items" ? "Items" :
+                     tab.name === "Soundscape" ? "Sound" :
+                     tab.name === "Transport Partners" ? "Partners" :
+                     tab.name === "Settings" ? "Settings" : tab.name}
+                  </span>
                 </button>
               </Link>
             );

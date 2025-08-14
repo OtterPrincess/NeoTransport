@@ -83,7 +83,7 @@ export const Header: React.FC = () => {
 
   return (
     <header className="bg-gradient-to-r from-white to-[#F5F0FF] border-b border-[#E1BEE7] shadow-sm">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <div className="bg-white p-2 rounded-md shadow-sm flex items-center justify-center border border-[#E1BEE7]/20">
             <div className="w-11 h-11 font-bold flex items-center justify-center overflow-hidden">
@@ -95,26 +95,27 @@ export const Header: React.FC = () => {
             <div className="absolute top-0 -left-4 w-20 h-20 bg-gradient-to-tl from-[#9C27B0]/20 to-transparent rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-all duration-700 group-hover:scale-150"></div>
             <div className="absolute bottom-0 right-0 w-32 h-12 bg-gradient-to-br from-[#F3E5F5] to-[#9C27B0]/10 rounded-full blur-xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"></div>
             
-            <h1 className="text-2xl sm:text-3xl tracking-wide flex items-center relative z-10">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl tracking-wide flex items-center relative z-10">
               <span className="font-serif font-normal text-[#662C6C]">nestara</span>
-              <div className="ml-2 h-5 w-0.5 bg-[#662C6C]/20 group-hover:bg-[#662C6C]/30 transition-colors duration-300"></div>
-              <span className="ml-2 text-[10px] text-[#662C6C] bg-[#F3E5F5] group-hover:bg-[#E1BEE7] px-2 py-0.5 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300">v2.1</span>
+              <div className="ml-1 sm:ml-2 h-4 sm:h-5 w-0.5 bg-[#662C6C]/20 group-hover:bg-[#662C6C]/30 transition-colors duration-300"></div>
+              <span className="ml-1 sm:ml-2 text-[8px] sm:text-[10px] text-[#662C6C] bg-[#F3E5F5] group-hover:bg-[#E1BEE7] px-1.5 sm:px-2 py-0.5 rounded-full shadow-sm group-hover:shadow-md transition-all duration-300">v2.1</span>
             </h1>
             <div className="flex items-center mt-1 relative z-10">
-              <span className="font-serif text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight">Neonatal Transport Monitoring System</span>
+              <span className="font-serif text-[10px] sm:text-xs tracking-wider text-[#662C6C]/80 font-medium leading-tight hidden sm:block">Neonatal Transport Monitoring System</span>
+              <span className="font-serif text-[9px] tracking-wider text-[#662C6C]/80 font-medium leading-tight sm:hidden">Transport Monitor</span>
             </div>
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          {/* Search bar - extended version */}
-          <form onSubmit={handleSearch} className="relative hidden md:flex">
+        <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Search bar - responsive */}
+          <form onSubmit={handleSearch} className="relative hidden sm:flex">
             <div className="relative">
               <Input
                 type="text"
-                placeholder="Search units, alerts, or items..."
+                placeholder="Search units, alerts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-80 h-9 pl-10 pr-4 border border-[#E1BEE7] text-[#4A148C] bg-white/80 shadow-sm focus-visible:ring-[#9C27B0]/40"
+                className="w-48 sm:w-80 h-9 pl-10 pr-4 border border-[#E1BEE7] text-[#4A148C] bg-white/80 shadow-sm focus-visible:ring-[#9C27B0]/40"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Icon name="search" size={16} className="text-[#4A148C]/40" />
@@ -125,18 +126,19 @@ export const Header: React.FC = () => {
             </Button>
           </form>
 
-          <div className="bg-[#4A148C]/30 px-3 py-1 rounded-md text-sm hidden md:block">
+          <div className="bg-[#4A148C]/30 px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm hidden sm:block">
             <span className="font-medium">{formattedTime}</span>
-            <span className="mx-2 opacity-50">|</span>
-            <span>{formattedDate}</span>
+            <span className="mx-1 sm:mx-2 opacity-50 hidden md:inline">|</span>
+            <span className="hidden md:inline">{formattedDate}</span>
           </div>
           
-          {/* Apple Watch Status Indicator */}
+          {/* Apple Watch Status Indicator - Mobile optimized */}
           {appleWatchIntegration && (
-            <div className="hidden md:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
-              <div className="h-3 w-3 rounded-full bg-[#66BB6A] mr-1.5"></div>
-              <span className="text-xs font-medium text-[#4A148C]">
-                Watch {appleWatchModel.includes('ultra') ? 'Ultra' : 'Series'} Alerts
+            <div className="hidden sm:flex items-center bg-[#4A148C]/10 px-2 py-1 rounded-md border border-[#4A148C]/20">
+              <div className="h-2 sm:h-3 w-2 sm:w-3 rounded-full bg-[#66BB6A] mr-1 sm:mr-1.5"></div>
+              <span className="text-[10px] sm:text-xs font-medium text-[#4A148C]">
+                <span className="hidden lg:inline">Watch {appleWatchModel.includes('ultra') ? 'Ultra' : 'Series'} Alerts</span>
+                <span className="lg:hidden">Watch</span>
               </span>
             </div>
           )}

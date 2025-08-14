@@ -130,47 +130,68 @@ export default function MobileMeasurements() {
   };
 
   return (
-    <div className="container mx-auto">
-      <div className="flex items-center py-4 bg-white border-b border-gray-200 sticky top-0 z-10">
-        <Button 
-          variant="ghost" 
-          className="mr-4" 
-          onClick={() => setLocation('/')}
-        >
-          <Icon name="back" size={16} className="mr-1" />
-          Back
-        </Button>
-        
-        <h1 className="text-2xl font-semibold">Mobile Measurements</h1>
-        
-        <div className="ml-auto flex items-center">
-          <Button 
-            onClick={generateQrCode}
-            variant="outline"
-            className="border-gray-300"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4">
-              <rect x="2" y="2" width="8" height="8" rx="1" />
-              <rect x="14" y="2" width="8" height="8" rx="1" />
-              <rect x="2" y="14" width="8" height="8" rx="1" />
-              <path d="M14 14h8v8h-8z" />
-              <path d="M6 6h.01v.01H6z" />
-              <path d="M18 6h.01v.01H18z" />
-              <path d="M6 18h.01v.01H6z" />
-              <path d="M18 18h.01v.01H18z" />
-            </svg>
-            QR Code
-          </Button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
+      {/* Mobile-optimized sticky header */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="mr-3 text-purple-600 hover:bg-purple-50" 
+                onClick={() => setLocation('/')}
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="hidden sm:inline">Back</span>
+              </Button>
+              
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Mobile Measurements</h1>
+                <p className="text-xs sm:text-sm text-slate-600 hidden sm:block">Real-time vibration monitoring</p>
+              </div>
+            </div>
+            
+            <Button 
+              onClick={generateQrCode}
+              variant="outline"
+              size="sm"
+              className="border-slate-200 text-slate-700 hover:bg-slate-50"
+            >
+              <svg className="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+              </svg>
+              <span className="hidden sm:inline">QR Code</span>
+              <span className="sm:hidden">QR</span>
+            </Button>
+          </div>
         </div>
       </div>
       
-      <Tabs defaultValue="mobile" className="w-full">
-        <TabsList>
-          <TabsTrigger value="mobile">Mobile Dashboard</TabsTrigger>
-          <TabsTrigger value="realtime">Real-Time Accelerometer</TabsTrigger>
-          <TabsTrigger value="all">All Measurements</TabsTrigger>
-          <TabsTrigger value="recent">Recent (24h)</TabsTrigger>
-        </TabsList>
+      {/* Main content area */}
+      <div className="flex-1 container mx-auto px-4 py-6">
+        <Tabs defaultValue="mobile" className="w-full">
+          {/* Mobile-optimized tab navigation */}
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full mb-6">
+            <TabsTrigger value="mobile" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Mobile Dashboard</span>
+              <span className="sm:hidden">Dashboard</span>
+            </TabsTrigger>
+            <TabsTrigger value="realtime" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Real-Time</span>
+              <span className="sm:hidden">Live</span>
+            </TabsTrigger>
+            <TabsTrigger value="all" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">All Measurements</span>
+              <span className="sm:hidden">All</span>
+            </TabsTrigger>
+            <TabsTrigger value="recent" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">Recent (24h)</span>
+              <span className="sm:hidden">24h</span>
+            </TabsTrigger>
+          </TabsList>
         
         <TabsContent value="mobile" className="mt-4">
           <HipaaCompliantAccelerometer />
@@ -547,6 +568,7 @@ export default function MobileMeasurements() {
           )}
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

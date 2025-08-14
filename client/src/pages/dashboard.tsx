@@ -40,9 +40,9 @@ export default function Dashboard() {
       <Header />
       <TabNavigation />
       
-      <main className="container mx-auto px-6 py-6 flex-grow">
-        {/* Overview Stats Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex-grow">
+        {/* Mobile-optimized Overview Stats Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
             <div className="flex items-center">
               <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
@@ -121,7 +121,7 @@ export default function Dashboard() {
             <p className="text-slate-500">Try adjusting your filters to see more results</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
             {filteredUnits.map(unit => (
               <UnitCard key={unit.id} unit={unit} />
             ))}
